@@ -51,13 +51,16 @@ app.get('/mobile', function (req, res){
     res.render('mIndex');
 });
 
-
+var date;
 var dl = 'https://www.sobeys.com/en/flyer/accessible'
-, dlPath = './hi.txt'
+, dlPath = './' + 'sobeys ' + date + '.html';
 
 
 app.get('/downloadSobeysFlyer', function (req, res){
+	date = new Date().getTime();
+	dlPath = './' + 'sobeys ' + date + '.html';
     request(dl).pipe(fs.createWriteStream(dlPath))
+    res.render('mIndex')
 })
 
 http.createServer(app).listen(app.get('port'), function () {
