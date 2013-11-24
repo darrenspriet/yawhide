@@ -51,80 +51,42 @@ var checkForMobile = function (req, res, next) {
 
 //when the root route is called, do our mobile check
 app.get('/', function (req, res){
-  var htmlString = $("div.card-inset").html();
-  console.log(JSON.stringify(htmlString));
+  //var htmlString = $("div.card-inset").html();
+  //console.log(JSON.stringify(htmlString));
 	// res.render('index');
-
 });
 
 app.get('/mobile', function (req, res){
-	res.render('mIndex');
+	//res.render('mIndex');
 });
 
 var date;
-var dl = 'https://www.sobeys.com/en/flyer/accessible'
-, dlPath = './' + 'sobeys ' + date + '.html';
+var url = 'https://www.sobeys.com/en/flyer/accessible'
+, dlPath = './' + 'sobeys ' + date + '.html'
+, data = {}
+, div = 'div.card > div.card-plain > div.card-inset > table > ';
 
 
 app.get('/downloadSobeysFlyer', function (req, res){
 	date = new Date().getTime();
 	dlPath = './' + 'sobeys ' + date + '.html';
-	request(dl).pipe(fs.createWriteStream(dlPath))
-	if (data) {
-		var $ = cheerio.load(data);
-		$("div.card > div.card-plain > div.card-inset > table").each(function (i, e) {
-			console.log($(e).attr("src"));
-		});
-
-		console.log("done");
-	}
-		
-	
-	
-	res.render('index')
-	readLines('./sobeys ' + date + '.html', console.log)
+	//request(dl).pipe(fs.createWriteStream(dlPath))
+	request(url, function (err, resp, body){
+		var $ = cheerio.load(body);
+		var  title = []
+		$('.card .card-plain .card-inset table thead tr').each(function (i, html){
+			for(var i = 0; i < html.children.length; i++){
+				for(var j = 0; j < html.children.length; j++){
+					if(typeof (html.children[i].children) !== 'undefined' && typeof (html.children[i].children[j]) !== 'undefined')
+						title.push(html.children[i].children[j].data)
+				}
+			}
+		})
+		console.log(title)
+	});
 })
 
-var readLines = function (input, func) {
-	var remaining = '';
 
-	input.on('data', function (data) {
-		remaining += data;
-		var index = remaining.indexOf('\n');
-		var last  = 0;
-		while (index > -1) {
-			var line = remaining.substring(last, index);
-			last = index + 1;
-			func(line);
-			index = remaining.indexOf('\n', last);
-		}
-
-		remaining = remaining.substring(last);
-	});
-
-	input.on('end', function() {
-		if (remaining.length > 0) {
-			func(remaining);
-		}
-	});
-}
-
-
-// Utility function that downloads a URL and invokes
-// callback with the data.
-var download = function(url, callback) {
-	http.get(url, function(res) {
-		var data = "";
-		res.on('data', function (chunk) {
-			data += chunk;
-		});
-		res.on("end", function() {
-			callback(data);
-		});
-	}).on("error", function() {
-		callback(null);
-	});
-}
 
 http.createServer(app).listen(app.get('port'), function () {
 	console.log("Express server listening on port " + app.get('port'));
