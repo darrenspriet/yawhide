@@ -1,11 +1,7 @@
-App = Ember.Application.create();
-
-App.Router.map(function() {
-  // put your routes here
+App = Ember.Application.createWithMixins({
+	ready: function() {
+		App.GetDeals();   // this triggers an AJAX call to Clojure REST interface
+	}
 });
 
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    return ['red', 'yellow', 'blue'];
-  }
-});
+
