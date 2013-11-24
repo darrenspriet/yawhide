@@ -5,7 +5,8 @@ var express = require('express')
 , Backbone = require('backbone')
 , request = require('request')
 , exphbs = require('express3-handlebars')
-,$ = require('jquery');
+//, $ = require('jquery')
+, cheerio = require('cheerio');
 
 app = express();
 
@@ -69,6 +70,17 @@ app.get('/downloadSobeysFlyer', function (req, res){
 	date = new Date().getTime();
 	dlPath = './' + 'sobeys ' + date + '.html';
 	request(dl).pipe(fs.createWriteStream(dlPath))
+	if (data) {
+		var $ = cheerio.load(data);
+		$("div.card > div.card-plain > div.card-inset > table").each(function (i, e) {
+			console.log($(e).attr("src"));
+		});
+
+		console.log("done");
+	}
+		
+	
+	
 	res.render('index')
 	readLines('./sobeys ' + date + '.html', console.log)
 })
@@ -94,6 +106,23 @@ var readLines = function (input, func) {
 		if (remaining.length > 0) {
 			func(remaining);
 		}
+	});
+}
+
+
+// Utility function that downloads a URL and invokes
+// callback with the data.
+var download = function(url, callback) {
+	http.get(url, function(res) {
+		var data = "";
+		res.on('data', function (chunk) {
+			data += chunk;
+		});
+		res.on("end", function() {
+			callback(data);
+		});
+	}).on("error", function() {
+		callback(null);
 	});
 }
 
