@@ -5,7 +5,8 @@ var express = require('express')
 , Backbone = require('backbone')
 , request = require('request')
 , exphbs = require('express3-handlebars')
-,$ = require('jquery');
+//, $ = require('jquery')
+, cheerio = require('cheerio');
 
 app = express();
 
@@ -70,6 +71,41 @@ app.get('/index', function (req, res){
 // 	request(dl).pipe(fs.createWriteStream(dlPath))
 // 	res.render('mIndex')
 // })
+app.get('/', function (req, res){
+  //var htmlString = $("div.card-inset").html();
+  //console.log(JSON.stringify(htmlString));
+	// res.render('index');
+});
+
+app.get('/mobile', function (req, res){
+	//res.render('mIndex');
+});
+
+var date;
+var url = 'https://www.sobeys.com/en/flyer/accessible'
+, dlPath = './' + 'sobeys ' + date + '.html'
+, data = {}
+, div = 'div.card > div.card-plain > div.card-inset > table > ';
+
+
+app.get('/downloadSobeysFlyer', function (req, res){
+	date = new Date().getTime();
+	dlPath = './' + 'sobeys ' + date + '.html';
+	//request(dl).pipe(fs.createWriteStream(dlPath))
+	request(url, function (err, resp, body){
+		var $ = cheerio.load(body);
+		var  title = []
+		$('.card .card-plain .card-inset table thead tr').each(function (i, html){
+			for(var i = 0; i < html.children.length; i++){
+				for(var j = 0; j < html.children.length; j++){
+					if(typeof (html.children[i].children) !== 'undefined' && typeof (html.children[i].children[j]) !== 'undefined')
+						title.push(html.children[i].children[j].data)
+				}
+			}
+		})
+		console.log(title)
+	});
+})
 
 http.createServer(app).listen(app.get('port'), function () {
 	console.log("Express server listening on port " + app.get('port'));
