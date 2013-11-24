@@ -11,7 +11,7 @@
     , "backbone" : "1.x"
     , "express3-handlebars": "x"
     , "request": "x"
-    , "jquery": "1.8.x"
-    , "jsdom": "0.x"
+    , "jsdom" : "https://github.com/tmpvar/jsdom/tarball/4cf155a1624b3fb54b2eec536a0c060ec1bab4ab"
+    , "jquery" : "*"
   }
 }
