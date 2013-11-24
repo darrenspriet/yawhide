@@ -50,6 +50,7 @@ var checkForMobile = function (req, res, next) {
 app.get('/', checkForMobile, function (req, res){
 	res.render('index');
 });
+
 app.get('/mobile', function (req, res){
 	res.render('mIndex');
 });
