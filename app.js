@@ -4,7 +4,8 @@ var express = require('express')
 , fs = require('fs')
 , Backbone = require('backbone')
 , request = require('request')
-, exphbs = require('express3-handlebars');
+, exphbs = require('express3-handlebars')
+,$ = require('jquery');
 
 app = express();
 
@@ -47,11 +48,13 @@ var checkForMobile = function (req, res, next) {
 	}
 }
 
-// when the root route is called, do our mobile check
-// app.get('/', checkForMobile, function (req, res){
-// 	// res.render('index');
-	
-// });
+//when the root route is called, do our mobile check
+app.get('/', function (req, res){
+  var htmlString = $("div.card-inset").html();
+  console.log(JSON.stringify(htmlString));
+	// res.render('index');
+
+});
 
 app.get('/mobile', function (req, res){
 	res.render('mIndex');
