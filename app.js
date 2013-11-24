@@ -22,7 +22,8 @@ app.configure(function () {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
-    app.use(express.static(__dirname + '/public'));
+    app.use(express.static(path.join(__dirname, 'public')));
+	app.use("/public", express.static(__dirname + '/public'));
 });
 
 app.configure('development', function () {
@@ -48,9 +49,11 @@ var checkForMobile = function (req, res, next) {
 }
 
 // when the root route is called, do our mobile check
-app.get('/', checkForMobile, function (req, res){
-	res.render('index');
-});
+// app.get('/', checkForMobile, function (req, res){
+// 	// res.render('index');
+	
+// });
+
 app.get('/mobile', function (req, res){
 	res.render('mIndex');
 });
