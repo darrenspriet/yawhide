@@ -4,7 +4,8 @@ var express = require('express')
 , fs = require('fs')
 , Backbone = require('backbone')
 , request = require('request')
-, exphbs = require('express3-handlebars');
+, exphbs = require('express3-handlebars')
+, $ = require('jquery');
 
 app = express();
 
@@ -63,8 +64,33 @@ app.get('/downloadSobeysFlyer', function (req, res){
 	date = new Date().getTime();
 	dlPath = './' + 'sobeys ' + date + '.html';
 	request(dl).pipe(fs.createWriteStream(dlPath))
-	res.render('mIndex')
+	res.render('index')
+	readLines('./sobeys ' + date + '.html', console.log)
 })
+
+var readLines = function (input, func) {
+	var remaining = '';
+
+	input.on('data', function (data) {
+		remaining += data;
+		var index = remaining.indexOf('\n');
+		var last  = 0;
+		while (index > -1) {
+			var line = remaining.substring(last, index);
+			last = index + 1;
+			func(line);
+			index = remaining.indexOf('\n', last);
+		}
+
+		remaining = remaining.substring(last);
+	});
+
+	input.on('end', function() {
+		if (remaining.length > 0) {
+			func(remaining);
+		}
+	});
+}
 
 http.createServer(app).listen(app.get('port'), function () {
 	console.log("Express server listening on port " + app.get('port'));

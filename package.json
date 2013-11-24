@@ -11,5 +11,7 @@
     , "backbone" : "1.x"
     , "express3-handlebars": "x"
     , "request": "x"
+    , "jquery": "1.8.x"
+    , "jsdom": "0.x"
   }
 }
