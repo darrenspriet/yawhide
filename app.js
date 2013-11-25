@@ -6,7 +6,8 @@ var express = require('express')
 , request = require('request')
 , exphbs = require('express3-handlebars')
 //, $ = require('jquery')
-, cheerio = require('cheerio');
+, cheerio = require('cheerio')
+, Sobeys = require('./models/sobeys.js');
 
 app = express();
 
@@ -119,16 +120,13 @@ app.get('/downloadSobeysFlyer', function (req, res){
 					var ob = {}
 					for(var j = 0; j < html.children[i].children.length; j++){
 						if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
-							delete html.children[i].children[j]['parent']
-							delete html.children[i].children[j]['prev']
-							delete html.children[i].children[j]['next']
 							if (html.children[i].children[j].children.length == 0){
 								html.children[i].children[j].children.push({
 									data: ''
 								})
 							}
-							console.log(i + " "  + j)
-							console.log(html.children[i].children[j].children[0].data)
+							//console.log(i + " "  + j)
+							//console.log(html.children[i].children[j].children[0].data)
 							switch(j){
 								case 1:
 									ob.item = html.children[i].children[j].children[0].data;
