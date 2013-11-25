@@ -95,15 +95,64 @@ app.get('/downloadSobeysFlyer', function (req, res){
 	request(url, function (err, resp, body){
 		var $ = cheerio.load(body);
 		var  title = []
+		, info = []
+		/** this finds the section with 3 classes and a table with a nested thead.
+		 *	 it then finds all the coloumns names and puts it in an array */
 		$('.card .card-plain .card-inset table thead tr').each(function (i, html){
 			for(var i = 0; i < html.children.length; i++){
-				for(var j = 0; j < html.children.length; j++){
-					if(typeof (html.children[i].children) !== 'undefined' && typeof (html.children[i].children[j]) !== 'undefined')
-						title.push(html.children[i].children[j].data)
+				if(html.children[i].data !== '\n'){
+					for(var j = 0; j < html.children[i].children.length; j++){
+						if(typeof (html.children[i].children) !== 'undefined' && typeof (html.children[i].children[j]) !== 'undefined')
+							title.push(html.children[i].children[j].data)
+					}
 				}
 			}
 		})
+		console.log('title is: ')
 		console.log(title)
+		/** this finds the tbody section in the table.
+		 *	 it will hopefully parse through and get four pieces of info:
+		 *	 item, price, savings and description */
+		$('.card .card-plain .card-inset table tbody').each(function (i, html){
+			for(var i = 0; i < html.children.length; i++){
+				if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
+					var ob = {}
+					for(var j = 0; j < html.children[i].children.length; j++){
+						if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
+							delete html.children[i].children[j]['parent']
+							delete html.children[i].children[j]['prev']
+							delete html.children[i].children[j]['next']
+							if (html.children[i].children[j].children.length == 0){
+								html.children[i].children[j].children.push({
+									data: ''
+								})
+							}
+							console.log(i + " "  + j)
+							console.log(html.children[i].children[j].children[0].data)
+							switch(j){
+								case 1:
+									ob.item = html.children[i].children[j].children[0].data;
+									break;
+								case 3:
+									ob.price = html.children[i].children[j].children[0].data;
+									break;
+								case 5:
+									ob.savings = html.children[i].children[j].children[0].data;
+									break;
+								case 7:
+									ob.description = html.children[i].children[j].children[0].data;
+									break;
+								default:
+									ob.description = html.children[i].children[j].children[0].data;
+									break;
+							}
+						}
+					}
+					info.push(ob)
+				}
+			}
+			console.log(info)
+		})
 	});
 })
 
