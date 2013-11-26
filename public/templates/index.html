@@ -1,1 +1,11 @@
 <h3>You have rendered the first View for YawHide!!!</h3>
+
+<table>
+<tr>
+<th>Name</th><th>Description</th><th>Price</th><th>Savings</th>
+</tr>
+{{#each sobeysArray}}
+<tr>
+<td>{{name}}</td><td>{{description}}</td><td>{{price}}</td><td>{{savings}}</td>
+</tr>
+{{/each}}

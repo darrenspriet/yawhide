@@ -4,11 +4,23 @@ var IndexView = Backbone.View.extend({
 
 		sobeysFlyer.fetch({
 			success: function(){
-				console.log(sobeysFlyer);
+				var sobeysArray= new Array();
+				for(var i= 0; i<sobeysFlyer.attributes.items.length; i++){
+					var sobeysObject =({
+						"id": sobeysFlyer.attributes.items[i]._id,
+						"description" : sobeysFlyer.attributes.items[i].description,
+						"name" : sobeysFlyer.attributes.items[i].name,
+						"price" : sobeysFlyer.attributes.items[i].price,
+						"savings" : sobeysFlyer.attributes.items[i].savings
+					})
+					sobeysArray.push(sobeysObject);
+
+				}
+				console.log(sobeysArray);
 
 				$.get('templates/index.html', function(incomingTemplate){
 					var template = Handlebars.compile(incomingTemplate);
-					$('#page_container').html(template).trigger('create');
+					$('#page_container').html(template({sobeysArray:sobeysArray})).trigger('create');
 
 				});
 				return this;
