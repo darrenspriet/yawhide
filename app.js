@@ -72,11 +72,6 @@ app.get('/index', function (req, res){
 // 	request(dl).pipe(fs.createWriteStream(dlPath))
 // 	res.render('mIndex')
 // })
-app.get('/', function (req, res){
-  //var htmlString = $("div.card-inset").html();
-  //console.log(JSON.stringify(htmlString));
-	// res.render('index');
-});
 
 app.get('/mobile', function (req, res){
 	//res.render('mIndex');
@@ -161,6 +156,7 @@ app.get('/downloadSobeysFlyer', function (req, res){
 app.get('/getSobeyFlyer', function (req, res){
 	Sobeys.getFlyerById('5293f009cd118f3b11000002', function (err, flyer){
 		console.log(err + " " + flyer);
+		res.send(flyer);
 	});
 });
 
