@@ -129,7 +129,7 @@ app.get('/downloadSobeysFlyer', function (req, res){
 							//console.log(html.children[i].children[j].children[0].data)
 							switch(j){
 								case 1:
-									ob.item = html.children[i].children[j].children[0].data;
+									ob.name = html.children[i].children[j].children[0].data;
 									break;
 								case 3:
 									ob.price = html.children[i].children[j].children[0].data;
@@ -151,8 +151,18 @@ app.get('/downloadSobeysFlyer', function (req, res){
 			}
 			console.log(info)
 		})
+		Sobeys.makeFlyer('', '', 0, '', '', info, function (err){
+			console.log(err);
+		});
+	
 	});
-})
+});
+
+app.get('/getSobeyFlyer', function (req, res){
+	Sobeys.getFlyerById('5293f009cd118f3b11000002', function (err, flyer){
+		console.log(err + " " + flyer);
+	});
+});
 
 http.createServer(app).listen(app.get('port'), function () {
 	console.log("Express server listening on port " + app.get('port'));
