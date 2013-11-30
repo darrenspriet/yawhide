@@ -135,14 +135,126 @@ app.get('/readLocalFlyers', function (req, res){
 });
 
 app.get('/makeStore', function (req, res){
-	var url = 'https://www.sobeys.com/en/stores/';
-	var num = 1;
-	request(url+num, function (r, s, b){
-		console.log(b);
-		var $ = cheerio.load(data);
-		var info = [];
-		
-	});
+	var url = 'https://www.sobeys.com/en/stores/'
+	var z = 1;
+	for(; z < 290; z++){
+		var storename = ''
+		, storeloc = ''
+		, storenum = 0
+		, urlnum = z
+		, city = ''
+		, postal = ''
+		, hours = {}
+		, interval = '';
+		request(url+z, function (r, s, b){
+			var $ = cheerio.load(b);
+			var info = [];
+
+			$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
+				var count = 0;
+				html.children.forEach(function (i){
+					delete i.prev;
+					delete i.parent;
+					delete i.next;
+
+					if(i.data !== '\n' && count > 1){
+						var count3 = 0;
+						i.children.forEach(function (j){
+							
+							delete j.prev;
+							delete j.parent;
+							delete j.next;
+							if(j.data !== '\n'){
+								if(j.attribs['class'].indexOf('grid__item') > -1){
+									
+									j.children.forEach(function (k){
+										if(k.data !== '\n'){
+											delete k.prev;
+											delete k.parent;
+											delete k.next;
+											if(k.attribs['class'] === 'palm--hide'){
+												var str = '';
+												var count2 = 0;
+												k.children.forEach(function (l){
+													if(l.type !== 'tag'){
+														var tmp = l.data.split('\n');
+														tmp.forEach(function (m){
+															if(m !== ''){
+																str += m + ' ';
+																switch(count2){
+																	case 0:
+																		storeloc = m;
+																		count2++;
+																		break;
+																	case 1:
+																		city = m;
+																		count2++;
+																		break;
+																	case 2:
+																		postal = m;
+																		count2++;
+																		break;
+																}
+															}
+														});
+													}
+												});
+												count2 = 0;
+											}
+											if(count3 == 6){
+												//console.log(k);
+												storenum = 	k.children[0].data.split('\n')[1];
+												//console.log('storenum: ' + storenum);							
+											}
+											count3++;
+										}
+										//console.log(count3);
+									});
+									
+									//console.log(j);
+								}
+								else if (j.attribs['class'] === 'grid'){
+									console.log('grid one')
+								}
+								
+							}
+						});
+						count3 = 0;
+					}
+					count++;
+				});
+			});
+			$('.my-store-title div div h3').each(function (i, html){
+				storename = html.children[0].data.split(' ')[2];
+			});
+			$('.push--desk--one-half table tbody tr').each(function (i, html){
+				var prevDay = '';
+				html.children.forEach(function (i){
+					delete i.prev;
+					delete i.parent;
+					delete i.next;
+					if(i.data !== '\n'){
+						var whole = i.children[0].data.split(' ');
+						//console.log(whole);
+						if(whole.length == 5){
+							hours[prevDay] = i.children[0].data;
+							//console.log(prevDay);
+						}
+						else if (whole.length == 1){
+							prevDay = whole[0];
+						}
+					}
+				});
+			});
+			console.log('storename: ' + storename);
+			console.log('storeloc: ' + storeloc);
+			console.log('urlnum: ' + urlnum);
+			console.log('city: ' + city);
+			console.log('postal: ' + postal);
+			console.log('hours: ');
+			console.log(hours);
+		});
+	}
 });
 
 app.post('/makeStore', function (req, res){
