@@ -1,7 +1,7 @@
 var db = require('../lib/db');
 
 var SobeySchema = new db.Schema({
-	storeName: String
+	storeName: {type: String, unique: true}
 	, storeLocation: String
 	, storeNumber: Number
 	, city: String
@@ -54,7 +54,15 @@ var makeFlyer = function(id, arr, cb){
 		, cb);	
 }
 
+var getStoreByStoreName = function(name, cb){
+	Sobey.findOne(
+		{storeName:name}
+		, null
+		, cb);
+}
+
 module.exports.makeStore = makeStore;
 module.exports.updateCurrentIntervalById = updateCurrentIntervalById;
 module.exports.getStoreById = getStoreById;
 module.exports.makeFlyer = makeFlyer;
+module.exports.getStoreByStoreName = getStoreByStoreName;

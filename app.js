@@ -57,36 +57,15 @@ app.get('/index', function (req, res){
   res.end('this worked');
 });
 
-// app.get('/mobile', function (req, res){
-// 	res.render('mIndex');
-// });
-
-// var date;
-// var dl = 'https://www.sobeys.com/en/flyer/accessible';
-// , dlPath = './' + 'sobeys ' + date + '.html';
-
-
-// app.get('/downloadSobeysFlyer', function (req, res){
-// 	date = new Date().getTime();
-// 	dlPath = './' + 'sobeys ' + date + '.html';
-// 	request(dl).pipe(fs.createWriteStream(dlPath))
-// 	res.render('mIndex')
-// })
-
 app.get('/mobile', function (req, res){
-	//res.render('mIndex');
 });
 
 var date;
-var url = 'https://www.sobeys.com/en/flyer/accessible'
-, dlPath = './' + 'sobeys ' + date + '.html'
-, data = {}
+var data = {}
 , div = 'div.card > div.card-plain > div.card-inset > table > ';
 
 
-app.get('/downloadSobeysFlyer', function (req, res){
-	date = new Date().getTime();
-	dlPath = './' + 'sobeys ' + date + '.html';
+app.get('/readLocalFlyers', function (req, res){
 	//request(dl).pipe(fs.createWriteStream(dlPath))
 	request(url, function (err, resp, body){
 		var $ = cheerio.load(body);
@@ -106,8 +85,6 @@ app.get('/downloadSobeysFlyer', function (req, res){
 									data: ''
 								})
 							}
-							//console.log(i + " "  + j)
-							//console.log(html.children[i].children[j].children[0].data)
 							switch(j){
 								case 1:
 									ob.name = html.children[i].children[j].children[0].data;
@@ -127,15 +104,17 @@ app.get('/downloadSobeysFlyer', function (req, res){
 							}
 						}
 					}
-					info.push(ob)
+					info.push(ob);
 				}
 			}
-			console.log(info)
+			console.log(info);
 		});
-		Sobeys.makeFlyer('', '', 0, '', '', info, function (err){
+		Sobeys.getStoreByStoreName(, function (err, store){
 			console.log(err);
+			Sobeys.makeFlyer(store._id, info, function (err2){
+				console.log(err2);
+			});
 		});
-	
 	});
 });
 
