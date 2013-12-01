@@ -1,39 +1,60 @@
 var db = require('../lib/db');
 
 var SobeySchema = new db.Schema({
-	date: {type: Date, default: Date.now}
-	, storeName: String
+	storeName: String
 	, storeLocation: String
 	, storeNumber: Number
 	, city: String
 	, postalCode: String
-	, items: [{
-		name: String
-		, price: String
-		, savings: String
-		, description: String
+	, currentInterval: String
+	, flyers: [{
+		date: Date
+		, flyer: [{
+			item: String
+			, price: String
+			, savings: String
+			, description: String
+		}]
 	}]
 });
 
 var Sobey = db.mongoose.model('sobeys', SobeySchema);
 
-var makeFlyer = function (store, storeLoc, storeNum, city, postalCode, arr, cb){
+var makeStore = function (store, storeLoc, storeNum, city, postalCode, cb){
 	var ins = new Sobey();
 	ins.storeName = store;
 	ins.storeLocation = storeLoc;
 	ins.storeNumber = storeNum;
 	ins.city = city;
 	ins.postalCode = ins.postalCode;
-	ins.items = arr;
 	ins.save(cb);
 }
 
-var getFlyerById = function (id, cb){
+var updateCurrentIntervalById = function (id, interval, cb){
+	Sobey.findByIdAndUpdate(
+		id
+		, {currentInterval : interval}
+		, cb);
+}
+
+var getStoreById = function(id, cb){
 	Sobey.findById(
 		id
 		, null
-		, cb)
+		, cb);
 }
 
+var makeFlyer = function(id, arr, cb){
+	var ob = {};
+	ob.flyer = arr;
+	ob.date = new Date().toISOString();
+	Sobey.findByIdAndUpdate(
+		id
+		, { $push: {flyers:ob}}
+		, cb);	
+}
+
+module.exports.makeStore = makeStore;
+module.exports.updateCurrentIntervalById = updateCurrentIntervalById;
+module.exports.getStoreById = getStoreById;
 module.exports.makeFlyer = makeFlyer;
-module.exports.getFlyerById = getFlyerById;
