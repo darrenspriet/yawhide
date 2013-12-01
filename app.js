@@ -90,22 +90,8 @@ app.get('/downloadSobeysFlyer', function (req, res){
 	//request(dl).pipe(fs.createWriteStream(dlPath))
 	request(url, function (err, resp, body){
 		var $ = cheerio.load(body);
-		var  title = []
-		, info = []
-		/** this finds the section with 3 classes and a table with a nested thead.
-		 *	 it then finds all the coloumns names and puts it in an array */
-		$('.card .card-plain .card-inset table thead tr').each(function (i, html){
-			for(var i = 0; i < html.children.length; i++){
-				if(html.children[i].data !== '\n'){
-					for(var j = 0; j < html.children[i].children.length; j++){
-						if(typeof (html.children[i].children) !== 'undefined' && typeof (html.children[i].children[j]) !== 'undefined')
-							title.push(html.children[i].children[j].data)
-					}
-				}
-			}
-		})
-		console.log('title is: ')
-		console.log(title)
+		var info = [];
+		
 		/** this finds the tbody section in the table.
 		 *	 it will hopefully parse through and get four pieces of info:
 		 *	 item, price, savings and description */
@@ -145,7 +131,7 @@ app.get('/downloadSobeysFlyer', function (req, res){
 				}
 			}
 			console.log(info)
-		})
+		});
 		Sobeys.makeFlyer('', '', 0, '', '', info, function (err){
 			console.log(err);
 		});
