@@ -13,11 +13,10 @@ app = express();
 
 app.configure(function () {
 	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/views');
+	app.set('views', __dirname + '/jadeViews');
     //app.engine('handlebars', exphbs({defaultLayout : 'main'}));
     // app.set('view engine', 'handlebars');
     app.set('view engine', 'jade');
-    app.use(express.favicon());
     app.use(express.favicon());
     app.use(express.logger('dev'));
     app.use(express.json());
@@ -66,56 +65,88 @@ var data = {}
 
 
 app.get('/readLocalFlyers', function (req, res){
-	//request(dl).pipe(fs.createWriteStream(dlPath))
-	request(url, function (err, resp, body){
-		var $ = cheerio.load(body);
-		var info = [];
-		
-		/** this finds the tbody section in the table.
-		 *	 it will hopefully parse through and get four pieces of info:
-		 *	 item, price, savings and description */
-		$('.card .card-plain .card-inset table tbody').each(function (i, html){
-			for(var i = 0; i < html.children.length; i++){
-				if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
-					var ob = {}
-					for(var j = 0; j < html.children[i].children.length; j++){
-						if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
-							if (html.children[i].children[j].children.length == 0){
-								html.children[i].children[j].children.push({
-									data: ''
-								})
-							}
-							switch(j){
-								case 1:
-									ob.name = html.children[i].children[j].children[0].data;
-									break;
-								case 3:
-									ob.price = html.children[i].children[j].children[0].data;
-									break;
-								case 5:
-									ob.savings = html.children[i].children[j].children[0].data;
-									break;
-								case 7:
-									ob.description = html.children[i].children[j].children[0].data;
-									break;
-								default:
-									ob.description = html.children[i].children[j].children[0].data;
-									break;
+	var latestFolder;
+	fs.readdir('./sobeys/', function (err, folders){
+		if (err) throw err;
+		/** always gets the last folder in ./sobeys/
+			because it sorts it by created date (or last mod prob)
+			*/
+		latestFolder = folders[folders.length -1];
+		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, html){
+			if (err2) throw err2;
+			html.forEach(function (h){
+
+				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {
+					if (err) throw err;
+					console.log(data + " " + h);
+					
+					var $ = cheerio.load(data);
+
+					var info = [];
+					
+					/** this finds the tbody section in the table.
+					 *	 it will hopefully parse through and get four pieces of info:
+					 *	 item, price, savings and description */
+					$('.card .card-plain .card-inset table tbody').each(function (i, html){
+						for(var i = 0; i < html.children.length; i++){
+							if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
+								var ob = {}
+								for(var j = 0; j < html.children[i].children.length; j++){
+									if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
+										if (html.children[i].children[j].children.length == 0){
+											html.children[i].children[j].children.push({
+												data: ''
+											});
+										}
+										switch(j){
+											case 1:
+												ob.name = html.children[i].children[j].children[0].data;
+												break;
+											case 3:
+												ob.price = html.children[i].children[j].children[0].data;
+												break;
+											case 5:
+												ob.savings = html.children[i].children[j].children[0].data;
+												break;
+											case 7:
+												ob.description = html.children[i].children[j].children[0].data;
+												break;
+											default:
+												ob.description = html.children[i].children[j].children[0].data;
+												break;
+										}
+									}
+								}
+								info.push(ob);
 							}
 						}
-					}
-					info.push(ob);
-				}
-			}
-			console.log(info);
-		});
-		Sobeys.getStoreByStoreName(, function (err, store){
-			console.log(err);
-			Sobeys.makeFlyer(store._id, info, function (err2){
-				console.log(err2);
+						console.log(info);
+					});
+					Sobeys.getStoreByUrlNum(h.split('.')[0], function (err, store){
+						console.log(err);
+						Sobeys.makeFlyer(store._id, info, function (err2){
+							console.log(err2);
+						});
+					});
+				});
 			});
 		});
 	});
+});
+
+app.get('/makeStore', function (req, res){
+	var url = 'https://www.sobeys.com/en/stores/';
+	var num = 1;
+	request(url+num, function (r, s, b){
+		console.log(b);
+		var $ = cheerio.load(data);
+		var info = [];
+		
+	});
+});
+
+app.post('/makeStore', function (req, res){
+
 });
 
 app.get('/getSobeyFlyer', function (req, res){

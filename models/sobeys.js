@@ -3,9 +3,19 @@ var db = require('../lib/db');
 var SobeySchema = new db.Schema({
 	storeName: {type: String, unique: true}
 	, storeLocation: String
-	, storeNumber: Number
+	, storeNumber: {type:Number, unique:true}
+	, urlNumber: {type:Number, unique:true}
 	, city: String
 	, postalCode: String
+	, storeHours: {
+		Sunday: String
+		, Monday: String
+		, Tuesday: String
+		, Wednesday: String
+		, Thursday: String
+		, Friday: String
+		, Saturday: String
+	}
 	, currentInterval: String
 	, flyers: [{
 		date: Date
@@ -20,13 +30,15 @@ var SobeySchema = new db.Schema({
 
 var Sobey = db.mongoose.model('sobeys', SobeySchema);
 
-var makeStore = function (store, storeLoc, storeNum, city, postalCode, cb){
+var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, cb){
 	var ins = new Sobey();
 	ins.storeName = store;
 	ins.storeLocation = storeLoc;
 	ins.storeNumber = storeNum;
+	ins.urlNumber = num;
 	ins.city = city;
-	ins.postalCode = ins.postalCode;
+	ins.postalCode = postalCode;
+	ins.storeHours = hours;
 	ins.save(cb);
 }
 
@@ -61,8 +73,16 @@ var getStoreByStoreName = function(name, cb){
 		, cb);
 }
 
+var getStoreByUrlNum = function(num, cb){
+	Sobey.findOne(
+		{urlNumber:num}
+		, null
+		, cb);
+}
+
 module.exports.makeStore = makeStore;
 module.exports.updateCurrentIntervalById = updateCurrentIntervalById;
 module.exports.getStoreById = getStoreById;
 module.exports.makeFlyer = makeFlyer;
 module.exports.getStoreByStoreName = getStoreByStoreName;
+module.exports.getStoreByUrlNum = getStoreByUrlNum;
