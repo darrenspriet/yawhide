@@ -63,7 +63,8 @@ var makeFlyer = function(id, arr, cb){
 	Sobey.findByIdAndUpdate(
 		id
 		, { $push: {flyers:ob}}
-		, cb);	
+		, cb);
+	
 }
 
 var getStoreByStoreName = function(name, cb){
