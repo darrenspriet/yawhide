@@ -131,14 +131,15 @@ app.get('/readLocalFlyers', function (req, res){
 							}
 						}
 						console.log(info);
-					});
-					Sobeys.getStoreByUrlNum(h.split('.')[0], function (err, store){
-						if (err) throw err;//console.log(err);
-						Sobeys.makeFlyer(store._id, info, function (err2){
-							if (err2) throw err;
-							console.log(err2);
+						Sobeys.getStoreByUrlNum(h.split('.')[0], function (err, store){
+							if (err) throw err;//console.log(err);
+							Sobeys.makeFlyer(store._id, info, function (err2){
+								if (err2) throw err;
+								console.log(err2);
+							});
 						});
 					});
+
 				});
 			});
 		});
