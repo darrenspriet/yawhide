@@ -7,7 +7,9 @@ var express = require('express')
 , exphbs = require('express3-handlebars')
 //, $ = require('jquery')
 , cheerio = require('cheerio')
-, Sobeys = require('./models/sobeys.js');
+, Sobeys = require('./models/sobeys.js')
+, Geocoder = require('node-geocoder-ca').Geocoder
+, geocoder = new Geocoder();
 
 app = express();
 
@@ -223,6 +225,7 @@ app.get('/makeStore', function (req, res){
 					}
 					count++;
 				});
+				
 			});
 			$('.my-store-title div div h3').each(function (i, html){
 				storename = html.children[0].data.split(' ')[2];
@@ -246,6 +249,18 @@ app.get('/makeStore', function (req, res){
 					}
 				});
 			});
+			var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
+		    var sensor = false;
+		    var geoOb = {};
+		    //address = '525 Market St, Philadelphia, PA 19106';
+
+			geocoder.geocode(address, function(err, coords) {
+			    if (err) throw err;
+			    console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
+			    console.log(coords);
+			});
+		    console.log('geoOb');
+		    console.log(geoOb);
 			console.log('storename: ' + storename);
 			console.log('storeloc: ' + storeloc);
 			console.log('urlnum: ' + urlnum);
@@ -253,6 +268,8 @@ app.get('/makeStore', function (req, res){
 			console.log('postal: ' + postal);
 			console.log('hours: ');
 			console.log(hours);
+			
+			//Sobey.makeStore()
 		});
 	}
 });

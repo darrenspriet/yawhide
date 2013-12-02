@@ -14,5 +14,6 @@
     , "ejs" : "*"
     , "cheerio": "*"
     , "jade": "*"
+    , "node-geocoder-ca": "*"
   }
 }
