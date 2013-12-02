@@ -1,22 +1,22 @@
 var db = require('../lib/db');
 
 var SobeySchema = new db.Schema({
-	storeName: {type: String, unique: true}
+	storeName: String
 	, storeLocation: String
-	, storeNumber: {type:Number, unique:true}
+	, storeNumber: Number
 	, urlNumber: {type:Number, unique:true}
 	, city: String
 	, postalCode: String
 	, storeHours: {
-		Sunday: String
+		/*Sunday: String
 		, Monday: String
 		, Tuesday: String
 		, Wednesday: String
 		, Thursday: String
 		, Friday: String
-		, Saturday: String
+		, Saturday: String*/
 	}
-	, geo: {lng: Number, lat: Number}
+	, location: {lng: Number, lat: Number}
 	, currentInterval: String
 	, flyers: [{
 		date: Date
@@ -31,7 +31,7 @@ var SobeySchema = new db.Schema({
 
 var Sobey = db.mongoose.model('sobeys', SobeySchema);
 
-var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, geoOb, cb){
+var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, cb){
 	var ins = new Sobey();
 	ins.storeName = store;
 	ins.storeLocation = storeLoc;
@@ -40,7 +40,6 @@ var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hour
 	ins.city = city;
 	ins.postalCode = postalCode;
 	ins.storeHours = hours;
-	ins.geo = geoOb;
 	ins.save(cb);
 }
 

@@ -51,6 +51,14 @@ app.configure('development', function () {
 // 	}
 // }
 
+var isEmptyObject = function (obj) {
+    var name;
+    for (name in obj) {
+        return false;
+    }
+    return true;
+}
+
 //when the root route is called, do our mobile check
 app.get('/index', function (req, res){
   // var htmlString = $("div.card-inset").html();
@@ -80,7 +88,7 @@ app.get('/readLocalFlyers', function (req, res){
 
 				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {
 					if (err) throw err;
-					console.log(data + " " + h);
+					//console.log(data + " " + h);
 					
 					var $ = cheerio.load(data);
 
@@ -125,8 +133,9 @@ app.get('/readLocalFlyers', function (req, res){
 						console.log(info);
 					});
 					Sobeys.getStoreByUrlNum(h.split('.')[0], function (err, store){
-						console.log(err);
+						if (err) throw err;//console.log(err);
 						Sobeys.makeFlyer(store._id, info, function (err2){
+							if (err2) throw err;
 							console.log(err2);
 						});
 					});
@@ -153,140 +162,154 @@ app.get('/makeStore', function (req, res){
 			request(url+z, function (r, s, b){
 				var $ = cheerio.load(b);
 				var info = [];
+				if(	$('body').find('.block').length == 0){
+					$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
+						var count = 0;
+						html.children.forEach(function (i){
+							delete i.prev;
+							delete i.parent;
+							delete i.next;
 
-				$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
-					var count = 0;
-					html.children.forEach(function (i){
-						delete i.prev;
-						delete i.parent;
-						delete i.next;
-
-						if(i.data !== '\n' && count > 1){
-							var count3 = 0;
-							i.children.forEach(function (j){
-								
-								delete j.prev;
-								delete j.parent;
-								delete j.next;
-								if(j.data !== '\n'){
-									if(j.attribs['class'].indexOf('grid__item') > -1){
-										
-										j.children.forEach(function (k){
-											if(k.data !== '\n'){
-												delete k.prev;
-												delete k.parent;
-												delete k.next;
-												if(k.attribs['class'] === 'palm--hide'){
-													var str = '';
-													var count2 = 0;
-													k.children.forEach(function (l){
-														if(l.type !== 'tag'){
-															var tmp = l.data.split('\n');
-															tmp.forEach(function (m){
-																if(m !== ''){
-																	str += m + ' ';
-																	switch(count2){
-																		case 0:
-																			storeloc = m;
-																			count2++;
-																			break;
-																		case 1:
-																			city = m;
-																			count2++;
-																			break;
-																		case 2:
-																			postal = m;
-																			count2++;
-																			break;
-																	}
-																}
-															});
-														}
-													});
-													count2 = 0;
-												}
-												if(count3 == 6){
-													//console.log(k);
-													storenum = 	k.children[0].data.split('\n')[1];
-													//console.log('storenum: ' + storenum);							
-												}
-												count3++;
-											}
-											//console.log(count3);
-										});
-										
-										//console.log(j);
-									}
-									else if (j.attribs['class'] === 'grid'){
-										console.log('grid one')
-									}
+							if(i.data !== '\n' && count > 1){
+								var count3 = 0;
+								i.children.forEach(function (j){
 									
+									delete j.prev;
+									delete j.parent;
+									delete j.next;
+									if(j.data !== '\n'){
+										if(j.attribs['class'].indexOf('grid__item') > -1){
+											
+											j.children.forEach(function (k){
+												if(k.data !== '\n'){
+													delete k.prev;
+													delete k.parent;
+													delete k.next;
+													if(k.attribs['class'] === 'palm--hide'){
+														var str = '';
+														var count2 = 0;
+														k.children.forEach(function (l){
+															if(l.type !== 'tag'){
+																var tmp = l.data.split('\n');
+																tmp.forEach(function (m){
+																	if(m !== ''){
+																		str += m + ' ';
+																		switch(count2){
+																			case 0:
+																				storeloc = m;
+																				count2++;
+																				break;
+																			case 1:
+																				city = m;
+																				count2++;
+																				break;
+																			case 2:
+																				postal = m;
+																				count2++;
+																				break;
+																		}
+																	}
+																});
+															}
+														});
+														count2 = 0;
+													}
+													if(count3 == 6){
+														//console.log(k);
+														storenum = 	k.children[0].data.split('\n')[1];
+														//console.log('storenum: ' + storenum);							
+													}
+													count3++;
+												}
+												//console.log(count3);
+											});
+											
+											//console.log(j);
+										}
+										else if (j.attribs['class'] === 'grid'){
+											console.log('grid one')
+										}
+										
+									}
+								});
+								count3 = 0;
+							}
+							count++;
+						});
+						
+					});
+					$('.my-store-title div div h3').each(function (i, html){
+						var tmp = html.children[0].data.split(' ');
+						var tmp2 = '';
+						for(var y = 0; y < tmp.length; y++){
+							if(y > 1){
+								tmp2 += tmp[y];
+								if(y+1 < tmp.length)
+									tmp2+=' ';
+							}
+						}
+						storename = tmp2;
+					});
+					$('.push--desk--one-half table tbody tr').each(function (i, html){
+						var prevDay = '';
+						html.children.forEach(function (i){
+							delete i.prev;
+							delete i.parent;
+							delete i.next;
+							
+
+								if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
+									
+									var whole = i.children[0].data.split(' ');
+									//console.log(whole);
+									if(whole.length == 5){
+										hours[prevDay] = i.children[0].data;
+										//console.log(prevDay);
+									}
+									else if (whole.length == 1){
+										prevDay = whole[0];
+									}
+									else if (whole.length > 1 && whole.length < 5){
+										hours[prevDay] = i.children[0].data;
+									}
+
 								}
-							});
-							count3 = 0;
-						}
-						count++;
+							
+						});
 					});
-					
-				});
-				$('.my-store-title div div h3').each(function (i, html){
-					var tmp = html.children[0].data.split(' ');
-					var tmp2 = '';
-					for(var y = 0; y < tmp.length; y++){
-						if(y > 1){
-							tmp2 += tmp[y];
-							if(y+1 < tmp.length)
-								tmp2+=' ';
-						}
-					}
-					storename = tmp2;
-				});
-				$('.push--desk--one-half table tbody tr').each(function (i, html){
-					var prevDay = '';
-					html.children.forEach(function (i){
-						delete i.prev;
-						delete i.parent;
-						delete i.next;
-						if(i.data !== '\n'){
-							var whole = i.children[0].data.split(' ');
-							//console.log(whole);
-							if(whole.length == 5){
-								hours[prevDay] = i.children[0].data;
-								//console.log(prevDay);
-							}
-							else if (whole.length == 1){
-								prevDay = whole[0];
-							}
-							else if (whole.length > 1 && whole.length < 5){
-								hours[prevDay] = i.children[0].data;
-							}
-						}
+					/*
+					var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
+				    var sensor = false;
+				    var geoOb = {};
+				    //address = '525 Market St, Philadelphia, PA 19106';
+				    
+					geocoder.geocode(address, function(err, coords) {
+					    if (err) throw err;
+					    console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
+					    console.log(coords);
 					});
-				});
-				/*
-				var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
-			    var sensor = false;
-			    var geoOb = {};
-			    //address = '525 Market St, Philadelphia, PA 19106';
-			    
-				geocoder.geocode(address, function(err, coords) {
-				    if (err) throw err;
-				    console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
-				    console.log(coords);
-				});
-			    console.log('geoOb');
-			    console.log(geoOb);*/
-				console.log('storename: ' + storename);
-				console.log('storeloc: ' + storeloc);
-				console.log('urlnum: ' + urlnum);
-				console.log('city: ' + city);
-				console.log('postal: ' + postal);
-				console.log('hours: ');
-				console.log(hours);
-				
-				//Sobey.makeStore()
-				z++;
-				loop();
+				    console.log('geoOb');
+				    console.log(geoOb);*/
+					console.log('storename: ' + storename);
+					//console.log('storenum: ' + storenum);
+					//console.log('storeloc: ' + storeloc);
+					console.log('urlnum: ' + urlnum);
+					//console.log('city: ' + city);
+					//console.log('postal: ' + postal);
+					//console.log('hours: ');
+					if(isEmptyObject(hours))
+						hours.open = '24 hours';
+					//console.log(hours);
+					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, function (err){
+						if(err) throw err;
+						z++;
+						loop();
+					});
+				}
+				else{
+					z++;
+					loop();
+				}
 			});
 		}
 	}());
