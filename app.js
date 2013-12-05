@@ -130,13 +130,20 @@ app.get('/readLocalFlyers', function (req, res){
 								info.push(ob);
 							}
 						}
-						console.log(info);
+						//console.log(info);
+						console.log(h.split('.')[0]);
 						Sobeys.getStoreByUrlNum(h.split('.')[0], function (err, store){
 							if (err) throw err;//console.log(err);
-							Sobeys.makeFlyer(store._id, info, function (err2){
-								if (err2) throw err;
-								console.log(err2);
-							});
+							if(!err && store !== null){
+
+								Sobeys.makeFlyer(store, info, function (err2){
+									if (err2) throw err;
+									//console.log(err2);
+								});
+							}
+							else{
+								console.log('no store under that url number');
+							}
 						});
 					});
 
@@ -226,11 +233,7 @@ app.get('/makeStore', function (req, res){
 											});
 											
 											//console.log(j);
-										}
-										else if (j.attribs['class'] === 'grid'){
-											console.log('grid one')
-										}
-										
+										}										
 									}
 								});
 								count3 = 0;
@@ -278,6 +281,12 @@ app.get('/makeStore', function (req, res){
 							
 						});
 					});
+					var latLng = $('#map_location').text().split(', ');
+					//console.log('latLng is: ' + latLng);
+					var latLngOb = {};
+					latLngOb.lng = latLng[0].substr(1);
+					latLngOb.lat = latLng[1].substr(0,latLng[1].length -1);
+					//console.log(latLngOb);
 					/*
 					var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
 				    var sensor = false;
@@ -291,17 +300,17 @@ app.get('/makeStore', function (req, res){
 					});
 				    console.log('geoOb');
 				    console.log(geoOb);*/
-					console.log('storename: ' + storename);
+					//console.log('storename: ' + storename);
 					//console.log('storenum: ' + storenum);
 					//console.log('storeloc: ' + storeloc);
-					console.log('urlnum: ' + urlnum);
+					//console.log('urlnum: ' + urlnum);
 					//console.log('city: ' + city);
 					//console.log('postal: ' + postal);
 					//console.log('hours: ');
 					if(isEmptyObject(hours))
 						hours.open = '24 hours';
 					//console.log(hours);
-					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, function (err){
+					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, latLngOb, function (err){
 						if(err) throw err;
 						z++;
 						loop();
@@ -319,13 +328,6 @@ app.get('/makeStore', function (req, res){
 app.post('/makeStore', function (req, res){
 
 });
-
-// app.get('/getSobeyFlyer', function (req, res){
-// 	Sobeys.getFlyerById('5293f009cd118f3b11000002', function (err, flyer){
-// 		console.log(err + " " + flyer);
-// 		res.send(flyer);
-// 	});
-// });
 
 app.get('/getNearestStores/:elat/:elong', function (req, res){
     var elat = req.params.elat;
@@ -352,6 +354,13 @@ app.get('/getAllStores', function (req, res){
 			console.log(flyer)
 			res.send(flyer);
 		}
+	});
+});
+
+app.post('/getBestDeals/:id', function (req, res){
+	Sobeys.getLatestFlyerById(req.params.id, function (err, flyer){
+		if (err) res.send(500, 'could not get latest flyer by id');
+
 	});
 });
 

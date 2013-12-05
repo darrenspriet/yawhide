@@ -18,9 +18,16 @@ var SobeySchema = new db.Schema({
 	}
 	, location: {lng: Number, lat: Number}
 	, currentInterval: String
-	, flyers: [{
+	, currFlyerDate: Date
+	, currFlyer: [{
+		item: String
+		, price: String
+		, savings: String
+		, description: String
+	}]
+	, oldFlyers: [{
 		date: Date
-		, flyer: [{
+		, actualFlyer: [{
 			item: String
 			, price: String
 			, savings: String
@@ -31,7 +38,14 @@ var SobeySchema = new db.Schema({
 
 var Sobey = db.mongoose.model('sobeys', SobeySchema);
 
-var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, cb){
+/**
+* makes a Sobey Object
+* @param {String} -store, storeLoc, city, postalCode
+* @param {Number} -storeNum, num
+* @param {Object} - hours, latLng
+* @return {cb} - callback
+*/
+var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, latLng, cb){
 	var ins = new Sobey();
 	ins.storeName = store;
 	ins.storeLocation = storeLoc;
@@ -40,9 +54,15 @@ var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hour
 	ins.city = city;
 	ins.postalCode = postalCode;
 	ins.storeHours = hours;
+	ins.location = latLng;
 	ins.save(cb);
 }
 
+/**
+* updates the current Inverval
+* @param {String} -id, interval
+* @return {cb} - callback
+*/
 var updateCurrentIntervalById = function (id, interval, cb){
 	Sobey.findByIdAndUpdate(
 		id
@@ -50,6 +70,11 @@ var updateCurrentIntervalById = function (id, interval, cb){
 		, cb);
 }
 
+/**
+* gets a sobey object by id
+* @param {String} -id
+* @return {cb} - callback
+*/
 var getStoreById = function(id, cb){
 	Sobey.findById(
 		id
@@ -57,17 +82,33 @@ var getStoreById = function(id, cb){
 		, cb);
 }
 
-var makeFlyer = function(id, arr, cb){
+/**
+* finds a sobey object by id and pushes a flyer object
+	into its flyer array
+* @param {String} -id
+* @param {Array} - arr
+* @return {cb} - callback
+*/
+var makeFlyer = function(store, arr, cb){
+	/** make backup of old flyer */
 	var ob = {};
-	ob.flyer = arr;
-	ob.date = new Date().toISOString();
-	Sobey.findByIdAndUpdate(
-		id
-		, { $push: {flyers:ob}}
-		, cb);
+	if(store.currFlyerDate == '')
+		ob.date = new Date().toISOString();
+	else
+		ob.date = store.currFlyerDate;
+	ob.actualFlyer = store.currFlyer;
 
+	store.currFlyerDate = new Date().toISOString();
+	store.currFlyer = arr;
+	store.oldFlyers.push(ob);
+	store.save(cb);
 }
 
+/**
+* gets a sobey object by its store name
+* @param {String} -name
+* @return {cb} - callback
+*/
 var getStoreByStoreName = function(name, cb){
 	Sobey.findOne(
 		{storeName:name}
@@ -75,6 +116,11 @@ var getStoreByStoreName = function(name, cb){
 		, cb);
 }
 
+/**
+* gets a sobey object by its url number
+* @param {Number} -num
+* @return {cb} - callback
+*/
 var getStoreByUrlNum = function(num, cb){
 	Sobey.findOne(
 		{urlNumber:num}
@@ -85,18 +131,23 @@ var getStoreByUrlNum = function(num, cb){
 /**
 * finds the nearest sobeys based on lat and long
 * @param {String} -elat, elong
+* @param {Number} -maxD
 * @return {collection} - callback
 */
-var getNearestStores = function(elong,elat, callback){
+var getNearestStores = function(elong,elat, maxD, callback){
 	Sobey.find({"location":
 		{$near: [elong, elat]
-			,$maxDistance : 5000} }
+			,$maxDistance : maxD} }
 			, function(err, collection){
 				callback(null, collection);
 			});
     //One way, from cmd line: db.sobeys.ensureIndex({location: "2d"})
 }
 
+/**
+* ggets all the sobey objects
+* @return {cb} - callback
+*/
 var getAllStores = function(cb){
     Sobey.find(
         {},
