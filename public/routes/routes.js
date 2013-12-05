@@ -1,7 +1,8 @@
 /*Instantiate */
 var Router = Backbone.Router.extend({
     routes:{
-        "index":"index",
+        "":"index",
+        "nearestStores":"nearestStores"
         
     }
 });
@@ -14,4 +15,9 @@ var app_router = new Router();
 app_router.on('route:index', function(){
     console.log("Router is taking you to index page");
     index.render();
+});
+
+app_router.on('route:nearestStores', function(){
+    console.log("Router is taking you to nearestStores page");
+    nearestStores.render();
 });

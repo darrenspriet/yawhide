@@ -320,10 +320,38 @@ app.post('/makeStore', function (req, res){
 
 });
 
-app.get('/getSobeyFlyer', function (req, res){
-	Sobeys.getFlyerById('5293f009cd118f3b11000002', function (err, flyer){
-		console.log(err + " " + flyer);
-		res.send(flyer);
+// app.get('/getSobeyFlyer', function (req, res){
+// 	Sobeys.getFlyerById('5293f009cd118f3b11000002', function (err, flyer){
+// 		console.log(err + " " + flyer);
+// 		res.send(flyer);
+// 	});
+// });
+
+app.get('/getNearestStores/:elat/:elong', function (req, res){
+    var elat = req.params.elat;
+    var elong = req.params.elong;
+
+	Sobeys.getNearestStores( elong ,elat,function (err, flyer){
+		if(err){
+			console.log("there was an error");
+		}
+		else{
+			console.log(flyer);
+			res.send(flyer);
+		}
+	});
+});
+
+app.get('/getAllStores', function (req, res){
+	Sobeys.getAllStores(function (err, flyer){
+		if(err){
+			console.log("there was an error");
+		}
+		else{
+			console.log('this is the flyer');
+			console.log(flyer)
+			res.send(flyer);
+		}
 	});
 });
 

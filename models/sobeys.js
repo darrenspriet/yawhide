@@ -82,9 +82,35 @@ var getStoreByUrlNum = function(num, cb){
 		, cb);
 }
 
+/**
+* finds the nearest sobeys based on lat and long
+* @param {String} -elat, elong
+* @return {collection} - callback
+*/
+var getNearestStores = function(elong,elat, callback){
+	Sobey.find({"location":
+		{$near: [elong, elat]
+			,$maxDistance : 5000} }
+			, function(err, collection){
+				callback(null, collection);
+			});
+    //One way, from cmd line: db.sobeys.ensureIndex({location: "2d"})
+}
+
+var getAllStores = function(cb){
+    Sobey.find(
+        {},
+        function(err, coll){
+            cb(err, coll);
+        }
+    );
+}
+
 module.exports.makeStore = makeStore;
 module.exports.updateCurrentIntervalById = updateCurrentIntervalById;
 module.exports.getStoreById = getStoreById;
 module.exports.makeFlyer = makeFlyer;
 module.exports.getStoreByStoreName = getStoreByStoreName;
 module.exports.getStoreByUrlNum = getStoreByUrlNum;
+module.exports.getNearestStores = getNearestStores;
+module.exports.getAllStores = getAllStores;

@@ -1,4 +1,20 @@
 
 var GetSobeysFlyer = Backbone.Model.extend({
-	    url:  getURL('/getSobeyFlyer') 
+	    url:  getURL('/getAllStores') 
 });
+
+
+/**
+* Gets the Nearest Sobeys collection
+* @param {options} - latitude, and longitude
+* @return {collection} - Nearest Collection
+*/
+var GetNearestSobeys = Backbone.Collection.extend({
+    initialize: function(options){
+        this.elat = options.elat;
+        this.elong = options.elong;
+    },
+    url: function(){
+        return getURL('/getNearestStores/') +this.elat+'/'+this.elong;
+    }
+}); 
