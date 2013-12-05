@@ -44,3 +44,19 @@ var getLocation = function(success, err){
         //success(moveCoords(debug.location));
       }
     }
+
+/**
+* Initializes the google map
+* @param {number} - Lat coord
+* @param {number} - Long coord
+*/
+var initializeMap = function(L1, L2)
+{
+    var mapProp = {
+        center:new google.maps.LatLng(L1,L2),
+        zoom:14,
+        mapTypeId:google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true
+    };
+    var map=new google.maps.Map(document.getElementById("findASobeys"),mapProp);
+}

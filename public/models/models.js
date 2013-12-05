@@ -18,3 +18,14 @@ var GetNearestSobeys = Backbone.Collection.extend({
         return getURL('/getNearestStores/') +this.elat+'/'+this.elong;
     }
 }); 
+
+
+var GetOneSobeyFlyer = Backbone.Collection.extend({
+    initialize: function(options){
+        this.id = options.id;
+    },
+    url: function(){
+        return getURL('/getSobeyFlyer/') +this.id;
+    }
+}); 
+
