@@ -13,9 +13,11 @@ var GetNearestSobeys = Backbone.Collection.extend({
     initialize: function(options){
         this.elat = options.elat;
         this.elong = options.elong;
+        this.maxD = options.maxD;
+
     },
     url: function(){
-        return getURL('/getNearestStores/') +this.elat+'/'+this.elong;
+        return getURL('/getNearestStores/') +this.elat+'/'+this.elong+'/'+this.maxD;
     }
 }); 
 
