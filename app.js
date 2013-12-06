@@ -342,6 +342,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
+			console.log('the flyers');
 			console.log(flyer);
 			res.send(flyer);
 		}
