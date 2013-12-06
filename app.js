@@ -320,16 +320,24 @@ app.get('/getBestDeals/:id', function (req, res){
 		if (err) res.send(500, 'could not get latest flyer by id');
 		var fly = flyer.currFlyer;
 		var highestSaving = []
-		, bestDeals = [];
+		, bestDeals = []
+		, buyOneGetOneFree = [];
 		for (var i = fly.length - 1; i >= 0; i--) {
-
-			console.log(fly[i])
+			if(fly[i].price.toLowerCase().indexOf('buy') > -1 && fly[i].price.toLowerCase().indexOf('get') > -1 && fly[i].price.toLowerCase().indexOf('free') > -1){
+				buyOneGetOneFree.push(fly[i]);
+				//console.log(fly[i]);
+			}
+			else{
+				console.log(fly[i]);
+			}
 		};
 
 		console.log('highestSaving: ');
 		console.log(highestSaving);
 		console.log('\nbestDeals: ');
 		console.log(bestDeals);
+		console.log('\buyOneGetOneFree: ');
+		console.log(buyOneGetOneFree);
 	});
 });
 
