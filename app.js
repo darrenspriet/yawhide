@@ -285,9 +285,8 @@ app.get('/makeStore', function (req, res){
 					});
 					var latLng = $('#map_location').text().split(', ');
 					//console.log('latLng is: ' + latLng);
-					var latLngOb = {};
-					latLngOb.lng = latLng[0].substr(1);
-					latLngOb.lat = latLng[1].substr(0,latLng[1].length -1);
+					var lng = latLng[0].substr(1);
+					var lat = latLng[1].substr(0,latLng[1].length -1);
 					//console.log(latLngOb);
 					/*
 					var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
@@ -312,7 +311,7 @@ app.get('/makeStore', function (req, res){
 					if(isEmptyObject(hours))
 						hours.open = '24 hours';
 					//console.log(hours);
-					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, latLngOb, function (err){
+					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
 						if(err) throw err;
 						z++;
 						loop();
@@ -327,15 +326,17 @@ app.get('/makeStore', function (req, res){
 	}());
 });
 
-app.post('/makeStore', function (req, res){
+// app.post('/makeStore', function (req, res){
 
-});
+// });
 
 
 app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
     var elat = req.params.elat;
     var elong = req.params.elong;
-    var maxD = req.params.maxD;
+    
+
+    var maxD = req.params.maxD/111;
 
 	Sobeys.getNearestStores( elong ,elat,maxD,function (err, flyer){
 		if(err){

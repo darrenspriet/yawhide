@@ -16,7 +16,7 @@ var SobeySchema = new db.Schema({
 		, Friday: String
 		, Saturday: String*/
 	}
-	, location: {lng: Number, lat: Number}
+	, location: {lat: Number, long: Number}
 	, currentInterval: String
 	, currFlyerDate: Date
 	, currFlyer: [{
@@ -45,7 +45,7 @@ var Sobey = db.mongoose.model('sobeys', SobeySchema);
 * @param {Object} - hours, latLng
 * @return {cb} - callback
 */
-var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, latLng, cb){
+var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, lat,lng, cb){
 	var ins = new Sobey();
 	ins.storeName = store;
 	ins.storeLocation = storeLoc;
@@ -54,7 +54,8 @@ var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hour
 	ins.city = city;
 	ins.postalCode = postalCode;
 	ins.storeHours = hours;
-	ins.location = latLng;
+	ins.location.lat = lat;
+	ins.location.long = lng;
 	ins.save(cb);
 }
 
@@ -136,9 +137,11 @@ var getStoreByUrlNum = function(num, cb){
 */
 var getNearestStores = function(elong,elat, maxD, callback){
 	Sobey.find({"location":
-		{$near: [elong, elat]
-			,$maxDistance : maxD} }
-			, function(err, collection){
+		{$near: [elat,elong]
+			,$maxDistance:maxD}}
+			,{}
+			,{limit:5}
+			, function(err, collection){ 
 				callback(null, collection);
 			});
     //One way, from cmd line: db.sobeys.ensureIndex({location: "2d"})

@@ -36,7 +36,7 @@ NearestStoresView = Backbone.View.extend({
 	el:' #page_container',
 	render: function(){
 		getLocation(function (loc){
-			var nearestSobeysStores = new GetNearestSobeys({elat: loc.latitude, elong: loc.longitude, maxD:10});
+			var nearestSobeysStores = new GetNearestSobeys({elat: loc.latitude, elong: loc.longitude, maxD:50});
 			//var nearestSobeysStores =  new GetOneSobeyFlyer();
 			nearestSobeysStores.fetch({
 				success: function(){
