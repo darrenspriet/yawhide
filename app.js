@@ -7,17 +7,18 @@ var express = require('express')
 , exphbs = require('express3-handlebars')
 //, $ = require('jquery')
 , cheerio = require('cheerio')
-, Sobeys = require('./models/sobeys.js');
+, Sobeys = require('./models/sobeys.js')
+, Geocoder = require('node-geocoder-ca').Geocoder
+, geocoder = new Geocoder();
 
 app = express();
 
 app.configure(function () {
 	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/views');
+	app.set('views', __dirname + '/jadeViews');
     //app.engine('handlebars', exphbs({defaultLayout : 'main'}));
     // app.set('view engine', 'handlebars');
     app.set('view engine', 'jade');
-    app.use(express.favicon());
     app.use(express.favicon());
     app.use(express.logger('dev'));
     app.use(express.json());
@@ -31,6 +32,8 @@ app.configure(function () {
 app.configure('development', function () {
 	app.use(express.errorHandler());
 });
+
+
 
 // var isCallerMobile = function (req) {
 // 	var ua = req.headers['user-agent'].toLowerCase(),
@@ -50,6 +53,14 @@ app.configure('development', function () {
 // 	}
 // }
 
+var isEmptyObject = function (obj) {
+    var name;
+    for (name in obj) {
+        return false;
+    }
+    return true;
+}
+
 //when the root route is called, do our mobile check
 app.get('/index', function (req, res){
   // var htmlString = $("div.card-inset").html();
@@ -57,106 +68,306 @@ app.get('/index', function (req, res){
   res.end('this worked');
 });
 
-// app.get('/mobile', function (req, res){
-// 	res.render('mIndex');
-// });
-
-// var date;
-// var dl = 'https://www.sobeys.com/en/flyer/accessible';
-// , dlPath = './' + 'sobeys ' + date + '.html';
-
-
-// app.get('/downloadSobeysFlyer', function (req, res){
-// 	date = new Date().getTime();
-// 	dlPath = './' + 'sobeys ' + date + '.html';
-// 	request(dl).pipe(fs.createWriteStream(dlPath))
-// 	res.render('mIndex')
-// })
-
 app.get('/mobile', function (req, res){
-	//res.render('mIndex');
 });
 
 var date;
-var url = 'https://www.sobeys.com/en/flyer/accessible'
-, dlPath = './' + 'sobeys ' + date + '.html'
-, data = {}
+var data = {}
 , div = 'div.card > div.card-plain > div.card-inset > table > ';
 
 
-app.get('/downloadSobeysFlyer', function (req, res){
-	date = new Date().getTime();
-	dlPath = './' + 'sobeys ' + date + '.html';
-	//request(dl).pipe(fs.createWriteStream(dlPath))
-	request(url, function (err, resp, body){
-		var $ = cheerio.load(body);
-		var  title = []
-		, info = []
-		/** this finds the section with 3 classes and a table with a nested thead.
-		 *	 it then finds all the coloumns names and puts it in an array */
-		$('.card .card-plain .card-inset table thead tr').each(function (i, html){
-			for(var i = 0; i < html.children.length; i++){
-				if(html.children[i].data !== '\n'){
-					for(var j = 0; j < html.children[i].children.length; j++){
-						if(typeof (html.children[i].children) !== 'undefined' && typeof (html.children[i].children[j]) !== 'undefined')
-							title.push(html.children[i].children[j].data)
-					}
-				}
-			}
-		})
-		console.log('title is: ')
-		console.log(title)
-		/** this finds the tbody section in the table.
-		 *	 it will hopefully parse through and get four pieces of info:
-		 *	 item, price, savings and description */
-		$('.card .card-plain .card-inset table tbody').each(function (i, html){
-			for(var i = 0; i < html.children.length; i++){
-				if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
-					var ob = {}
-					for(var j = 0; j < html.children[i].children.length; j++){
-						if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
-							if (html.children[i].children[j].children.length == 0){
-								html.children[i].children[j].children.push({
-									data: ''
-								})
-							}
-							//console.log(i + " "  + j)
-							//console.log(html.children[i].children[j].children[0].data)
-							switch(j){
-								case 1:
-									ob.name = html.children[i].children[j].children[0].data;
-									break;
-								case 3:
-									ob.price = html.children[i].children[j].children[0].data;
-									break;
-								case 5:
-									ob.savings = html.children[i].children[j].children[0].data;
-									break;
-								case 7:
-									ob.description = html.children[i].children[j].children[0].data;
-									break;
-								default:
-									ob.description = html.children[i].children[j].children[0].data;
-									break;
+app.get('/readLocalFlyers', function (req, res){
+	var latestFolder;
+	fs.readdir('./sobeys/', function (err, folders){
+		if (err) throw err;
+		/** always gets the last folder in ./sobeys/
+			because it sorts it by created date (or last mod prob)
+			*/
+		latestFolder = folders[folders.length -1];
+		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, html){
+			if (err2) throw err2;
+			html.forEach(function (h){
+
+				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {//h instead of 289.html
+					if (err) throw err;
+					var $ = cheerio.load(data);
+
+					var info = [];
+					
+					/** this finds the tbody section in the table.
+					 *	 it will hopefully parse through and get four pieces of info:
+					 *	 item, price, savings and description */
+					$('.card .card-plain .card-inset table tbody').each(function (i, html){
+						for(var i = 0; i < html.children.length; i++){
+							if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
+								var ob = {};
+								for(var j = 0; j < html.children[i].children.length; j++){
+									if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
+										delete html.children[i].children[j].prev;
+										delete html.children[i].children[j].next;
+										delete html.children[i].children[j].parent;
+										delete html.children[i].children[j].attribs;
+										delete html.children[i].children[j].data;
+										//console.log('\n' + j);
+										//console.log(html.children[i].children[j]);
+										if (html.children[i].children[j].children.length == 0){
+											html.children[i].children[j].children.push({
+												data: ''
+											});
+										}
+										switch(j){
+											case 1:
+												ob.item = html.children[i].children[j].children[0].data;
+												break;
+											case 3:
+												ob.price = html.children[i].children[j].children[0].data;
+												break;
+											case 5:
+												ob.savings = html.children[i].children[j].children[0].data;
+												break;
+											case 7:
+												ob.description = html.children[i].children[j].children[0].data;
+												break;
+											/*default:
+												ob.description = html.children[i].children[j].children[0].data;
+												break;*/
+										}
+									}
+								}
+								info.push(ob);
+								//console.log('\n');
+								//console.log(ob);
 							}
 						}
-					}
-					info.push(ob)
-				}
-			}
-			console.log(info)
-		})
-		Sobeys.makeFlyer('', '', 0, '', '', info, function (err){
-			console.log(err);
+						var urlNum = h.split('.')[0]
+						Sobeys.getStoreByUrlNum(urlNum, function (err, store){
+							if (err) throw err;
+							if(!err && store !== null){
+
+								Sobeys.makeFlyer(store, info, function (err2){
+									if (err2) throw err;
+									console.log('success: '+urlNum);
+								});
+							}
+							else{
+								console.log('no store under that url number: '+urlNum);
+							}
+						});
+					});
+
+				});
+			});
 		});
-	
 	});
 });
 
-app.get('/getSobeyFlyer', function (req, res){
-	Sobeys.getFlyerById('5293f009cd118f3b11000002', function (err, flyer){
-		console.log(err + " " + flyer);
-		res.send(flyer);
+app.get('/makeStore', function (req, res){
+	var url = 'https://www.sobeys.com/en/stores/'
+
+	var z = 1;
+	(function loop(){
+		if(z < 290){
+			var storename = ''
+			, storeloc = ''
+			, storenum = 0
+			, urlnum = z
+			, city = ''
+			, postal = ''
+			, hours = {}
+			, interval = '';
+			request(url+z, function (r, s, b){
+				var $ = cheerio.load(b);
+				var info = [];
+				if(	$('body').find('.block').length == 0){
+					$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
+						var count = 0;
+						html.children.forEach(function (i){
+							if(i.data !== '\n' && count > 1){
+								var count3 = 0;
+								i.children.forEach(function (j){
+									if(j.data !== '\n'){
+										if(j.attribs['class'].indexOf('grid__item') > -1){
+											
+											j.children.forEach(function (k){
+												if(k.data !== '\n'){
+													if(k.attribs['class'] === 'palm--hide'){
+														var str = '';
+														var count2 = 0;
+														k.children.forEach(function (l){
+															if(l.type !== 'tag'){
+																var tmp = l.data.split('\n');
+																tmp.forEach(function (m){
+																	if(m !== ''){
+																		str += m + ' ';
+																		switch(count2){
+																			case 0:
+																				storeloc = m;
+																				count2++;
+																				break;
+																			case 1:
+																				city = m;
+																				count2++;
+																				break;
+																			case 2:
+																				postal = m;
+																				count2++;
+																				break;
+																		}
+																	}
+																});
+															}
+														});
+														count2 = 0;
+													}
+													if(count3 == 6){
+														storenum = 	k.children[0].data.split('\n')[1];					
+													}
+													count3++;
+												}
+											});
+										}										
+									}
+								});
+								count3 = 0;
+							}
+							count++;
+						});
+					});
+					$('.my-store-title div div h3').each(function (i, html){
+						var tmp = html.children[0].data.split(' ');
+						var tmp2 = '';
+						for(var y = 0; y < tmp.length; y++){
+							if(y > 1){
+								tmp2 += tmp[y];
+								if(y+1 < tmp.length)
+									tmp2+=' ';
+							}
+						}
+						storename = tmp2;
+					});
+					$('.push--desk--one-half table tbody tr').each(function (i, html){
+						var prevDay = '';
+						html.children.forEach(function (i){
+							if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
+									
+								var whole = i.children[0].data.split(' ');
+								if(whole.length == 5){
+									hours[prevDay] = i.children[0].data;
+								}
+								else if (whole.length == 1){
+									prevDay = whole[0];
+								}
+								else if (whole.length > 1 && whole.length < 5){
+									hours[prevDay] = i.children[0].data;
+								}
+							}
+						});
+					});
+					var latLng = $('#map_location').text().split(', ');
+					//console.log('latLng is: ' + latLng);
+					var lng = latLng[0].substr(1);
+					var lat = latLng[1].substr(0,latLng[1].length -1);
+					//console.log(latLngOb);
+					/*
+					var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
+				    var sensor = false;
+				    var geoOb = {};
+				    //address = '525 Market St, Philadelphia, PA 19106';
+				    
+					geocoder.geocode(address, function(err, coords) {
+					    if (err) throw err;
+					    console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
+					    console.log(coords);
+					});
+				    console.log('geoOb');
+				    console.log(geoOb);*/
+					//console.log('storename: ' + storename);
+					//console.log('storenum: ' + storenum);
+					//console.log('storeloc: ' + storeloc);
+					//console.log('urlnum: ' + urlnum);
+					//console.log('city: ' + city);
+					//console.log('postal: ' + postal);
+					//console.log('hours: ');
+					if(isEmptyObject(hours))
+						hours.open = '24 hours';
+					//console.log(hours);
+					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
+						if(err) throw err;
+						console.log(z);
+						z++;
+						loop();
+					});
+				}
+				else{
+					z++;
+					loop();
+				}
+			});
+		}
+	}());
+});
+
+// app.post('/makeStore', function (req, res){
+
+// });
+
+
+app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
+    var elat = req.params.elat;
+    var elong = req.params.elong;
+    
+
+    var maxD = req.params.maxD/111;
+
+	Sobeys.getNearestStores( elong ,elat,maxD,function (err, flyer){
+		if(err){
+			console.log("there was an error");
+		}
+		else{
+			console.log('the flyers');
+			console.log(flyer);
+			res.send(flyer);
+		}
+	});
+});
+
+app.get('/getAllStores', function (req, res){
+
+	Sobeys.getAllStores(function (err, flyer){
+		if(err){
+			console.log("there was an error");
+		}
+		else{
+			console.log('this is the flyer');
+			console.log(flyer)
+			res.send(flyer);
+		}
+	});
+});
+
+app.get('/getBestDeals/:id', function (req, res){
+	Sobeys.getStoreByUrlNum(req.params.id, function (err, flyer){
+		if (err) res.send(500, 'could not get latest flyer by id');
+		var fly = flyer.currFlyer;
+		var highestSaving = []
+		, bestDeals = []
+		, buyOneGetOneFree = [];
+		for (var i = fly.length - 1; i >= 0; i--) {
+			if(fly[i].price.toLowerCase().indexOf('buy') > -1 && fly[i].price.toLowerCase().indexOf('get') > -1 && fly[i].price.toLowerCase().indexOf('free') > -1){
+				buyOneGetOneFree.push(fly[i]);
+				//console.log(fly[i]);
+			}
+			else{
+				console.log(fly[i]);
+			}
+		};
+
+		console.log('highestSaving: ');
+		console.log(highestSaving);
+		console.log('\nbestDeals: ');
+		console.log(bestDeals);
+		console.log('\buyOneGetOneFree: ');
+		console.log(buyOneGetOneFree);
 	});
 });
 

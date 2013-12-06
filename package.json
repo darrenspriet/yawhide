@@ -11,8 +11,9 @@
     , "backbone" : "1.x"
     , "express3-handlebars": "x"
     , "request": "x"
-    , "jquery" : "*"
     , "ejs" : "*"
     , "cheerio": "*"
+    , "jade": "*"
+    , "node-geocoder-ca": "*"
   }
 }

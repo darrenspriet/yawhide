@@ -2,26 +2,37 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>YawHide</title>
   <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap-responsive.css">
+  <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div id='page_container'>
+  <div id='page_container' >
   </div>
-
   <script src="js/libs/jquery-1.10.2.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=&AIzaSyDWBI3ihsg8ui1QlwJ2FGgA992Hwfm97ks&v=3.exp&sensor=false&libraries=visualization"></script>
   <script src="js/libs/underscore.js"></script>
   <script src="js/libs/backbone.js"></script>
+  <script src="js/libs/mustache.js"></script>
   <script src="js/libs/handlebars-v1.1.2.js"></script>
+  <script src="js/libs/bootstrap.js"></script>
+  <script src="js/libs/bootstrap.min.js"></script>
   <script src="js/functions.js"></script>
   <script src="views/views.js"></script>
   <script src="routes/routes.js"></script>
   <script src="models/models.js"></script>
   <script type="text/javascript">
 
-  /*INSTANTIATE VIEWS */
+    /*INSTANTIATE VIEWS */
     var index = new IndexView();
+    var nearestStores = new NearestStoresView();
     index.render();
     /* Begins the backbone history */
     Backbone.history.start();
