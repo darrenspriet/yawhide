@@ -88,10 +88,8 @@ app.get('/readLocalFlyers', function (req, res){
 			if (err2) throw err2;
 			html.forEach(function (h){
 
-				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {
+				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {//h instead of 289.html
 					if (err) throw err;
-					//console.log(data + " " + h);
-					
 					var $ = cheerio.load(data);
 
 					var info = [];
@@ -102,9 +100,16 @@ app.get('/readLocalFlyers', function (req, res){
 					$('.card .card-plain .card-inset table tbody').each(function (i, html){
 						for(var i = 0; i < html.children.length; i++){
 							if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
-								var ob = {}
+								var ob = {};
 								for(var j = 0; j < html.children[i].children.length; j++){
 									if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
+										delete html.children[i].children[j].prev;
+										delete html.children[i].children[j].next;
+										delete html.children[i].children[j].parent;
+										delete html.children[i].children[j].attribs;
+										delete html.children[i].children[j].data;
+										//console.log('\n' + j);
+										//console.log(html.children[i].children[j]);
 										if (html.children[i].children[j].children.length == 0){
 											html.children[i].children[j].children.push({
 												data: ''
@@ -112,7 +117,7 @@ app.get('/readLocalFlyers', function (req, res){
 										}
 										switch(j){
 											case 1:
-												ob.name = html.children[i].children[j].children[0].data;
+												ob.item = html.children[i].children[j].children[0].data;
 												break;
 											case 3:
 												ob.price = html.children[i].children[j].children[0].data;
@@ -123,28 +128,29 @@ app.get('/readLocalFlyers', function (req, res){
 											case 7:
 												ob.description = html.children[i].children[j].children[0].data;
 												break;
-											default:
+											/*default:
 												ob.description = html.children[i].children[j].children[0].data;
-												break;
+												break;*/
 										}
 									}
 								}
 								info.push(ob);
+								//console.log('\n');
+								//console.log(ob);
 							}
 						}
-						//console.log(info);
-						console.log(h.split('.')[0]);
-						Sobeys.getStoreByUrlNum(h.split('.')[0], function (err, store){
-							if (err) throw err;//console.log(err);
+						var urlNum = h.split('.')[0]
+						Sobeys.getStoreByUrlNum(urlNum, function (err, store){
+							if (err) throw err;
 							if(!err && store !== null){
 
 								Sobeys.makeFlyer(store, info, function (err2){
 									if (err2) throw err;
-									//console.log(err2);
+									console.log('success: '+urlNum);
 								});
 							}
 							else{
-								console.log('no store under that url number');
+								console.log('no store under that url number: '+urlNum);
 							}
 						});
 					});
@@ -176,25 +182,14 @@ app.get('/makeStore', function (req, res){
 					$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
 						var count = 0;
 						html.children.forEach(function (i){
-							delete i.prev;
-							delete i.parent;
-							delete i.next;
-
 							if(i.data !== '\n' && count > 1){
 								var count3 = 0;
 								i.children.forEach(function (j){
-									
-									delete j.prev;
-									delete j.parent;
-									delete j.next;
 									if(j.data !== '\n'){
 										if(j.attribs['class'].indexOf('grid__item') > -1){
 											
 											j.children.forEach(function (k){
 												if(k.data !== '\n'){
-													delete k.prev;
-													delete k.parent;
-													delete k.next;
 													if(k.attribs['class'] === 'palm--hide'){
 														var str = '';
 														var count2 = 0;
@@ -225,16 +220,11 @@ app.get('/makeStore', function (req, res){
 														count2 = 0;
 													}
 													if(count3 == 6){
-														//console.log(k);
-														storenum = 	k.children[0].data.split('\n')[1];
-														//console.log('storenum: ' + storenum);							
+														storenum = 	k.children[0].data.split('\n')[1];					
 													}
 													count3++;
 												}
-												//console.log(count3);
 											});
-											
-											//console.log(j);
 										}										
 									}
 								});
@@ -242,7 +232,6 @@ app.get('/makeStore', function (req, res){
 							}
 							count++;
 						});
-						
 					});
 					$('.my-store-title div div h3').each(function (i, html){
 						var tmp = html.children[0].data.split(' ');
@@ -259,28 +248,19 @@ app.get('/makeStore', function (req, res){
 					$('.push--desk--one-half table tbody tr').each(function (i, html){
 						var prevDay = '';
 						html.children.forEach(function (i){
-							delete i.prev;
-							delete i.parent;
-							delete i.next;
-							
-
-								if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
+							if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
 									
-									var whole = i.children[0].data.split(' ');
-									//console.log(whole);
-									if(whole.length == 5){
-										hours[prevDay] = i.children[0].data;
-										//console.log(prevDay);
-									}
-									else if (whole.length == 1){
-										prevDay = whole[0];
-									}
-									else if (whole.length > 1 && whole.length < 5){
-										hours[prevDay] = i.children[0].data;
-									}
-
+								var whole = i.children[0].data.split(' ');
+								if(whole.length == 5){
+									hours[prevDay] = i.children[0].data;
 								}
-							
+								else if (whole.length == 1){
+									prevDay = whole[0];
+								}
+								else if (whole.length > 1 && whole.length < 5){
+									hours[prevDay] = i.children[0].data;
+								}
+							}
 						});
 					});
 					var latLng = $('#map_location').text().split(', ');
@@ -313,6 +293,7 @@ app.get('/makeStore', function (req, res){
 					//console.log(hours);
 					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
 						if(err) throw err;
+						console.log(z);
 						z++;
 						loop();
 					});
@@ -364,10 +345,29 @@ app.get('/getAllStores', function (req, res){
 	});
 });
 
-app.post('/getBestDeals/:id', function (req, res){
-	Sobeys.getLatestFlyerById(req.params.id, function (err, flyer){
+app.get('/getBestDeals/:id', function (req, res){
+	Sobeys.getStoreByUrlNum(req.params.id, function (err, flyer){
 		if (err) res.send(500, 'could not get latest flyer by id');
+		var fly = flyer.currFlyer;
+		var highestSaving = []
+		, bestDeals = []
+		, buyOneGetOneFree = [];
+		for (var i = fly.length - 1; i >= 0; i--) {
+			if(fly[i].price.toLowerCase().indexOf('buy') > -1 && fly[i].price.toLowerCase().indexOf('get') > -1 && fly[i].price.toLowerCase().indexOf('free') > -1){
+				buyOneGetOneFree.push(fly[i]);
+				//console.log(fly[i]);
+			}
+			else{
+				console.log(fly[i]);
+			}
+		};
 
+		console.log('highestSaving: ');
+		console.log(highestSaving);
+		console.log('\nbestDeals: ');
+		console.log(bestDeals);
+		console.log('\buyOneGetOneFree: ');
+		console.log(buyOneGetOneFree);
 	});
 });
 

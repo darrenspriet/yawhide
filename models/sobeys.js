@@ -19,20 +19,20 @@ var SobeySchema = new db.Schema({
 	, location: {lat: Number, long: Number}
 	, currentInterval: String
 	, currFlyerDate: Date
-	, currFlyer: [{
+	, currFlyer: [/*{
 		item: String
 		, price: String
 		, savings: String
 		, description: String
-	}]
+	}*/]
 	, oldFlyers: [{
 		date: Date
-		, actualFlyer: [{
+		, actualFlyer: [/*{
 			item: String
 			, price: String
 			, savings: String
 			, description: String
-		}]
+		}*/]
 	}]
 });
 
