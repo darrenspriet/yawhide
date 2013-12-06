@@ -131,7 +131,7 @@ app.get('/readLocalFlyers', function (req, res){
 							}
 						}
 						//console.log(info);
-						console.log(h.split('.')[0]);
+						//console.log(h.split('.')[0]);
 						Sobeys.getStoreByUrlNum(h.split('.')[0], function (err, store){
 							if (err) throw err;//console.log(err);
 							if(!err && store !== null){
@@ -142,7 +142,7 @@ app.get('/readLocalFlyers', function (req, res){
 								});
 							}
 							else{
-								console.log('no store under that url number');
+								console.log('no store under that url number: '+h.split('.')[0]);
 							}
 						});
 					});
@@ -174,25 +174,14 @@ app.get('/makeStore', function (req, res){
 					$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
 						var count = 0;
 						html.children.forEach(function (i){
-							delete i.prev;
-							delete i.parent;
-							delete i.next;
-
 							if(i.data !== '\n' && count > 1){
 								var count3 = 0;
 								i.children.forEach(function (j){
-									
-									delete j.prev;
-									delete j.parent;
-									delete j.next;
 									if(j.data !== '\n'){
 										if(j.attribs['class'].indexOf('grid__item') > -1){
 											
 											j.children.forEach(function (k){
 												if(k.data !== '\n'){
-													delete k.prev;
-													delete k.parent;
-													delete k.next;
 													if(k.attribs['class'] === 'palm--hide'){
 														var str = '';
 														var count2 = 0;
@@ -223,16 +212,11 @@ app.get('/makeStore', function (req, res){
 														count2 = 0;
 													}
 													if(count3 == 6){
-														//console.log(k);
-														storenum = 	k.children[0].data.split('\n')[1];
-														//console.log('storenum: ' + storenum);							
+														storenum = 	k.children[0].data.split('\n')[1];					
 													}
 													count3++;
 												}
-												//console.log(count3);
 											});
-											
-											//console.log(j);
 										}										
 									}
 								});
@@ -240,7 +224,6 @@ app.get('/makeStore', function (req, res){
 							}
 							count++;
 						});
-						
 					});
 					$('.my-store-title div div h3').each(function (i, html){
 						var tmp = html.children[0].data.split(' ');
@@ -257,61 +240,30 @@ app.get('/makeStore', function (req, res){
 					$('.push--desk--one-half table tbody tr').each(function (i, html){
 						var prevDay = '';
 						html.children.forEach(function (i){
-							delete i.prev;
-							delete i.parent;
-							delete i.next;
-							
-
-								if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
+							if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
 									
-									var whole = i.children[0].data.split(' ');
-									//console.log(whole);
-									if(whole.length == 5){
-										hours[prevDay] = i.children[0].data;
-										//console.log(prevDay);
-									}
-									else if (whole.length == 1){
-										prevDay = whole[0];
-									}
-									else if (whole.length > 1 && whole.length < 5){
-										hours[prevDay] = i.children[0].data;
-									}
-
+								var whole = i.children[0].data.split(' ');
+								if(whole.length == 5){
+									hours[prevDay] = i.children[0].data;
 								}
-							
+								else if (whole.length == 1){
+									prevDay = whole[0];
+								}
+								else if (whole.length > 1 && whole.length < 5){
+									hours[prevDay] = i.children[0].data;
+								}
+							}
 						});
 					});
 					var latLng = $('#map_location').text().split(', ');
-					//console.log('latLng is: ' + latLng);
 					var latLngOb = {};
 					latLngOb.lng = latLng[0].substr(1);
 					latLngOb.lat = latLng[1].substr(0,latLng[1].length -1);
-					//console.log(latLngOb);
-					/*
-					var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
-				    var sensor = false;
-				    var geoOb = {};
-				    //address = '525 Market St, Philadelphia, PA 19106';
-				    
-					geocoder.geocode(address, function(err, coords) {
-					    if (err) throw err;
-					    console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
-					    console.log(coords);
-					});
-				    console.log('geoOb');
-				    console.log(geoOb);*/
-					//console.log('storename: ' + storename);
-					//console.log('storenum: ' + storenum);
-					//console.log('storeloc: ' + storeloc);
-					//console.log('urlnum: ' + urlnum);
-					//console.log('city: ' + city);
-					//console.log('postal: ' + postal);
-					//console.log('hours: ');
 					if(isEmptyObject(hours))
 						hours.open = '24 hours';
-					//console.log(hours);
 					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, latLngOb, function (err){
 						if(err) throw err;
+						console.log(z);
 						z++;
 						loop();
 					});
@@ -357,10 +309,21 @@ app.get('/getAllStores', function (req, res){
 	});
 });
 
-app.post('/getBestDeals/:id', function (req, res){
-	Sobeys.getLatestFlyerById(req.params.id, function (err, flyer){
+app.get('/getBestDeals/:id', function (req, res){
+	Sobeys.getStoreByUrlNum(req.params.id, function (err, flyer){
 		if (err) res.send(500, 'could not get latest flyer by id');
+		var fly = flyer.currFlyer;
+		var highestSaving = []
+		, bestDeals = [];
+		for (var i = fly.length - 1; i >= 0; i--) {
 
+			console.log(fly[i])
+		};
+
+		console.log('highestSaving: ');
+		console.log(highestSaving);
+		console.log('\nbestDeals: ');
+		console.log(bestDeals);
 	});
 });
 
