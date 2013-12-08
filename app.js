@@ -89,74 +89,87 @@ app.get('/readLocalFlyers', function (req, res){
 			if (err2) throw err2;
 			console.log(latestFolder);
 			html.forEach(function (h){
+				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err3, data) {
+					if (err3) throw err;
 
-				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {//h instead of 289.html
-					if (err) throw err;
 					var $ = cheerio.load(data);
 
 					var info = [];
+
+					if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1){
+						console.log('no flyer at file: ' + h);
+						z++;
+						loop();
+					}
+					else{
 					
-					/** this finds the tbody section in the table.
-					 *	 it will hopefully parse through and get four pieces of info:
-					 *	 item, price, savings and description */
-					$('.card .card-plain .card-inset table tbody').each(function (i, html){
-						for(var i = 0; i < html.children.length; i++){
-							if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
-								var ob = {};
-								for(var j = 0; j < html.children[i].children.length; j++){
-									if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
-										delete html.children[i].children[j].prev;
-										delete html.children[i].children[j].next;
-										delete html.children[i].children[j].parent;
-										delete html.children[i].children[j].attribs;
-										delete html.children[i].children[j].data;
-										//console.log('\n' + j);
-										//console.log(html.children[i].children[j]);
-										if (html.children[i].children[j].children.length == 0){
-											html.children[i].children[j].children.push({
-												data: ''
-											});
-										}
-										switch(j){
-											case 1:
-												ob.item = html.children[i].children[j].children[0].data;
-												break;
-											case 3:
-												ob.price = html.children[i].children[j].children[0].data;
-												break;
-											case 5:
-												ob.savings = html.children[i].children[j].children[0].data;
-												break;
-											case 7:
-												ob.description = html.children[i].children[j].children[0].data;
-												break;
-											/*default:
-												ob.description = html.children[i].children[j].children[0].data;
-												break;*/
+						/** this finds the tbody section in the table.
+						 *	 it will hopefully parse through and get four pieces of info:
+						 *	 item, price, savings and description */
+						$('.card .card-plain .card-inset table tbody').each(function (i, html){
+							for(var i = 0; i < html.children.length; i++){
+								if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
+									var ob = {};
+									for(var j = 0; j < html.children[i].children.length; j++){
+										if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
+											delete html.children[i].children[j].prev;
+											delete html.children[i].children[j].next;
+											delete html.children[i].children[j].parent;
+											delete html.children[i].children[j].attribs;
+											delete html.children[i].children[j].data;
+											//console.log('\n' + j);
+											//console.log(html.children[i].children[j]);
+											if (html.children[i].children[j].children.length == 0){
+												html.children[i].children[j].children.push({
+													data: ''
+												});
+											}
+											switch(j){
+												case 1:
+													ob.item = html.children[i].children[j].children[0].data;
+													break;
+												case 3:
+													ob.price = html.children[i].children[j].children[0].data;
+													break;
+												case 5:
+													ob.savings = html.children[i].children[j].children[0].data;
+													break;
+												case 7:
+													ob.description = html.children[i].children[j].children[0].data;
+													break;
+												/*default:
+													ob.description = html.children[i].children[j].children[0].data;
+													break;*/
+											}
 										}
 									}
+									info.push(ob);
+									//console.log('\n');
+									//console.log(ob);
 								}
-								info.push(ob);
-								//console.log('\n');
-								//console.log(ob);
 							}
-						}
-						var urlNum = h.split('.')[0]
-						Sobeys.getStoreByUrlNum(urlNum, function (err, store){
-							if (err) throw err;
-							if(!err && store !== null){
+							var urlNum = h.split('.')[0];
+							console.log(z + " " + urlNum);
+							Sobeys.getStoreByUrlNum(urlNum, function (err, store){
+								if (err) throw err;
+								if(!err && store !== null){
 
-								Sobeys.makeFlyer(store, info, function (err2){
-									if (err2) throw err;
-									console.log('success: '+urlNum);
-								});
-							}
-							else{
-								console.log('no store under that url number: '+urlNum);
-							}
+									Sobeys.makeFlyer(store, info, function (err2){
+										if (err2) throw err;
+										//console.log('success: '+urlNum);
+										
+										z++;
+										loop();
+									});
+								}
+								else{
+									console.log('no store under that url number: '+urlNum);
+									z++;
+									loop();
+								}
+							});
 						});
-					});
-
+					}
 				});
 			});
 		});
@@ -356,16 +369,15 @@ app.get('/getBestDeals/:id', function (req, res){
 		, buyOneGetOneFree = [];
 		
 		//buyOneGetOneFree = s.findBuy1Get1Free(fly, buyOneGetOneFree);
+		bestDeals = s.findBestDollarDeal(fly, bestDeals);
 		console.log('highestSaving: ');
 		console.log(highestSaving);
 		console.log('\nbestDeals: ');
 		console.log(bestDeals);
 		console.log('\buyOneGetOneFree: ');
 		console.log(buyOneGetOneFree);
-		fly.forEach(function (i){
-			console.log(i.item);
-		})
 		
+		console.log(flyer.storeName);
 	});
 });
 
