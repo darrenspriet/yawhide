@@ -16,7 +16,7 @@ app = express();
 
 app.configure(function () {
 	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/jadeViews');
+	// app.set('views', __dirname + '/jadeViews');
     //app.engine('handlebars', exphbs({defaultLayout : 'main'}));
     // app.set('view engine', 'handlebars');
     app.set('view engine', 'jade');
@@ -383,6 +383,7 @@ app.get('/getBestDeals/:id', function (req, res){
 
 app.get('/getSobeyFlyer/:id', function (req, res){
 	Sobeys.getStoreByUrlNum(req.params.id, function (err, store){
+	
 		if (err) res.send(500, 'could not get store by number')
 		else{
 			res.send(store);
