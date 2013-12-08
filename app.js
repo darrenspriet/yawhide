@@ -9,7 +9,8 @@ var express = require('express')
 , cheerio = require('cheerio')
 , Sobeys = require('./models/sobeys.js')
 , Geocoder = require('node-geocoder-ca').Geocoder
-, geocoder = new Geocoder();
+, geocoder = new Geocoder()
+, s = require('./algorithms/sobeyFunc');
 
 app = express();
 
@@ -353,21 +354,18 @@ app.get('/getBestDeals/:id', function (req, res){
 		var highestSaving = []
 		, bestDeals = []
 		, buyOneGetOneFree = [];
-		for (var i = fly.length - 1; i >= 0; i--) {
-			if(fly[i].price.toLowerCase().indexOf('buy') > -1 && fly[i].price.toLowerCase().indexOf('get') > -1 && fly[i].price.toLowerCase().indexOf('free') > -1){
-				buyOneGetOneFree.push(fly[i]);
-				//console.log(fly[i]);
-			}
-			else{
-				console.log(fly[i]);
-			}
-		};
+		
+		//buyOneGetOneFree = s.findBuy1Get1Free(fly, buyOneGetOneFree);
 		console.log('highestSaving: ');
 		console.log(highestSaving);
 		console.log('\nbestDeals: ');
 		console.log(bestDeals);
 		console.log('\buyOneGetOneFree: ');
 		console.log(buyOneGetOneFree);
+		fly.forEach(function (i){
+			console.log(i.item);
+		})
+		
 	});
 });
 
