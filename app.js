@@ -86,6 +86,7 @@ app.get('/readLocalFlyers', function (req, res){
 		latestFolder = folders[folders.length -1];
 		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, html){
 			if (err2) throw err2;
+			console.log(latestFolder);
 			html.forEach(function (h){
 
 				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {//h instead of 289.html
