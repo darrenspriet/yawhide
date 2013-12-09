@@ -15,7 +15,7 @@ app = express();
 
 app.configure(function () {
 	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/jadeViews');
+	// app.set('views', __dirname + '/jadeViews');
     //app.engine('handlebars', exphbs({defaultLayout : 'main'}));
     // app.set('view engine', 'handlebars');
     app.set('view engine', 'jade');
