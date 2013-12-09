@@ -362,7 +362,6 @@ app.get('/getBestDeals/:id', function (req, res){
 				console.log(fly[i]);
 			}
 		};
-
 		console.log('highestSaving: ');
 		console.log(highestSaving);
 		console.log('\nbestDeals: ');
@@ -370,6 +369,15 @@ app.get('/getBestDeals/:id', function (req, res){
 		console.log('\buyOneGetOneFree: ');
 		console.log(buyOneGetOneFree);
 	});
+});
+
+app.get('/getSobeyFlyer/:id', function (req, res){
+	Sobeys.getStoreByUrlNum(req.params.id, function (err, store){
+		if (err) res.send(500, 'could not get store by number')
+		else{
+			res.send(store);
+		}
+	})
 });
 
 http.createServer(app).listen(app.get('port'), function () {
