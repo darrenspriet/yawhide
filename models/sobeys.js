@@ -148,16 +148,14 @@ var getNearestStores = function(elong,elat, maxD, callback){
 }
 
 /**
-* ggets all the sobey objects
+* gets all the sobey objects
 * @return {cb} - callback
 */
 var getAllStores = function(cb){
     Sobey.find(
-        {},
-        function(err, coll){
-            cb(err, coll);
-        }
-    );
+        null
+        , null
+        , cb );
 }
 
 module.exports.makeStore = makeStore;
