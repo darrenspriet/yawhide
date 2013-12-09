@@ -106,36 +106,36 @@ var ViewFlyerView = Backbone.View.extend({
 		var store = new GetOneSobeyStore({id: id});
 		store.fetch({
 			success: function(){
-				// console.log(store.attributes);
-				// var template = "<table>"+
-				// "<tr><th>Name</th><th>Description</th><th>Price</th><th>Savings</th></tr>"+
-				// "{{#store.attributes}}"+
-				// "<tr>"+
-				// "<td>{{name}}</td><td>{{description}}</td><td>{{price}}</td><td>{{savings}}</td>"+
-				// "</tr>"+
-				// "{{/store.attributes}}";
+				console.log(store.attributes);
+				var template = "<table>"+
+				"<tr><th>Name</th><th>Description</th><th>Price</th><th>Savings</th></tr>"+
+				"{{#flyer}}"+
+				"<tr>"+
+				"<td>{{item}}</td><td>{{description}}</td><td>{{price}}</td><td>{{savings}}</td>"+
+				"</tr>"+
+				"{{/flyer}}";
 
 
-				var template ="<div class='row'>"+
-					"<div class='col-xs-12'>"+
-						"<h5>Sobeys - {{storeName}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"<div class='row'>"+
-					"<div class='col-xs-6'>"+
-						"<h5>{{storeNumber}}</h5>"+
-					"</div>"+
-					"<div class='col-xs-6'>"+
-						"<h5>{{city}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"<div class='row'>"+
-					"<div class='col-xs-12'>"+
-						"<h5>Store Hours - {{storeHours.open}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"</div>";
-				 $('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
+				// var template ="<div class='row'>"+
+				// 	"<div class='col-xs-12'>"+
+				// 		"<h5>Sobeys - {{storeName}}</h5>"+
+				// 	"</div>"+
+				// "</div>"+
+				// "<div class='row'>"+
+				// 	"<div class='col-xs-6'>"+
+				// 		"<h5>{{storeNumber}}</h5>"+
+				// 	"</div>"+
+				// 	"<div class='col-xs-6'>"+
+				// 		"<h5>{{city}}</h5>"+
+				// 	"</div>"+
+				// "</div>"+
+				// "<div class='row'>"+
+				// 	"<div class='col-xs-12'>"+
+				// 		"<h5>Store Hours - {{storeHours.open}}</h5>"+
+				// 	"</div>"+
+				// "</div>"+
+				// "</div>";
+				 $('#page_container').html(Mustache.to_html(template, {flyer:store.attributes.currFlyer})).trigger('create');
 				
 				 return this;
 			}
