@@ -24,11 +24,11 @@ app_router.on('route:nearestStores', function (){
 });
 
 app_router.on('route:storeInfo', function (id){
-	console.log("Router is taking you to storeInfo page");
-	storeInfo.render();
+	console.log("Router is taking you to storeInfo page with id: "+id);
+	storeInfo.render(id);
 });
 
 app_router.on('route:viewFlyer', function (id){
-	console.log("Router is taking you to viewFlyer page");
-	viewFlyer.render();
+	console.log("Router is taking you to viewFlyer page with id: "+id);
+	viewFlyer.render(id);
 });

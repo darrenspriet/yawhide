@@ -16,7 +16,7 @@ var IndexView = Backbone.View.extend({
 	}
 });
 
-NearestStoresView = Backbone.View.extend({
+var NearestStoresView = Backbone.View.extend({
 	el:' #page_container'
 	, events: {
 	}
@@ -45,8 +45,8 @@ NearestStoresView = Backbone.View.extend({
 						"<table>"+
 						"{{#storesArray}}"+
 						"<tr><td>Sobeys - {{storeName}}</td><td>{{urlNumber}}</td>"+
-						"<td><a class='viewStoreInfo btn' href='/storeInfo/{{urlNumber}}'>Store Info</a></td>"+
-						"<td><a class='getDeals btn btn-primary' href='/viewFlyer/{{urlNumber}}'>View Deals</a></td></tr>"+
+						"<td><a class='viewStoreInfo btn' href='/#/storeInfo/{{urlNumber}}'>Store Info</a></td>"+
+						"<td><a class='getDeals btn btn-primary' href='/#/viewFlyer/{{urlNumber}}'>View Deals</a></td></tr>"+
 						"{{/storesArray}}"+
 						"</table>";
 
@@ -63,12 +63,76 @@ NearestStoresView = Backbone.View.extend({
 	}
 });
 
-StoreInfoView = Backbone.View.extend({
+var StoreInfoView = Backbone.View.extend({
+
+		render:function(id){
+
+		var store = new GetOneSobeyStore({id: id});
+		store.fetch({
+			success: function(){
+				console.log(store.attributes);
+				var template = "<div class='row'>"+
+					"<div class='col-xs-12'>"+
+						"<h5>Sobeys - {{storeName}}</h5>"+
+					"</div>"+
+				"</div>"+
+				"<div class='row'>"+
+					"<div class='col-xs-6'>"+
+						"<h5>{{storeNumber}}</h5>"+
+					"</div>"+
+					"<div class='col-xs-6'>"+
+						"<h5>{{city}}</h5>"+
+					"</div>"+
+				"</div>"+
+				"<div class='row'>"+
+					"<div class='col-xs-12'>"+
+						"<h5>Store Hours - {{storeHours.open}}</h5>"+
+					"</div>"+
+				"</div>"+
+				"</div>";
+				$('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
+				
+				return this;
+			}
+		});
+	}
 	
 });
 
-ViewFlyerView = Backbone.View.extend({
-	
+var ViewFlyerView = Backbone.View.extend({
+
+	render:function(id){
+
+		var store = new GetOneSobeyStore({id: id});
+		store.fetch({
+			success: function(){
+				console.log(store.attributes);
+				var template = "<div class='row'>"+
+					"<div class='col-xs-12'>"+
+						"<h5>Sobeys - {{storeName}}</h5>"+
+					"</div>"+
+				"</div>"+
+				"<div class='row'>"+
+					"<div class='col-xs-6'>"+
+						"<h5>{{storeNumber}}</h5>"+
+					"</div>"+
+					"<div class='col-xs-6'>"+
+						"<h5>{{city}}</h5>"+
+					"</div>"+
+				"</div>"+
+				"<div class='row'>"+
+					"<div class='col-xs-12'>"+
+						"<h5>Store Hours - {{storeHours.open}}</h5>"+
+					"</div>"+
+				"</div>"+
+				"</div>";
+				$('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
+				
+				return this;
+			}
+		});
+	}
+
 });
 /*
 , gotoStore: function(e){
