@@ -106,8 +106,17 @@ var ViewFlyerView = Backbone.View.extend({
 		var store = new GetOneSobeyStore({id: id});
 		store.fetch({
 			success: function(){
-				console.log(store.attributes);
-				var template = "<div class='row'>"+
+				// console.log(store.attributes);
+				// var template = "<table>"+
+				// "<tr><th>Name</th><th>Description</th><th>Price</th><th>Savings</th></tr>"+
+				// "{{#store.attributes}}"+
+				// "<tr>"+
+				// "<td>{{name}}</td><td>{{description}}</td><td>{{price}}</td><td>{{savings}}</td>"+
+				// "</tr>"+
+				// "{{/store.attributes}}";
+
+
+				var template ="<div class='row'>"+
 					"<div class='col-xs-12'>"+
 						"<h5>Sobeys - {{storeName}}</h5>"+
 					"</div>"+
@@ -126,9 +135,9 @@ var ViewFlyerView = Backbone.View.extend({
 					"</div>"+
 				"</div>"+
 				"</div>";
-				$('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
+				 $('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
 				
-				return this;
+				 return this;
 			}
 		});
 	}

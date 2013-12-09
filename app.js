@@ -373,6 +373,7 @@ app.get('/getBestDeals/:id', function (req, res){
 
 app.get('/getSobeyFlyer/:id', function (req, res){
 	Sobeys.getStoreByUrlNum(req.params.id, function (err, store){
+	
 		if (err) res.send(500, 'could not get store by number')
 		else{
 			res.send(store);
