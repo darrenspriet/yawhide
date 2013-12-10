@@ -16,20 +16,47 @@ var findBestDollarDeal = function (arrOfObs, arr){
 		, sav = arrOfObs[i].savings
 		, pr = arrOfObs[i].price
 		, it = arrOfObs[i].item;
-		if(sav.indexOf('%') == -1 && isNaN(sav)){
-			
-				var filter = sav.match(/(\d[\d\.]*)/g);
-				if (filter === null){
-					console.log('no savings ' + pr);
-				}
-				else if(filter.length > 1){
 
-					console.log('well ' + filter[0]);
+		if(sav.indexOf('%') == -1 && isNaN(sav)){
+			//var tst = /^$$/;
+			//console.log(tst.test(filter));
+			var cent = 155;
+			//console.log(sav[sav.length-1] + " " + sav.charCodeAt(sav.length-1));
+
+
+			var filter = sav.match(/(\d[\d\.]*)/g);
+			console.log(filter);
+			if (filter === null){
+				console.log('no savings ' + pr + '\n');
+			}
+			else if(filter.length > 1){
+				var f = +filter[0]
+				, p = +pr
+				, fNum = f/100;
+				if(filter[0].indexOf('.') > -1){
+					console.log('dot found');
+					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					console.log('best %age is: ' + (f / (f+p) )*100+ '\n');
 				}
 				else{
-					
-					console.log("best savings: " + filter);
+					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					console.log('best %age is: ' + (fNum / (fNum+p) )*100+ '\n');
 				}
+			}
+			else{
+				var f = +filter[0]
+				, p = +pr
+				, fNum = f/100;
+				if(filter[0].indexOf('.') > -1){
+					console.log('dot found');
+					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					console.log('best %age is: ' + (f / (f+p) )*100+ '\n');
+				}
+				else{
+					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					console.log('best %age is: ' + (fNum / (fNum + p))*100  + '\n');
+				}
+			}
 			
 		}
 	};
