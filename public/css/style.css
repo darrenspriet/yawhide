@@ -17,14 +17,9 @@ html, body {
     text-align:center;
 }
 
-#stores{
-	padding-top: 55%;
-	margin-left: 40%;
-}
 
 @media (max-width: 767px){
-body {
-padding-right: 0px;
-padding-left: 0px;
+#findASobeys {
+margin-left: -20px;
 }
 }

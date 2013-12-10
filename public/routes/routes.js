@@ -2,7 +2,7 @@
 var Router = Backbone.Router.extend({
 	routes:{
 		"":"index"
-		, "nearestStores":"nearestStores"
+		, "nearestStores/:id":"nearestStores"
 		, "storeInfo/:id": "storeInfo"
 		, "viewFlyer/:id": "viewFlyer"
 	}
@@ -18,9 +18,9 @@ app_router.on('route:index', function (){
 	index.render();
 });
 
-app_router.on('route:nearestStores', function (){
+app_router.on('route:nearestStores', function (id){
 	console.log("Router is taking you to nearestStores page");
-	nearestStores.render();
+	nearestStores.render(id);
 });
 
 app_router.on('route:storeInfo', function (id){
