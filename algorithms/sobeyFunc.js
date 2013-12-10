@@ -3,8 +3,8 @@ var veggieFruit = ['apple', 'apricot', 'artichoke', 'asparagus', 'aubergine', 'a
 
 var findBuy1Get1Free = function (arrOfObs, arr, option){
 	for (var i = arrOfObs.length - 1; i >= 0; i--) {
-		if(arrOfObs[i].price.toLowerCase().indexOf('buy') > -1 && arrOfObs[i].price.toLowerCase().indexOf('get') > -1 && arrOfObs[i].price.toLowerCase().indexOf('free') > -1){
-			if(option) arr.push(arrOfObs[i]);
+		if(option && arrOfObs[i].price.toLowerCase().indexOf('buy') > -1 && arrOfObs[i].price.toLowerCase().indexOf('get') > -1 && arrOfObs[i].price.toLowerCase().indexOf('free') > -1){
+			arr.push(arrOfObs[i]);
 		}
 		else if (!option) arr.push(arrOfObs[i]);
 	};
@@ -209,15 +209,12 @@ var findBestPercentageDeal = function (arrOfObs){
 	result.sort(function (a,b){
 		var c = getSav(false, a)
 		, d = getSav(false, b);
-		
 		return d-c;
 	});
 	console.log(result);
 
 	return result.concat(rest);
 }
-
-
 
 module.exports.findBuy1Get1Free = findBuy1Get1Free;
 module.exports.findBestDollarDeal = findBestDollarDeal;
