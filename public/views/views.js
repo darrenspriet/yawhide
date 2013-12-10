@@ -162,45 +162,4 @@ var ViewFlyerView = Backbone.View.extend({
 	}
 
 });
-/*
-, gotoStore: function(e){
-		var store = new GetOneSobeyStore({id: $(e.currentTarget).attr('value')});
-		store.fetch({
-			success: function(){
-				console.log(store.attributes);
-				var template = "<div class='row'>"+
-					"<div class='col-xs-12'>"+
-						"<h5>Sobeys - {{storeName}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"<div class='row'>"+
-					"<div class='col-xs-6'>"+
-						"<h5>{{storeNumber}}</h5>"+
-					"</div>"+
-					"<div class='col-xs-6'>"+
-						"<h5>{{city}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"<div class='row'>"+
-					"<div class='col-xs-12'>"+
-						"<h5>Store Hours - {{storeHours}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"</div>";
-				$('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
-				
-				return this;
-			}
-		});
-	}
-	, gotoDeals: function(e){
-		var store = new GetOneSobeyStore({id: $(e.currentTarget).attr('value')});
-		store.fetch({
-			success: function(){
-				console.log(store.attributes);
 
-
-				e.preventDefault();
-			}
-		});
-	}*/
