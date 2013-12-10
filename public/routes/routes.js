@@ -5,6 +5,7 @@ var Router = Backbone.Router.extend({
 		, "nearestStores":"nearestStores"
 		, "storeInfo/:id": "storeInfo"
 		, "viewFlyer/:id": "viewFlyer"
+		, "storeToLocal": "store"
 	}
 });
 
@@ -31,4 +32,9 @@ app_router.on('route:storeInfo', function (id){
 app_router.on('route:viewFlyer', function (id){
 	console.log("Router is taking you to viewFlyer page with id: "+id);
 	viewFlyer.render(id);
+});
+
+app_router.on('route:store', function (id){
+	console.log('storing...');
+	
 });

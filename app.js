@@ -329,7 +329,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
     
 
     var maxD = req.params.maxD/111;
-
+    console.log(elong+ " " + elat + " " + maxD);
 	Sobeys.getNearestStores( elong ,elat,maxD,function (err, flyer){
 		if(err){
 			console.log("there was an error");
