@@ -84,7 +84,7 @@ var getSav = function (option, num){
 	if(isNaN(sav)){
 		var filter = sav.match(/(\d[\d\.]*)/g);
 		if(sav.indexOf('%') == -1){
-			if (filter === null){
+			if (filter === null || filter === ''){
 				console.log('no savings');
 			}
 			else if(filter.length > 1){
@@ -92,22 +92,22 @@ var getSav = function (option, num){
 				, p = +pr
 				, fNum = f/100;
 				if(f[0] === '0'){
-					console.log('less than a dollar');
+					//console.log('less than a dollar');
 					f /= 100;
 				}
 
 				if(filter[0].indexOf('.') > -1){
-					console.log('dot found');
-					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					//console.log('dot found');
+					//console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
 					finalSav = f;
 					finalPercent = (f / (f+p) )*100;
-					console.log('best %age is: ' + (f / (f+p) )*100+ '\n');
+					//console.log('best %age is: ' + (f / (f+p) )*100+ '\n');
 				}
 				else{
-					finalSav = f;
+					finalSav = fNum;
 					finalPercent = (fNum / (fNum+p) )*100;
-					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
-					console.log('best %age is: ' + (fNum / (fNum+p) )*100+ '\n');
+					//console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					//console.log('best %age is: ' + (fNum / (fNum+p) )*100+ '\n');
 				}
 			}
 			else{
@@ -115,22 +115,25 @@ var getSav = function (option, num){
 				, p = +pr
 				, fNum = f/100;
 				if(f[0] === '0'){
-					console.log('less than a dollar');
+					//console.log('less than a dollar');
 					f/= 100;
 				}
 				if(filter[0].indexOf('.') > -1){
 					finalSav = f;
 					finalPercent = (f / (f+p) )*100;
-					console.log('dot found');
-					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
-					console.log('best %age is: ' + (f / (f+p) )*100+ '\n');
+					//console.log('dot found');
+					//console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					//console.log('best %age is: ' + (f / (f+p) )*100+ '\n');
 				}
 				else{
-					finalSav = f;
+					finalSav = fNum;
 					finalPercent = (fNum / (fNum+p) )*100;
-					console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
-					console.log('best %age is: ' + (fNum / (fNum + p))*100  + '\n');
+					//console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
+					//console.log('best %age is: ' + (fNum / (fNum + p))*100  + '\n');
 				}
+				console.log(filter);
+				console.log(pr);
+				console.log(finalSav + " " + finalPercent);
 			}
 		}
 		else{
@@ -138,11 +141,14 @@ var getSav = function (option, num){
 				console.log('no savings');
 			}
 			else{
+				/** if sav has a % in it, just get the number, that is the finalPercent
+					finalSav is still 0. */
 				finalPercent = +filter[0];
 			}
 		}
 		
 	}
+	//console.log('sav: '+finalSav+', %: ' + finalPercent);
 	return option ? finalSav : finalPercent
 }
 
@@ -168,15 +174,15 @@ var findBestDollarDeal = function (arrOfObs, arr){
 			rest.push(arrOfObs[i]);
 		}
 	};
-	console.log(result);
+	//console.log(result);
 
 	result.sort(function (a,b){
 		//
-		console.log(a.getSav + " " + b.getSav);
-		return a.getSav-b.getSav;
+		//console.log(getSav(true, a) + " " + getSav(true, b));
+		return getSav(true, a)-getSav(true, b);
 	});
-	
-	/*for (var i = result.length - 1; i >= 0; i--) {
+	/*
+	for (var i = result.length - 1; i >= 0; i--) {
 		console.log(result[i].savings);
 	};*/
 	
