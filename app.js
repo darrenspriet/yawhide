@@ -98,8 +98,7 @@ app.get('/readLocalFlyers', function (req, res){
 
 					if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1){
 						console.log('no flyer at file: ' + h);
-						z++;
-						loop();
+						
 					}
 					else{
 					
@@ -149,7 +148,6 @@ app.get('/readLocalFlyers', function (req, res){
 								}
 							}
 							var urlNum = h.split('.')[0];
-							console.log(z + " " + urlNum);
 							Sobeys.getStoreByUrlNum(urlNum, function (err, store){
 								if (err) throw err;
 								if(!err && store !== null){
@@ -158,14 +156,12 @@ app.get('/readLocalFlyers', function (req, res){
 										if (err2) throw err;
 										//console.log('success: '+urlNum);
 										
-										z++;
-										loop();
+										
 									});
 								}
 								else{
 									console.log('no store under that url number: '+urlNum);
-									z++;
-									loop();
+									
 								}
 							});
 						});
@@ -369,15 +365,15 @@ app.get('/getBestDeals/:id', function (req, res){
 		, buyOneGetOneFree = [];
 		
 		//buyOneGetOneFree = s.findBuy1Get1Free(fly, buyOneGetOneFree);
-		bestDeals = s.findBestDollarDeal(fly, bestDeals);
-		console.log('highestSaving: ');
-		console.log(highestSaving);
+		bestDeals = s.findBestDollarDeal(fly);
+		//console.log('highestSaving: ');
+		//console.log(highestSaving);
 		console.log('\nbestDeals: ');
 		console.log(bestDeals);
-		console.log('\buyOneGetOneFree: ');
-		console.log(buyOneGetOneFree);
+		//console.log('\nbuyOneGetOneFree: ');
+		//console.log(buyOneGetOneFree);
 		
-		console.log(flyer.storeName);
+		//console.log(flyer.storeName);
 	});
 });
 
