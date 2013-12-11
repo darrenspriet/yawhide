@@ -131,9 +131,9 @@ var getSav = function (option, num){
 					//console.log('f: %s, p: %s, fNum: %s', f, p, fNum);
 					//console.log('best %age is: ' + (fNum / (fNum + p))*100  + '\n');
 				}
-				console.log(filter);
+				/*console.log(filter);
 				console.log(pr);
-				console.log(finalSav + " " + finalPercent);
+				console.log(finalSav + " " + finalPercent);*/
 			}
 		}
 		else{
@@ -153,11 +153,10 @@ var getSav = function (option, num){
 }
 
 
-var findBestDollarDeal = function (arrOfObs, arr){
-	
+var findBestDollarDeal = function (arrOfObs){
 	var result = []
 	, rest = [];
-	//result = findBuy1Get1Free(arrOfObs, result, false);
+	
 	for (var i = arrOfObs.length - 1; i >= 0; i--) {
 		var sav = arrOfObs[i].savings;
 
@@ -175,29 +174,51 @@ var findBestDollarDeal = function (arrOfObs, arr){
 		}
 	};
 	//console.log(result);
-
 	result.sort(function (a,b){
-		//
-		//console.log(getSav(true, a) + " " + getSav(true, b));
-		return getSav(true, a)-getSav(true, b);
+		var c = getSav(true, a)
+		, d = getSav(true, b);
+		
+		return d-c;
 	});
-	/*
-	for (var i = result.length - 1; i >= 0; i--) {
-		console.log(result[i].savings);
-	};*/
-	
-
-
-
-	//filterNoSave(arrOfObs, arr);
-
-
-	return arr;
+	//console.log(result);
+	console.log('done');
+	return result.concat(rest);
 }
 
+var findBestPercentageDeal = function (arrOfObs){
+	var result = []
+	, rest = [];
+	
+	for (var i = arrOfObs.length - 1; i >= 0; i--) {
+		var sav = arrOfObs[i].savings;
 
+		if(sav !== '' && isNaN(sav)){
+			var filter = sav.match(/(\d[\d\.]*)/g);
+			if (filter !== null){
+				result.push(arrOfObs[i]);
+			}
+			else{
+				rest.push(arrOfObs[i]);
+			}
+		}
+		else{
+			rest.push(arrOfObs[i]);
+		}
+	};
+
+	result.sort(function (a,b){
+		var c = getSav(false, a)
+		, d = getSav(false, b);
+		
+		return d-c;
+	});
+	console.log(result);
+
+	return result.concat(rest);
+}
 
 
 
 module.exports.findBuy1Get1Free = findBuy1Get1Free;
 module.exports.findBestDollarDeal = findBestDollarDeal;
+module.exports.findBestPercentageDeal = findBestPercentageDeal;
