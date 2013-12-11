@@ -18,7 +18,7 @@ $.fn.serializeObject = function() {
 var IndexView = Backbone.View.extend({
 	el:' #page_container',
 	events: {
-		"submit #distanceSubmit": "findFlyersPage"
+		"click #findFlyers": "findFlyersPage"
 	},
 	render: function(){
 		$.get('templates/home.html', function(incomingTemplate){
@@ -27,19 +27,9 @@ var IndexView = Backbone.View.extend({
 		});
 		return this;
 	}, 
-	findFlyersPage: function(ev){
-		ev.preventDefault();
-		var entry = $(ev.currentTarget).serializeObject();
-		if(entry.distance===''){
-			app_router.navigate('#/nearestStores/10', {trigger: true});	
-		}
-		else{
+	findFlyersPage: function(){
 
-			app_router.navigate('#/nearestStores/'+entry.distance, {trigger: true});
-		}
-
-		
-
+			app_router.navigate('#/nearestStores', {trigger: true});
 	}
 });
 
@@ -47,9 +37,9 @@ var NearestStoresView = Backbone.View.extend({
 	el:' #page_container'
 	, events: {
 	}
-	, render: function(id){
+	, render: function(){
 		getLocation(function (loc){
-			var nearestSobeysStores = new GetNearestSobeys({elat: loc.latitude, elong: loc.longitude, maxD:id});
+			var nearestSobeysStores = new GetNearestSobeys({elat: loc.latitude, elong: loc.longitude, maxD:10});
 			//var nearestSobeysStores =  new GetOneSobeyFlyer();
 			nearestSobeysStores.fetch({
 				success: function(){
@@ -71,14 +61,14 @@ var NearestStoresView = Backbone.View.extend({
 						var incomingStores =
 						"<table class='table table-striped table-hover'>"+
 						"{{#storesArray}}"+
-						"<tr><td>Sobeys - {{storeName}}</td><td>{{urlNumber}}</td>"+
+						"<tr><td>Sobeys - {{storeName}}</td>"+
 						"<td><a class='viewStoreInfo btn' href='/#/storeInfo/{{urlNumber}}'>Store Info</a></td>"+
 						"<td><a class='getDeals btn btn-primary' href='/#/viewFlyer/{{urlNumber}}'>View Deals</a></td></tr>"+
 						"{{/storesArray}}"+
 						"</table>";
 
 						var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
-						$('#stores').html(html).trigger('create');
+						$('.tablesForStore').html(html).trigger('create');
 					});					
 					return this;
 				},
@@ -124,7 +114,7 @@ var ViewFlyerView = Backbone.View.extend({
 			success: function(){
 				console.log(store.attributes);
 				var template = 
-				"<table class='table table-striped table-hover'>"+
+				"<table class='table table-striped table-hover tablesForStore'>"+
 				"<thead>"+
 				"<tr><th>Name</th><th>Description</th><th>Price</th><th>Savings</th></tr></thead>"+
 				"{{#flyer}}"+

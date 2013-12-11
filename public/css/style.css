@@ -1,7 +1,12 @@
-/* Put your CSS here */
-html, body {
+
+html,body {
     margin: 0 auto;
+    background-color: #585858;
 }
+h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+}
+
 
 .findASobeysMap{
 	background-size: cover;
@@ -12,6 +17,11 @@ html, body {
 	height: 100%;
 }
 
+.tablesForStore{
+    height: 100px !important;
+    overflow: auto;
+}​
+
 .centered
 {
     text-align:center;
@@ -19,7 +29,9 @@ html, body {
 
 
 @media (max-width: 767px){
-#findASobeys {
-margin-left: -20px;
-}
-}
+html,body{
+    padding:0px; 
+    	background: #585858;
+
+}​
+}    
