@@ -335,9 +335,16 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
+			var finalOb = [];
+			for (var i = flyer.length - 1; i >= 0; i--) {
+				var ob = {};
+				ob.sortSavings = s.findBestDollarDeal(flyer[i].currFlyer);
+				ob.sortPercent = s.findBestPercentageDeal(flyer[i].currFlyer);
+				ob.flyer = flyer[i];
+				finalOb.push(ob);
+			};
 			console.log('the flyers');
-			console.log(flyer);
-			res.send(flyer);
+			res.send(finalOb);
 		}
 	});
 });

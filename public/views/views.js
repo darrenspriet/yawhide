@@ -47,10 +47,17 @@ var NearestStoresView = Backbone.View.extend({
 					var storesArray = new Array();
 					for(var i=0;i<nearestSobeysStores.length;i++){
 						var storeObj = new Object({
-							"storeName" : nearestSobeysStores.models[i].attributes.storeName,
-							"urlNumber" : nearestSobeysStores.models[i].attributes.urlNumber
+							"storeName" : nearestSobeysStores.models[i].attributes.flyer.storeName,
+							"urlNumber" : nearestSobeysStores.models[i].attributes.flyer.urlNumber
 						});
 						storesArray.push(storeObj);
+						var data = JSON.stringify( nearestSobeysStores.models[i].attributes.sortSavings)
+						, data2 = JSON.stringify( nearestSobeysStores.models[i].attributes.sortPercent)
+						, data3 = JSON.stringify( nearestSobeysStores.models[i].attributes.flyer.currFlyer)
+						, store = nearestSobeysStores.models[i].attributes.flyer.storeName;
+						localStorage.setItem('savings'+store, data);
+						localStorage.setItem('percent'+store, data2);
+						localStorage.setItem('flyer'+store, data3);
 					}
 					//console.log(storesArray);
 
