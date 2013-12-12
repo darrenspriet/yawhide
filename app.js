@@ -111,6 +111,16 @@ app.get('/readLocalFlyers', function (req, res){
 									var ob = {};
 									for(var j = 0; j < html.children[i].children.length; j++){
 										if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
+<<<<<<< HEAD
+=======
+											delete html.children[i].children[j].prev;
+											delete html.children[i].children[j].next;
+											delete html.children[i].children[j].parent;
+											delete html.children[i].children[j].attribs;
+											delete html.children[i].children[j].data;
+											//console.log('\n' + j);
+											//console.log(html.children[i].children[j]);
+>>>>>>> stefan
 											if (html.children[i].children[j].children.length == 0){
 												html.children[i].children[j].children.push({
 													data: ''
@@ -129,10 +139,21 @@ app.get('/readLocalFlyers', function (req, res){
 												case 7:
 													ob.description = html.children[i].children[j].children[0].data;
 													break;
+<<<<<<< HEAD
+=======
+												/*default:
+													ob.description = html.children[i].children[j].children[0].data;
+													break;*/
+>>>>>>> stefan
 											}
 										}
 									}
 									info.push(ob);
+<<<<<<< HEAD
+=======
+									//console.log('\n');
+									//console.log(ob);
+>>>>>>> stefan
 								}
 							}
 							var urlNum = h.split('.')[0];
@@ -142,6 +163,12 @@ app.get('/readLocalFlyers', function (req, res){
 
 									Sobeys.makeFlyer(store, info, function (err2){
 										if (err2) throw err;
+<<<<<<< HEAD
+=======
+										//console.log('success: '+urlNum);
+										
+										
+>>>>>>> stefan
 									});
 								}
 								else{
@@ -306,7 +333,10 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 				finalOb.push(ob);
 			};
 			console.log('the flyers');
+<<<<<<< HEAD
 			//console.log(flyer);
+=======
+>>>>>>> stefan
 			res.send(finalOb);
 		}
 	});

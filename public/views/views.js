@@ -36,20 +36,30 @@ var IndexView = Backbone.View.extend({
 var NearestStoresView = Backbone.View.extend({
 	el:' #page_container'
 	, events: {
+<<<<<<< HEAD
 		".sync": "syncDeals"
 	}
 	, render: function(){
 
+=======
+	}
+	, render: function(){
+>>>>>>> stefan
 		getLocation(function (loc){
 			var nearestSobeysStores = new GetNearestSobeys({elat: loc.latitude, elong: loc.longitude, maxD:10});
 			//var nearestSobeysStores =  new GetOneSobeyFlyer();
 			nearestSobeysStores.fetch({
 				success: function(){
 					//console.log(nearestSobeysStores);
+<<<<<<< HEAD
 					var storesArray = [];
 					localStorage.clear();
 					for(var i=0;i<nearestSobeysStores.length;i++){
 						console.log(nearestSobeysStores);
+=======
+					var storesArray = new Array();
+					for(var i=0;i<nearestSobeysStores.length;i++){
+>>>>>>> stefan
 						var storeObj = new Object({
 							"storeName" : nearestSobeysStores.models[i].attributes.flyer.storeName,
 							"urlNumber" : nearestSobeysStores.models[i].attributes.flyer.urlNumber
@@ -90,11 +100,19 @@ var NearestStoresView = Backbone.View.extend({
 		});
 	}
 });
+<<<<<<< HEAD
 
 var StoreInfoView = Backbone.View.extend({
 
 		render:function(id){
 
+=======
+
+var StoreInfoView = Backbone.View.extend({
+
+		render:function(id){
+
+>>>>>>> stefan
 		var store = new GetOneSobeyStore({id: id});
 		store.fetch({
 			success: function(){
@@ -155,9 +173,15 @@ var ViewFlyerView = Backbone.View.extend({
 				// 	"</div>"+
 				// "</div>"+
 				// "</div>";
+<<<<<<< HEAD
 				$('#page_container').html(Mustache.to_html(template, {flyer:store.attributes.currFlyer})).trigger('create');
 				
 				return this;
+=======
+				 $('#page_container').html(Mustache.to_html(template, {flyer:store.attributes.currFlyer})).trigger('create');
+				
+				 return this;
+>>>>>>> stefan
 			}
 		});
 	}

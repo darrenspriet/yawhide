@@ -1,6 +1,6 @@
 
 var GetSobeysFlyer = Backbone.Model.extend({
-	    url:  getURL('/getAllStores') 
+	url:  getURL('/getAllStores') 
 });
 
 
@@ -14,7 +14,6 @@ var GetNearestSobeys = Backbone.Collection.extend({
         this.elat = options.elat;
         this.elong = options.elong;
         this.maxD = options.maxD;
-
     },
     url: function(){
         return getURL('/getNearestStores/') +this.elat+'/'+this.elong+'/'+this.maxD;
@@ -22,7 +21,7 @@ var GetNearestSobeys = Backbone.Collection.extend({
 }); 
 
 
-var GetOneSobeyFlyer = Backbone.Collection.extend({
+var GetOneSobeyStore = Backbone.Model.extend({
     initialize: function(options){
         this.id = options.id;
     },
