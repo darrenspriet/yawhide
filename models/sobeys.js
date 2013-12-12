@@ -36,6 +36,9 @@ var SobeySchema = new db.Schema({
 	}]
 });
 
+console.log('db ensureIndex');
+SobeySchema.index({location: "2d"});
+
 var Sobey = db.mongoose.model('sobeys', SobeySchema);
 
 /**
