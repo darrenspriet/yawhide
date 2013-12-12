@@ -9,13 +9,14 @@ var express = require('express')
 , cheerio = require('cheerio')
 , Sobeys = require('./models/sobeys.js')
 , Geocoder = require('node-geocoder-ca').Geocoder
-, geocoder = new Geocoder();
+, geocoder = new Geocoder()
+, s = require('./algorithms/sobeyFunc');
 
 app = express();
 
 app.configure(function () {
 	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/jadeViews');
+	// app.set('views', __dirname + '/jadeViews');
     //app.engine('handlebars', exphbs({defaultLayout : 'main'}));
     // app.set('view engine', 'handlebars');
     app.set('view engine', 'jade');
@@ -88,74 +89,68 @@ app.get('/readLocalFlyers', function (req, res){
 			if (err2) throw err2;
 			console.log(latestFolder);
 			html.forEach(function (h){
+				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err3, data) {
+					if (err3) throw err;
 
-				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err, data) {//h instead of 289.html
-					if (err) throw err;
 					var $ = cheerio.load(data);
 
 					var info = [];
+
+					if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1){
+						console.log('no flyer at file: ' + h);
+						
+					}
+					else{
 					
-					/** this finds the tbody section in the table.
-					 *	 it will hopefully parse through and get four pieces of info:
-					 *	 item, price, savings and description */
-					$('.card .card-plain .card-inset table tbody').each(function (i, html){
-						for(var i = 0; i < html.children.length; i++){
-							if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
-								var ob = {};
-								for(var j = 0; j < html.children[i].children.length; j++){
-									if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
-										delete html.children[i].children[j].prev;
-										delete html.children[i].children[j].next;
-										delete html.children[i].children[j].parent;
-										delete html.children[i].children[j].attribs;
-										delete html.children[i].children[j].data;
-										//console.log('\n' + j);
-										//console.log(html.children[i].children[j]);
-										if (html.children[i].children[j].children.length == 0){
-											html.children[i].children[j].children.push({
-												data: ''
-											});
-										}
-										switch(j){
-											case 1:
-												ob.item = html.children[i].children[j].children[0].data;
-												break;
-											case 3:
-												ob.price = html.children[i].children[j].children[0].data;
-												break;
-											case 5:
-												ob.savings = html.children[i].children[j].children[0].data;
-												break;
-											case 7:
-												ob.description = html.children[i].children[j].children[0].data;
-												break;
-											/*default:
-												ob.description = html.children[i].children[j].children[0].data;
-												break;*/
+						/** this finds the tbody section in the table.
+						 *	 it will hopefully parse through and get four pieces of info:
+						 *	 item, price, savings and description */
+						$('.card .card-plain .card-inset table tbody').each(function (i, html){
+							for(var i = 0; i < html.children.length; i++){
+								if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
+									var ob = {};
+									for(var j = 0; j < html.children[i].children.length; j++){
+										if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
+											if (html.children[i].children[j].children.length == 0){
+												html.children[i].children[j].children.push({
+													data: ''
+												});
+											}
+											switch(j){
+												case 1:
+													ob.item = html.children[i].children[j].children[0].data;
+													break;
+												case 3:
+													ob.price = html.children[i].children[j].children[0].data;
+													break;
+												case 5:
+													ob.savings = html.children[i].children[j].children[0].data;
+													break;
+												case 7:
+													ob.description = html.children[i].children[j].children[0].data;
+													break;
+											}
 										}
 									}
+									info.push(ob);
 								}
-								info.push(ob);
-								//console.log('\n');
-								//console.log(ob);
 							}
-						}
-						var urlNum = h.split('.')[0]
-						Sobeys.getStoreByUrlNum(urlNum, function (err, store){
-							if (err) throw err;
-							if(!err && store !== null){
+							var urlNum = h.split('.')[0];
+							Sobeys.getStoreByUrlNum(urlNum, function (err, store){
+								if (err) throw err;
+								if(!err && store !== null){
 
-								Sobeys.makeFlyer(store, info, function (err2){
-									if (err2) throw err;
-									console.log('success: '+urlNum);
-								});
-							}
-							else{
-								console.log('no store under that url number: '+urlNum);
-							}
+									Sobeys.makeFlyer(store, info, function (err2){
+										if (err2) throw err;
+									});
+								}
+								else{
+									console.log('no store under that url number: '+urlNum);
+									
+								}
+							});
 						});
-					});
-
+					}
 				});
 			});
 		});
@@ -265,33 +260,10 @@ app.get('/makeStore', function (req, res){
 						});
 					});
 					var latLng = $('#map_location').text().split(', ');
-					//console.log('latLng is: ' + latLng);
 					var lng = latLng[0].substr(1);
 					var lat = latLng[1].substr(0,latLng[1].length -1);
-					//console.log(latLngOb);
-					/*
-					var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
-				    var sensor = false;
-				    var geoOb = {};
-				    //address = '525 Market St, Philadelphia, PA 19106';
-				    
-					geocoder.geocode(address, function(err, coords) {
-					    if (err) throw err;
-					    console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
-					    console.log(coords);
-					});
-				    console.log('geoOb');
-				    console.log(geoOb);*/
-					//console.log('storename: ' + storename);
-					//console.log('storenum: ' + storenum);
-					//console.log('storeloc: ' + storeloc);
-					//console.log('urlnum: ' + urlnum);
-					//console.log('city: ' + city);
-					//console.log('postal: ' + postal);
-					//console.log('hours: ');
 					if(isEmptyObject(hours))
 						hours.open = '24 hours';
-					//console.log(hours);
 					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
 						if(err) throw err;
 						console.log(z);
@@ -319,15 +291,23 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
     
 
     var maxD = req.params.maxD/111;
-
+    console.log(elong+ " " + elat + " " + maxD);
 	Sobeys.getNearestStores( elong ,elat,maxD,function (err, flyer){
 		if(err){
 			console.log("there was an error");
 		}
 		else{
+			var finalOb = [];
+			for (var i = flyer.length - 1; i >= 0; i--) {
+				var ob = {};
+				ob.sortSavings = s.findBestDollarDeal(flyer[i].currFlyer);
+				ob.sortPercent = s.findBestPercentageDeal(flyer[i].currFlyer);
+				ob.flyer = flyer[i];
+				finalOb.push(ob);
+			};
 			console.log('the flyers');
-			console.log(flyer);
-			res.send(flyer);
+			//console.log(flyer);
+			res.send(finalOb);
 		}
 	});
 });
@@ -346,30 +326,35 @@ app.get('/getAllStores', function (req, res){
 	});
 });
 
-app.get('/getBestDeals/:id', function (req, res){
+app.get('/getBestDeals/:id/:bool', function (req, res){
 	Sobeys.getStoreByUrlNum(req.params.id, function (err, flyer){
 		if (err) res.send(500, 'could not get latest flyer by id');
 		var fly = flyer.currFlyer;
 		var highestSaving = []
 		, bestDeals = []
-		, buyOneGetOneFree = [];
-		for (var i = fly.length - 1; i >= 0; i--) {
-			if(fly[i].price.toLowerCase().indexOf('buy') > -1 && fly[i].price.toLowerCase().indexOf('get') > -1 && fly[i].price.toLowerCase().indexOf('free') > -1){
-				buyOneGetOneFree.push(fly[i]);
-				//console.log(fly[i]);
-			}
-			else{
-				console.log(fly[i]);
-			}
-		};
-
-		console.log('highestSaving: ');
-		console.log(highestSaving);
-		console.log('\nbestDeals: ');
-		console.log(bestDeals);
-		console.log('\buyOneGetOneFree: ');
-		console.log(buyOneGetOneFree);
+		, bestPercent = [];
+		if(req.params.bool){
+			bestDeals = s.findBestDollarDeal(fly);
+			res.send(bestDeals);
+		}
+		else if (req.params.bool){
+			bestPercent = s.findBestPercentageDeal(fly);
+			res.send(bestPercent);
+		}
+		else{
+			res.send(500, 'could not get bool');
+		}
 	});
+});
+
+app.get('/getSobeyFlyer/:id', function (req, res){
+	Sobeys.getStoreByUrlNum(req.params.id, function (err, store){
+	
+		if (err) res.send(500, 'could not get store by number')
+		else{
+			res.send(store);
+		}
+	})
 });
 
 http.createServer(app).listen(app.get('port'), function () {
