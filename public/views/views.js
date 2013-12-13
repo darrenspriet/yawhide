@@ -28,8 +28,7 @@ var IndexView = Backbone.View.extend({
 		return this;
 	}, 
 	findFlyersPage: function(){
-
-			app_router.navigate('#/nearestStores', {trigger: true});
+		app_router.navigate('#/nearestStores', {trigger: true});
 	}
 });
 
@@ -64,16 +63,14 @@ var NearestStoresView = Backbone.View.extend({
 					$.get('../templates/nearestStores.html', function (incomingTemplate){
 						var template = Handlebars.compile(incomingTemplate);
 						$('#page_container').html(template).trigger('create');
-						google.maps.event.addDomListener(window, 'load', initializeMap(loc.latitude, loc.longitude));
+						//google.maps.event.addDomListener(window, 'load', initializeMap(loc.latitude, loc.longitude));
 						var incomingStores =
-						"<table class='table table-striped table-hover'>"+
+						"<div class='list-group'>"+
 						"{{#storesArray}}"+
-						"<tr><td>Sobeys - {{storeName}}</td>"+
-						"<td><a class='viewStoreInfo btn' href='/#/storeInfo/{{urlNumber}}'>Store Info</a></td>"+
-						"<td><a class='getDeals btn btn-primary' href='/#/viewFlyer/{{urlNumber}}'>View Deals</a></td></tr>"+
+						"<a href='/#/viewFlyer/{{urlNumber}}' class='list-group-item'>Sobeys - {{storeName}}</a>"+
 						"{{/storesArray}}"+
-						"</table>";
-
+						"</div>";
+										
 						var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
 						$('.tablesForStore').html(html).trigger('create');
 					});					

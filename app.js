@@ -357,7 +357,7 @@ app.get('/getAllStores', function (req, res){
 		}
 		else{
 			console.log('this is the flyer');
-			console.log(flyer)
+			//console.log(flyer)
 			res.send(flyer);
 		}
 	});

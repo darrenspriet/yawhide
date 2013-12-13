@@ -163,6 +163,9 @@ var findBestDollarDeal = function (arrOfObs){
 		if(sav !== '' && isNaN(sav)){
 			var filter = sav.match(/(\d[\d\.]*)/g);
 			if (filter !== null){
+				//console.log(getSav(true, arrOfObs[i]));
+				//arrOfObs[i].sav = filter;
+				arrOfObs[i].sav = getSav(true, arrOfObs[i]);
 				result.push(arrOfObs[i]);
 			}
 			else{
@@ -181,7 +184,7 @@ var findBestDollarDeal = function (arrOfObs){
 		return d-c;
 	});
 	//console.log(result);
-	console.log('done');
+	console.log('done savings');
 	return result.concat(rest);
 }
 
@@ -211,7 +214,8 @@ var findBestPercentageDeal = function (arrOfObs){
 		, d = getSav(false, b);
 		return d-c;
 	});
-	console.log(result);
+	//console.log(result);
+	console.log('done percent');
 
 	return result.concat(rest);
 }
