@@ -30,3 +30,12 @@ var GetOneSobeyStore = Backbone.Model.extend({
     }
 }); 
 
+var GetBestDealFlyers = Backbone.Collection.extend({
+    initialize: function(options){
+       
+    }
+    , url: function(){
+
+    };
+})
+
