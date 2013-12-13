@@ -5,8 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>YawHide</title>
 	<link rel="stylesheet" href="css/normalize.css">
-	<link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/simple-sidebar.css">
 	<link rel="stylesheet" href="/css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
@@ -34,6 +35,15 @@
 		index.render();
 		/* Begins the backbone history */
 		Backbone.history.start();
+
+	var menuToggling = function(){
+	   $("#menu-toggle").click(function(ev) {
+	   		console.log('this clicked');
+        	ev.preventDefault();
+        	$("#wrapper").toggleClass("active");
+    	});
+	}
+
 	</script>
 
 </body>

@@ -3,7 +3,6 @@ html,body {
     /*margin: 0 auto;*/
     background-color: #585858;
     /*padding:0px; */
-
 }
 h1, h2, h3, h4, h5, h6 {
 	text-align: center;
@@ -14,7 +13,11 @@ h1, h2, h3, h4, h5, h6 {
 	height: 100%;
 }*/
 
-/*Nav Bar*/
+
+.tablesForStore{
+    overflow: auto;
+    margin-top:60px;
+}​
 
 
 /* accordian on viewFlyer */
@@ -34,3 +37,4 @@ h1, h2, h3, h4, h5, h6 {
     /* symbol for "collapsed" panels */
     content:"\f078";
 }
+
