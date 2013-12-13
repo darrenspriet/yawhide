@@ -1,27 +1,54 @@
+<div id="wrapper">
 
+	<!-- Sidebar -->
+	<div id="sidebar-wrapper">
+		<ul class="sidebar-nav">
+			<li class="sidebar-brand"><a href="#">Start Bootstrap</a></li>
+			<li><a class='selection'>Dashboard</a></li>
+			<li><a class='selection'>Shortcuts</a></li>
+			<li><a class='selection'>Overview</a></li>
+			<li><a class='selection'>Events</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Services</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+	</div>
 
-<div class="navbar navbar-inverse navbar-fixed-top">
+	<!-- Page content -->
+	<div id="page-content-wrapper">
+	<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
+      <a id="menu-toggle" class="btn btn-default"><i class="icon-reorder"></i></a>
         <div class="navbar-brand text-center" style='float:none;'>YawHide</div>
       </div>
     </div>
   </div>
-<div class="panel-group" id="accordion">
+		<!-- Keep all page content within the page-content inset div! -->
+		<div class="page-content inset">
+			<div class="panel-group" id="accordion">
 
-	{{#flyer}}
-	<div class="panel panel-info">
-		<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{@index}}">
-			<h4 class="panel-title accordion-toggle">
-				{{item}} - {{price}}, {{savings}}
-			</h4>
-		</div>
-		<div id="collapse{{@index}}" class="panel-collapse collapse">
-			<div class="panel-body">
-				{{description}}
-			</div>
+				{{#flyer}}
+				<div class="panel panel-info">
+					<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{@index}}">
+						<h4 class="panel-title accordion-toggle">
+							{{item}} - {{price}}, {{savings}}
+						</h4>
+					</div>
+					<div id="collapse{{@index}}" class="panel-collapse collapse">
+						<div class="panel-body">
+							{{description}}
+						</div>
+					</div>
+				</div>
+				{{/flyer}}
+			</div> 
+
 		</div>
 	</div>
-	{{/flyer}}
+
 </div>
+<!-- 
+
+-->
 
