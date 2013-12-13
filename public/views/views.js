@@ -28,8 +28,7 @@ var IndexView = Backbone.View.extend({
 		return this;
 	}, 
 	findFlyersPage: function(){
-
-			app_router.navigate('#/nearestStores', {trigger: true});
+		app_router.navigate('#/nearestStores', {trigger: true});
 	}
 });
 
@@ -47,26 +46,31 @@ var NearestStoresView = Backbone.View.extend({
 					var storesArray = new Array();
 					for(var i=0;i<nearestSobeysStores.length;i++){
 						var storeObj = new Object({
-							"storeName" : nearestSobeysStores.models[i].attributes.storeName,
-							"urlNumber" : nearestSobeysStores.models[i].attributes.urlNumber
+							"storeName" : nearestSobeysStores.models[i].attributes.flyer.storeName,
+							"urlNumber" : nearestSobeysStores.models[i].attributes.flyer.urlNumber
 						});
 						storesArray.push(storeObj);
+						var data = JSON.stringify( nearestSobeysStores.models[i].attributes.sortSavings)
+						, data2 = JSON.stringify( nearestSobeysStores.models[i].attributes.sortPercent)
+						, data3 = JSON.stringify( nearestSobeysStores.models[i].attributes.flyer.currFlyer)
+						, store = nearestSobeysStores.models[i].attributes.flyer.storeName;
+						localStorage.setItem('savings'+store, data);
+						localStorage.setItem('percent'+store, data2);
+						localStorage.setItem('flyer'+store, data3);
 					}
 					//console.log(storesArray);
 
 					$.get('../templates/nearestStores.html', function (incomingTemplate){
 						var template = Handlebars.compile(incomingTemplate);
 						$('#page_container').html(template).trigger('create');
-						google.maps.event.addDomListener(window, 'load', initializeMap(loc.latitude, loc.longitude));
+						//google.maps.event.addDomListener(window, 'load', initializeMap(loc.latitude, loc.longitude));
 						var incomingStores =
-						"<table class='table table-striped table-hover'>"+
+						"<div class='list-group'>"+
 						"{{#storesArray}}"+
-						"<tr><td>Sobeys - {{storeName}}</td>"+
-						"<td><a class='viewStoreInfo btn' href='/#/storeInfo/{{urlNumber}}'>Store Info</a></td>"+
-						"<td><a class='getDeals btn btn-primary' href='/#/viewFlyer/{{urlNumber}}'>View Deals</a></td></tr>"+
+						"<a href='/#/viewFlyer/{{urlNumber}}' class='list-group-item'>Sobeys - {{storeName}}</a>"+
 						"{{/storesArray}}"+
-						"</table>";
-
+						"</div>";
+										
 						var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
 						$('.tablesForStore').html(html).trigger('create');
 					});					
@@ -152,45 +156,4 @@ var ViewFlyerView = Backbone.View.extend({
 	}
 
 });
-/*
-, gotoStore: function(e){
-		var store = new GetOneSobeyStore({id: $(e.currentTarget).attr('value')});
-		store.fetch({
-			success: function(){
-				console.log(store.attributes);
-				var template = "<div class='row'>"+
-					"<div class='col-xs-12'>"+
-						"<h5>Sobeys - {{storeName}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"<div class='row'>"+
-					"<div class='col-xs-6'>"+
-						"<h5>{{storeNumber}}</h5>"+
-					"</div>"+
-					"<div class='col-xs-6'>"+
-						"<h5>{{city}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"<div class='row'>"+
-					"<div class='col-xs-12'>"+
-						"<h5>Store Hours - {{storeHours}}</h5>"+
-					"</div>"+
-				"</div>"+
-				"</div>";
-				$('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
-				
-				return this;
-			}
-		});
-	}
-	, gotoDeals: function(e){
-		var store = new GetOneSobeyStore({id: $(e.currentTarget).attr('value')});
-		store.fetch({
-			success: function(){
-				console.log(store.attributes);
 
-
-				e.preventDefault();
-			}
-		});
-	}*/

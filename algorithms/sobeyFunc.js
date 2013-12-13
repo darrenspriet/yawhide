@@ -3,8 +3,8 @@ var veggieFruit = ['apple', 'apricot', 'artichoke', 'asparagus', 'aubergine', 'a
 
 var findBuy1Get1Free = function (arrOfObs, arr, option){
 	for (var i = arrOfObs.length - 1; i >= 0; i--) {
-		if(arrOfObs[i].price.toLowerCase().indexOf('buy') > -1 && arrOfObs[i].price.toLowerCase().indexOf('get') > -1 && arrOfObs[i].price.toLowerCase().indexOf('free') > -1){
-			if(option) arr.push(arrOfObs[i]);
+		if(option && arrOfObs[i].price.toLowerCase().indexOf('buy') > -1 && arrOfObs[i].price.toLowerCase().indexOf('get') > -1 && arrOfObs[i].price.toLowerCase().indexOf('free') > -1){
+			arr.push(arrOfObs[i]);
 		}
 		else if (!option) arr.push(arrOfObs[i]);
 	};
@@ -163,6 +163,9 @@ var findBestDollarDeal = function (arrOfObs){
 		if(sav !== '' && isNaN(sav)){
 			var filter = sav.match(/(\d[\d\.]*)/g);
 			if (filter !== null){
+				//console.log(getSav(true, arrOfObs[i]));
+				//arrOfObs[i].sav = filter;
+				arrOfObs[i].sav = getSav(true, arrOfObs[i]);
 				result.push(arrOfObs[i]);
 			}
 			else{
@@ -181,7 +184,7 @@ var findBestDollarDeal = function (arrOfObs){
 		return d-c;
 	});
 	//console.log(result);
-	console.log('done');
+	console.log('done savings');
 	return result.concat(rest);
 }
 
@@ -209,15 +212,13 @@ var findBestPercentageDeal = function (arrOfObs){
 	result.sort(function (a,b){
 		var c = getSav(false, a)
 		, d = getSav(false, b);
-		
 		return d-c;
 	});
-	console.log(result);
+	//console.log(result);
+	console.log('done percent');
 
 	return result.concat(rest);
 }
-
-
 
 module.exports.findBuy1Get1Free = findBuy1Get1Free;
 module.exports.findBestDollarDeal = findBestDollarDeal;

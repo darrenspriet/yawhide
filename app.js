@@ -335,9 +335,16 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
+			var finalOb = [];
+			for (var i = flyer.length - 1; i >= 0; i--) {
+				var ob = {};
+				ob.sortSavings = s.findBestDollarDeal(flyer[i].currFlyer);
+				ob.sortPercent = s.findBestPercentageDeal(flyer[i].currFlyer);
+				ob.flyer = flyer[i];
+				finalOb.push(ob);
+			};
 			console.log('the flyers');
-			console.log(flyer);
-			res.send(flyer);
+			res.send(finalOb);
 		}
 	});
 });
@@ -350,30 +357,30 @@ app.get('/getAllStores', function (req, res){
 		}
 		else{
 			console.log('this is the flyer');
-			console.log(flyer)
+			//console.log(flyer)
 			res.send(flyer);
 		}
 	});
 });
 
-app.get('/getBestDeals/:id', function (req, res){
+app.get('/getBestDeals/:id/:bool', function (req, res){
 	Sobeys.getStoreByUrlNum(req.params.id, function (err, flyer){
 		if (err) res.send(500, 'could not get latest flyer by id');
 		var fly = flyer.currFlyer;
 		var highestSaving = []
 		, bestDeals = []
-		, buyOneGetOneFree = [];
-		
-		//buyOneGetOneFree = s.findBuy1Get1Free(fly, buyOneGetOneFree);
-		bestDeals = s.findBestDollarDeal(fly);
-		//console.log('highestSaving: ');
-		//console.log(highestSaving);
-		console.log('\nbestDeals: ');
-		console.log(bestDeals);
-		//console.log('\nbuyOneGetOneFree: ');
-		//console.log(buyOneGetOneFree);
-		
-		//console.log(flyer.storeName);
+		, bestPercent = [];
+		if(req.params.bool){
+			bestDeals = s.findBestDollarDeal(fly);
+			res.send(bestDeals);
+		}
+		else if (req.params.bool){
+			bestPercent = s.findBestPercentageDeal(fly);
+			res.send(bestPercent);
+		}
+		else{
+			res.send(500, 'could not get bool');
+		}
 	});
 });
 

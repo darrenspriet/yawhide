@@ -4,7 +4,7 @@
 * @return {string} - formatted URL with current IP/Server
 *
 */
- var getURL = function(op){
+var getURL = function(op){
     //DEPLOYING ON LOCAL MACHINE
     // return "http://192.168.11.54:3000"+op;
 
@@ -27,23 +27,23 @@ var getLocation = function(success, err){
 				longitude:position.coords.longitude
 			};
 			success(loc);
-      // vars.location=loc;
-      // console.log(loc);
+		// vars.location=loc;
+		// console.log(loc);
 
-    }, function(e){
-     err(e);
-   },
-   {
-     timeout:30000,
-     maximumAge:600000
-   });
-	}catch(e){
+			}, function(e){
+				err(e);
+			},
+			{
+				timeout:30000,
+				maximumAge:600000
+			});
+				}catch(e){
 
-        // On fail, use communitech coordinates
-        alert(e);
-        //success(moveCoords(debug.location));
-      }
-    }
+			// On fail, use communitech coordinates
+			alert(e);
+			//success(moveCoords(debug.location));
+		}
+}
 
 /**
 * Initializes the google map
@@ -52,11 +52,11 @@ var getLocation = function(success, err){
 */
 var initializeMap = function(L1, L2)
 {
-    var mapProp = {
-        center:new google.maps.LatLng(L1,L2),
-        zoom:14,
-        mapTypeId:google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: true
-    };
-    var map=new google.maps.Map(document.getElementById("findASobeys"),mapProp);
+	var mapProp = {
+		center:new google.maps.LatLng(L1,L2),
+		zoom:14,
+		mapTypeId:google.maps.MapTypeId.ROADMAP,
+		disableDefaultUI: true
+	};
+	var map=new google.maps.Map(document.getElementById("findASobeys"),mapProp);
 }
