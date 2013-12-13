@@ -32,6 +32,16 @@ app_router.on('route:storeInfo', function (id){
 app_router.on('route:viewFlyer', function (id){
 	console.log("Router is taking you to viewFlyer page with id: "+id);
 	viewFlyer.render(id);
+	$(document).on("click", "#menu-toggle",function(ev){
+        	ev.preventDefault();
+        	$("#wrapper").toggleClass("active");
+    	});
+	$(document).on("click", ".selection",function(ev) {
+        	ev.preventDefault();
+        	$("#wrapper").toggleClass("active");
+    	});
+
+	
 });
 
 app_router.on('route:store', function (id){
