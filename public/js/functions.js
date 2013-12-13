@@ -60,3 +60,4 @@ var initializeMap = function(L1, L2)
 	};
 	var map=new google.maps.Map(document.getElementById("findASobeys"),mapProp);
 }
+
