@@ -67,10 +67,10 @@ var NearestStoresView = Backbone.View.extend({
 						var incomingStores =
 						"<div class='list-group'>"+
 						"{{#storesArray}}"+
-						"<a href='/#/viewFlyer/{{urlNumber}}' class='list-group-item'>Sobeys - {{storeName}}</a>"+
+						"<a href='/#/viewFlyer/{{urlNumber}}' class='list-group-item text-center'>Sobeys - {{storeName}}</a>"+
 						"{{/storesArray}}"+
 						"</div>";
-										
+						
 						var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
 						$('.tablesForStore').html(html).trigger('create');
 					});					
@@ -80,13 +80,13 @@ var NearestStoresView = Backbone.View.extend({
 					console.log('there was an error');
 				}
 			});
-		});
-	}
+});
+}
 });
 
 var StoreInfoView = Backbone.View.extend({
 
-		render:function(id){
+	render:function(id){
 
 		var store = new GetOneSobeyStore({id: id});
 		store.fetch({
@@ -99,7 +99,7 @@ var StoreInfoView = Backbone.View.extend({
 				"<tr><td>{{city}}</td></tr>"+
 				"<tr><td>Store Hours - {{storeHours.open}}</td></tr>"+
 				"</table>";
-			
+				
 				$('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
 				
 				return this;
@@ -117,40 +117,12 @@ var ViewFlyerView = Backbone.View.extend({
 		store.fetch({
 			success: function(){
 				console.log(store.attributes);
-				var template = 
-				"<table class='table table-striped table-hover tablesForStore'>"+
-				"<thead>"+
-				"<tr><th>Name</th><th>Description</th><th>Price</th><th>Savings</th></tr></thead>"+
-				"{{#flyer}}"+
-				"<tr>"+
-				"<td>{{item}}</td><td>{{description}}</td><td>{{price}}</td><td>{{savings}}</td>"+
-				"</tr>"+
-				"{{/flyer}}"+
-				"</table>";
-
-
-				// var template ="<div class='row'>"+
-				// 	"<div class='col-xs-12'>"+
-				// 		"<h5>Sobeys - {{storeName}}</h5>"+
-				// 	"</div>"+
-				// "</div>"+
-				// "<div class='row'>"+
-				// 	"<div class='col-xs-6'>"+
-				// 		"<h5>{{storeNumber}}</h5>"+
-				// 	"</div>"+
-				// 	"<div class='col-xs-6'>"+
-				// 		"<h5>{{city}}</h5>"+
-				// 	"</div>"+
-				// "</div>"+
-				// "<div class='row'>"+
-				// 	"<div class='col-xs-12'>"+
-				// 		"<h5>Store Hours - {{storeHours.open}}</h5>"+
-				// 	"</div>"+
-				// "</div>"+
-				// "</div>";
-				 $('#page_container').html(Mustache.to_html(template, {flyer:store.attributes.currFlyer})).trigger('create');
+				$.get('templates/flyer.html', function(incomingTemplate){
+					var template = Handlebars.compile(incomingTemplate);
+					$('#page_container').html(template({flyer:store.attributes.currFlyer})).trigger('create');
+				}); 
 				
-				 return this;
+				return this;
 			}
 		});
 	}
