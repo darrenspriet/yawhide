@@ -1,28 +1,61 @@
 var veggieFruit = ['apple', 'apricot', 'artichoke', 'asparagus', 'aubergine', 'avocado', 'banana', 'beetroot', 'bean', 'broccoli', 'brussel', 'carrot', 'cherry', 'clementine', 'courgette', 'date', 'elderberry', 'endive', 'fennel', 'fig', 'garlic', 'grape', 'guava', 'kiwi', 'leek', 'lemon', 'lettuce', 'mango', 'melon', 'mushroom', 'nectarine', 'nut', 'olive', 'orange', 'pea', 'peanut', 'pear', 'pepper', 'pineapple', 'plum', 'potato', 'pumpkin', 'quince', 'radish', 'raisin', 'rhubarb', 'satsuma', 'sprout', 'squash', 'strawberry', 'tomato', 'turnip', 'ugli', 'watercress', 'watermelon', 'yam'];
 
 var almightyOb = {
-	'apple':6, 'apricot': 6, 'artichoke': 6, 'asparagus': 6, 'aubergine': 6, 'avocado': 6, 'banana': 6, 'beetroot': 6, 'bean': 6, 'broccoli': 6, 'brussel': 6, 'cabbage':6,'cantaloupe':6, 'carrot': 6, 'cherry': 6, 'clementine': 6, 'courgette': 6,'cucumber':6, 'date': 6, 'elderberry': 6, 'endive': 6, 'fennel': 6, 'fig': 6, 'garlic': 6, 'grape': 6, 'guava': 6, 'kiwi': 6, 'leek': 6, 'lemon': 6, 'lettuce': 6, 'mango': 6, 'melon': 6, 'mushroom': 6, 'nectarine': 6, 'nut': 6, 'olive': 6, 'orange': 6, 'pea': 6, 'peanut': 6, 'pear': 6, 'pepper': 6, 'pineapple': 6, 'plum': 6, 'potato': 6, 'pumpkin': 6, 'quince': 6, 'radish': 6, 'raisin': 6, 'rhubarb': 6, 'satsuma': 6, 'sprout': 6, 'squash': 6, 'strawberry': 6, 'tomato': 6, 'turnip': 6, 'ugli': 6, 'watercress': 6, 'watermelon': 6, 'yam':6,
+	/* veggies and fruits	*/
+	'apple':6, 'apricot': 6, 'artichoke': 6, 'asparagus': 6, 'aubergine': 6, 'avocado': 6, 'banana': 6, 'beetroot': 6, 'bean': 6, 'broccoli': 6, 'brussel': 6, 'cabbage':6,'cantaloupe':6, 'carrot': 6, 'cherry': 6, 'clementine': 6, 'courgette': 6,'craisin':6,'cranberry':6, 'cucumber':6, 'date': 6, 'elderberry': 6, 'endive': 6, 'fennel': 6, 'fig': 6, 'garlic': 6, 'grape': 6,'grapefruit':6, 'guava': 6, 'kiwi': 6, 'leek': 6, 'lemon': 6, 'lettuce': 6, 'mango': 6, 'melon': 6, 'mushroom': 6, 'nectarine': 6, 'nut': 6, 'olive': 6,'onion':6, 'orange': 6, 'pea': 6, 'peanut': 6, 'pear': 6, 'pepper': 6,'pickle':6, 'pineapple': 6, 'plum': 6, 'potato': 6, 'pumpkin': 6, 'quince': 6, 'radish': 6, 'raisin': 6, 'rhubarb': 6, 'satsuma': 6,'spinach':6, 'sprout': 6, 'squash': 6, 'strawberry': 6,'tangerine':6, 'tomato': 6, 'turnip': 6, 'ugli': 6, 'watercress': 6, 'watermelon': 6, 'yam':6, 'zucchini':6,
 
-	'apples':6, 'apricots': 6, 'artichokes': 6, 'aubergines': 6, 'avocados': 6, 'bananas': 6, 'beetroots': 6, 'beans': 6, 'brussel': 6,'cantaloupes':6, 'carrots': 6, 'cherries': 6, 'clementines': 6, 'courgettes': 6,'cucumbers':6, 'dates': 6, 'elderberries': 6, 'endives': 6, 'fennels': 6, 'figs': 6, 'grapes': 6, 'guavas': 6, 'kiwis': 6, 'leeks': 6, 'lemons': 6, 'mangoes': 6, 'mangos':6, 'melons': 6, 'mushrooms': 6, 'nectarines': 6, 'nuts': 6, 'olives': 6, 'oranges': 6, 'peas': 6, 'peanuts': 6, 'pears': 6, 'peppers': 6, 'pineapples': 6, 'plums': 6, 'potatoes': 6, 'potatos':6, 'pumpkins': 6, 'quinces': 6, 'radishes': 6,'radishs':6, 'raisins': 6, 'rhubarbs': 6, 'satsumas': 6, 'sprouts': 6, 'squashes': 6,'squashs':6, 'strawberries': 6, 'tomatoes': 6,'tomatos':6, 'turnips': 6, 'uglies': 6, 'watercresses': 6, 'watermelons': 6, 'yams':6
+	'apples':6, 'apricots': 6, 'artichokes': 6, 'aubergines': 6, 'avocados': 6, 'bananas': 6, 'beetroots': 6, 'beans': 6, 'brussel': 6,'cantaloupes':6, 'carrots': 6, 'cherries': 6, 'clementines': 6, 'courgettes': 6,'craisins':6,'cranberries':6, 'cucumbers':6, 'dates': 6, 'elderberries': 6, 'endives': 6, 'fennels': 6, 'figs': 6, 'grapes': 6, 'guavas': 6, 'kiwis': 6, 'leeks': 6, 'lemons': 6, 'mangoes': 6, 'mangos':6, 'melons': 6, 'mushrooms': 6, 'nectarines': 6, 'nuts': 6, 'olives': 6,'onions':6, 'oranges': 6, 'peas': 6, 'peanuts': 6, 'pears': 6, 'peppers': 6,'pickles':6, 'pineapples': 6, 'plums': 6, 'potatoes': 6, 'potatos':6, 'pumpkins': 6, 'quinces': 6, 'radishes': 6,'radishs':6, 'raisins': 6, 'rhubarbs': 6, 'satsumas': 6, 'sprouts': 6, 'squashes': 6,'squashs':6, 'strawberries': 6,'tangerines':6, 'tomatoes': 6,'tomatos':6, 'turnips': 6, 'uglies': 6, 'watercresses': 6, 'watermelons': 6, 'yams':6, 'zucchinis':6,'zucchinies':6
+	/* grain */
+
+	/* meat */
+
+	/* dairy */
+
 }
 
-var categories = function (arrOfObs){
+var categories = function (arrOfObs, arr1, arr2, arr3, arr4, arr5, arr6){
 	console.time("dbsave");
 	for (var i = arrOfObs.length - 1; i >= 0; i--) {
-		var item = arrOfObs[i].item.split(' ');
-		for (var j = item.length - 1; j >= 0; j--) {
-			if(j==item.length -50)
-				break;
-			if(typeof(almightyOb[item[j].toLowerCase()]) !== 'undefined'){
-				//console.log('\n' + item[j]);
-				//console.log(almightyOb[item[j].toLowerCase()]);
+		var item = arrOfObs[i].item.split(' ')
+		, rank = 0
+		, index = -1;
+		for (var j = item.length-1; j >= 0; j--) {
+			var num = almightyOb[item[j].toLowerCase()];
+			//console.log(num);
+			if(!isNaN(num) && (rank == 0 || num < rank)){
+				rank = num;
+				index = j;
+				//console.log('rank: ' + rank + ", index: "+index);
 			}
-			else{
-				console.log(item[j]);
-			}
+			if(rank == 1) break;
 		};
+		if(index > -1){
+			switch(rank){
+				case 1:
+					arr1.push(arrOfObs[i]);
+					break;
+				case 2:
+					arr2.push(arrOfObs[i]);
+					break;
+				case 3:
+					arr3.push(arrOfObs[i]);
+					break;
+				case 4:
+					arr4.push(arrOfObs[i]);
+					break;
+				case 5:
+					arr5.push(arrOfObs[i]);
+					break;
+				case 6:
+					arr6.push(arrOfObs[i]);
+					break;
+			}
+		}
 	};
 	console.timeEnd("dbsave");
+	//console.log(arr6);
+	//console.log(veggieAndFruit);
+
 }
 
 

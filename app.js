@@ -369,8 +369,15 @@ app.get('/getBestDeals/:id', function (req, res){
 		var fly = flyer.currFlyer;
 		var highestSaving = []
 		, bestDeals = []
-		, bestPercent = [];
-		s.categories(fly);
+		, bestPercent = []
+		, arr1=[]
+		, arr2=[]
+		, arr3=[]
+		, arr4=[]
+		, arr5=[]
+		, arr6=[];
+		s.categories(fly, arr1, arr2, arr3, arr4, arr5, arr6);
+		//console.log(arr6);
 	});
 });
 
