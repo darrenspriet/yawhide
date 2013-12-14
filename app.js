@@ -363,24 +363,14 @@ app.get('/getAllStores', function (req, res){
 	});
 });
 
-app.get('/getBestDeals/:id/:bool', function (req, res){
+app.get('/getBestDeals/:id', function (req, res){
 	Sobeys.getStoreByUrlNum(req.params.id, function (err, flyer){
 		if (err) res.send(500, 'could not get latest flyer by id');
 		var fly = flyer.currFlyer;
 		var highestSaving = []
 		, bestDeals = []
 		, bestPercent = [];
-		if(req.params.bool){
-			bestDeals = s.findBestDollarDeal(fly);
-			res.send(bestDeals);
-		}
-		else if (req.params.bool){
-			bestPercent = s.findBestPercentageDeal(fly);
-			res.send(bestPercent);
-		}
-		else{
-			res.send(500, 'could not get bool');
-		}
+		s.categories(fly);
 	});
 });
 
