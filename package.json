@@ -15,5 +15,7 @@
     , "cheerio": "*"
     , "jade": "*"
     , "node-geocoder-ca": "*"
+    , "graceful-fs":"latest"
+    , "async": "latest"
   }
 }
