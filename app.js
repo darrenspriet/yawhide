@@ -85,99 +85,203 @@ app.get('/readLocalFlyers', function (req, res){
 			because it sorts it by created date (or last mod prob)
 			*/
 		latestFolder = folders[folders.length -1];
-		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, html){
+		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, folders2){
 			if (err2) throw err2;
 			console.log(latestFolder);
-			html.forEach(function (h){
-				fs.readFile('./sobeys/' + latestFolder + '/'+h, function (err3, data) {
-					if (err3) throw err;
-
-					var $ = cheerio.load(data);
-
+			/** this is each store's flyer */
+			folders2.forEach(function (h){
+				fs.readdir('./sobeys/'+latestFolder + '/' + h + '/', function (err3, folders3){
+					if(err3)throw err3;
+					/** this is each flyer part */
 					var info = [];
-
-					if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1){
-						console.log('no flyer at file: ' + h);
-						
-					}
-					else{
 					
-						/** this finds the tbody section in the table.
-						 *	 it will hopefully parse through and get four pieces of info:
-						 *	 item, price, savings and description */
-						$('.card .card-plain .card-inset table tbody').each(function (i, html){
-							for(var i = 0; i < html.children.length; i++){
-								if(typeof (html.children[i]) !== 'undefined' && html.children[i].type === 'tag'){
-									var ob = {};
-									for(var j = 0; j < html.children[i].children.length; j++){
-										if(typeof (html.children[i].children[j]) !== 'undefined' && html.children[i].children[j].type === 'tag'){
-<<<<<<< HEAD
-=======
-											delete html.children[i].children[j].prev;
-											delete html.children[i].children[j].next;
-											delete html.children[i].children[j].parent;
-											delete html.children[i].children[j].attribs;
-											delete html.children[i].children[j].data;
-											//console.log('\n' + j);
-											//console.log(html.children[i].children[j]);
->>>>>>> stefan
-											if (html.children[i].children[j].children.length == 0){
-												html.children[i].children[j].children.push({
-													data: ''
-												});
-											}
-											switch(j){
-												case 1:
-													ob.item = html.children[i].children[j].children[0].data;
-													break;
-												case 3:
-													ob.price = html.children[i].children[j].children[0].data;
-													break;
-												case 5:
-													ob.savings = html.children[i].children[j].children[0].data;
-													break;
-												case 7:
-													ob.description = html.children[i].children[j].children[0].data;
-													break;
-<<<<<<< HEAD
-=======
-												/*default:
-													ob.description = html.children[i].children[j].children[0].data;
-													break;*/
->>>>>>> stefan
-											}
-										}
-									}
-									info.push(ob);
-<<<<<<< HEAD
-=======
-									//console.log('\n');
-									//console.log(ob);
->>>>>>> stefan
-								}
-							}
-							var urlNum = h.split('.')[0];
-							Sobeys.getStoreByUrlNum(urlNum, function (err, store){
-								if (err) throw err;
-								if(!err && store !== null){
+					//async.forEach(folders3, function (flyerPart, callback){ 
+//folders3.forEach(function (flyerPart){
+     				async.map(folders3
+     					, function (flyerPart, complete) {
+     					fs.readFile('./sobeys/'+latestFolder + '/' + h + '/' + flyerPart, 'utf8', function (err4, data){
 
-									Sobeys.makeFlyer(store, info, function (err2){
-										if (err2) throw err;
-<<<<<<< HEAD
-=======
-										//console.log('success: '+urlNum);
-										
-										
->>>>>>> stefan
-									});
-								}
-								else{
-									console.log('no store under that url number: '+urlNum);
-									
-								}
-							});
+							/** this is each 1 of 20 parts of a flyer */
+							if (err4) throw err4;
+							var $ = cheerio.load(data);
+							//var info = [];
+
+							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
+								console.log('no flyer at file: ' + flyerPart);
+							}
+							else {
+								console.log(flyerPart);
+								$('.container .toggle-last .one-third .flyer-card .card-top').each(function (a, html){
+									var url = ''
+									, price = ''
+									, sav = ''
+									, desc = ''
+									, item = ''
+									, bestSav = ''
+									, bestPercent = ''
+									, savings = ''
+									, savings1 = ''
+									, savings2 = ''
+									, flyerDate = '';
+
+									for (var i = html.children.length - 1; i >= 0; i--) {
+
+										if(html.children[i].type === 'tag') {
+											var class1 = html.children[i];											
+											/** this finds url specifically from selecting a chain of classes */
+											if(class1.attribs.class === 'card-image'){
+												url = class1.attribs.style.split(' ')[1].substr(5);
+												url = url.substr(0, url.length -3);
+											}
+											else if (class1.attribs.class==='card-inset'){
+												for (var j = class1.children.length - 1; j >= 0; j--) {
+													var class2 = class1.children[j];
+													if(class2.type === 'tag'){
+														/** finds the desc */
+														if (class2.name === 'p'){
+															desc = class2.children[0].data;
+															desc = desc.replace(/&amp;/g, '&');
+															desc = desc.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"'");
+														}
+														/** finds the item name */
+														else if(class2.attribs.class.indexOf('h6') > -1){
+															item = class2.children[0].data;
+															item = item.replace(/&amp;/g, '&');
+															item = item.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"'");
+														}
+														/** finds the price and savings */
+														else if (class2.attribs.class.indexOf('price')>-1){
+															for (var k = class2.children.length - 1; k >= 0; k--) {
+																var class3 = class2.children[k];
+																if(class3.type === 'tag'){
+																	if(class3.attribs.class.indexOf('price-amount')){
+																		if(class3.children.length > 1 && class3.children[1].children.length > 0){
+																			sav = class3.children[1].children[0].data;
+																			sav = sav.replace(/&amp;/g, '&');
+																			sav = sav.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"|");
+																		}
+																	}
+																	else if (class3.attribs.class.indexOf('price-promos')) {
+																		
+																		if(class3.children.length > 1){
+																			if(class3.children[1].children.length > 1){
+																				savings = '$' + class3.children[0].data+'.';
+																				savings1 = class3.children[1].children[0].data;
+																				savings2 = class3.children[1].children[1].children[0].data;
+																			}
+																			else if (class3.children[0].data.indexOf('/') === -1){
+																				savings = '$0' + class3.children[0].data;
+																				savings1 = class3.children[1].children[0].data;
+																			}
+																			else{
+																				savings = class3.children[0].data + '.';
+																				savings = savings.replace('/', '/$');
+																				savings1 = class3.children[1].children[0].data;
+																			}
+																			var price = savings + savings1 + savings2;
+																		}
+																	}
+																}
+															};
+														}
+													}
+												};
+											}
+											flyerDate = $('.container .site-section .site-section-content .fancy-heading .h3-editorial').text();
+											//
+											
+											/** gets the best savings from the price */
+											var  savArr= sav.split(' ');
+											for (var i = savArr.length - 1; i >= 0; i--) {
+												var z = savArr[i];
+												/** price is in cents then! */
+												if(savArr[i].indexOf('|') > -1){
+													sav = sav.replace(z, '$0.' + z.replace('|', ''));
+													bestSav = '$0.' + z.replace('|', '');
+													/** check if sav has a / in it*/
+													if(price.indexOf('/') > -1){
+														var priceArr = price.split('/');
+														for (var i = priceArr.length - 1; i >= 0; i--) {
+															if(priceArr[i].indexOf('$') > -1){
+																var parsedPrice = parseFloat(priceArr[i].substr(1))
+																, parsedBest = parseFloat(bestSav.substr(1));
+																bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
+															}
+														};
+													}
+													else{
+														var parsedPrice = parseFloat(price.substr(1))
+														, parsedBest = parseFloat(bestSav.substr(1));
+														bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
+													}
+													break;
+												}
+												else if(savArr[i] !== '' && !isNaN(savArr[i])){
+													sav = sav.replace(z, '$' + z);
+													bestSav = '$' + z;
+													/** check if sav has a / in it*/
+													if(price.indexOf('/') > -1){
+														var priceArr = price.split('/');
+														for (var i = priceArr.length - 1; i >= 0; i--) {
+															if(priceArr[i].indexOf('$') > -1){
+																var parsedPrice = parseFloat(priceArr[i].substr(1))
+																, parsedBest = parseFloat(bestSav.substr(1));
+																bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
+															}
+														};
+													}
+													else{
+														var parsedPrice = parseFloat(price.substr(1))
+														, parsedBest = parseFloat(bestSav.substr(1));
+														bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
+													}
+													break;
+												}
+											};
+											
+
+											//console.log('************************************' + item + " " + price + " " + sav+ " " + url + " " + desc + " " + bestPercent + "% " + bestSav + " " + flyerDate);
+											var ob = {};
+											ob.item = item;
+											ob.price = price;
+											ob.savings = sav;
+											ob.url = url;
+											ob.description = desc;
+											ob.bestPercent = bestPercent;
+											ob.bestSav = bestSav;
+											info.push(ob);
+											// tell async that the iterator has completed
+
+										}
+
+									};
+								});
+							}
+							complete(err4, data);
+						})
+						}
+						, function (err, results){
+
+						console.log('iterating done');
+						var urlNum = h.split('.')[0];
+						console.log(info);
+						Sobeys.getStoreByUrlNum(urlNum, function (err7, store){
+							if (err7) throw err7;
+							if(!err7 && store !== null){
+								Sobeys.makeFlyer(store, info, function (err8){
+									if (err8) throw err8;
+								});
+							}
+							else{
+								console.log('no store under that url number: '+urlNum);
+							}
 						});
-					}
+						
+					});
+					
+						
+					
+					
 				});
 			});
 		});
