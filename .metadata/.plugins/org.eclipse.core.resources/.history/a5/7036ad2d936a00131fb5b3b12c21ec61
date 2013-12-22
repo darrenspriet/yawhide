@@ -1,0 +1,107 @@
+package com.yawhide.yawhide;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+public class Home extends Activity {
+
+	Button btnShowLocation;
+
+	// GPSTracker class
+	GPSTracker gps;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_home);
+
+		btnShowLocation = (Button) findViewById(R.id.btnShowLocation);
+
+		// show location button click event
+		btnShowLocation.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// create class object
+				gps = new GPSTracker(Home.this);
+
+				// check if GPS enabled
+				if (gps.canGetLocation()) {
+
+					double latitude = gps.getLatitude();
+					double longitude = gps.getLongitude();
+
+					String url = "http://192.168.1.113/getNearestStores/43.49/-80.5467/50";
+					
+					HttpURLConnection con = null;
+					try {
+						con = (HttpURLConnection) ( new URL(url)).openConnection();
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						con.setRequestMethod("GET");
+					} catch (ProtocolException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					con.setDoInput(true);
+					con.setDoOutput(true);
+					try {
+						con.connect();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					InputStream is = con.getInputStream();
+	                byte[] b1 = new byte[1024];
+	                StringBuffer buffer = new StringBuffer();
+	                
+	                while ( is.read(b1) != -1)
+	                        buffer.append(new String(b1));
+	                
+	                con.disconnect();
+	                
+	                buffer.toString();
+					
+					// \n is for new line
+					Toast.makeText(
+							getApplicationContext(),
+							"Your Location is - \nLat: " + latitude
+									+ "\nLong: " + longitude, Toast.LENGTH_LONG)
+							.show();
+				} else {
+					// can't get location
+					// GPS or Network is not enabled
+					// Ask user to enable GPS/network in settings
+					gps.showSettingsAlert();
+				}
+
+			}
+		});
+	}
+
+}
