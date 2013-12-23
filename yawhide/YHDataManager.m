@@ -10,4 +10,16 @@
 
 @implementation YHDataManager
 
+//Singleton Object of this class and is accessed again and again
++ (YHDataManager*) sharedData{
+    static YHDataManager *sharedData;
+    @synchronized(self){
+        if (!sharedData){
+            sharedData = [[YHDataManager alloc] init];
+        }
+        return sharedData;
+    }
+}
+
+
 @end

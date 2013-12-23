@@ -10,4 +10,7 @@
 
 @interface YHDataManager : NSObject
 
+//As singleton Object that is called at the beginning of the Application
++ (YHDataManager*) sharedData;
+
 @end
