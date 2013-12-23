@@ -1,14 +1,14 @@
 //
-//  AppDelegate.m
+//  YHAppDelegate.m
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "YHAppDelegate.h"
 
-@implementation AppDelegate
+@implementation YHAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

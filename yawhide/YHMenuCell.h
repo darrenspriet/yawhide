@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  YHMenuCell.h
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
+@interface YHMenuCell : UITableViewCell
 
 @end

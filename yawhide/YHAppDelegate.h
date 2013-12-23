@@ -1,5 +1,5 @@
 //
-//  MenuCell.h
+//  YHAppDelegate.h
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MenuCell : UITableViewCell
+@interface YHAppDelegate : UIResponder <UIApplicationDelegate>
+
+@property (strong, nonatomic) UIWindow *window;
 
 @end

@@ -1,18 +1,18 @@
 //
-//  FrontViewTableViewController.m
+//  YHFrontViewTableViewController.m
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
-#import "FrontViewTableViewController.h"
+#import "YHFrontViewTableViewController.h"
 
-@interface FrontViewTableViewController ()
+@interface YHFrontViewTableViewController ()
 
 @end
 
-@implementation FrontViewTableViewController
+@implementation YHFrontViewTableViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -35,6 +35,7 @@
     [self.locationManager setDelegate:self];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
     [self.locationManager startUpdatingLocation];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,7 +93,7 @@
         NSLog(@"user Denied Authorization");
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         //sets it to the initialViewController on that storyboard
-        PostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
+        YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
         viewController.delegate = self;
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
         [nav.navigationBar setBarStyle:UIBarStyleBlack];

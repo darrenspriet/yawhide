@@ -1,5 +1,5 @@
 //
-//  RearViewController.h
+//  YHRearViewController.h
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RearViewController : UIViewController <UIGestureRecognizerDelegate>
+@interface YHRearViewController : UIViewController <UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
 
 @end

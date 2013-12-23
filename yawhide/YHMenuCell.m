@@ -1,14 +1,14 @@
 //
-//  MenuCell.m
+//  YHMenuCell.m
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
-#import "MenuCell.h"
+#import "YHMenuCell.h"
 
-@implementation MenuCell
+@implementation YHMenuCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

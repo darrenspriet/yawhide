@@ -1,18 +1,18 @@
 //
-//  SideBarTableViewController.m
+//  YHSideBarTableViewController.m
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
-#import "SideBarTableViewController.h"
+#import "YHSideBarTableViewController.h"
 
-@interface SideBarTableViewController ()
+@interface YHSideBarTableViewController ()
 
 @end
 
-@implementation SideBarTableViewController
+@implementation YHSideBarTableViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -26,6 +26,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UINavigationController *frontNav = (id)self.revealViewController.frontViewController;
+    NSLog(@"what is the top nav%@", frontNav);
+    NSLog(@"what is the top controller%@", frontNav.topViewController);
+    self.frontController = (YHFrontViewTableViewController*)frontNav.topViewController;
+
+    
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -115,6 +121,8 @@
         SWRevealViewControllerSegue* revealSegue = (SWRevealViewControllerSegue*) segue;
         SWRevealViewController* revealController = self.revealViewController;
         UINavigationController *frontNavigationController = (id)revealController.frontViewController;  // <-- we know it is a NavigationController
+        
+        
 
         
 //      NSAssert( revealController != nil, @"oops! must have a revealViewController" );
@@ -122,20 +130,29 @@
         
         revealSegue.performBlock = ^(SWRevealViewControllerSegue* rvc_segue, UIViewController* svc, UIViewController* dvc){
             UITableViewCell *cell = sender;
+            NSLog(@"what is dvc%@", dvc);
+            NSLog(@"what is svc%@", svc);
+            NSLog(@"this is revela segue%@", rvc_segue);
             if ([cell.textLabel.text isEqualToString:@"Front"] ) {
-                if (![frontNavigationController.topViewController isKindOfClass:[FrontViewTableViewController class]] ){
-                    UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:dvc];
+                if (![frontNavigationController.topViewController isKindOfClass:[YHFrontViewTableViewController class]] ){
+                    
+//                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+//                    //sets it to the initialViewController on that storyboard
+                    UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:self.frontController ];
                     [revealController setFrontViewController:navigation animated:YES];
                 }
                 else{
                     [revealController revealToggle:self];
+                    
                 }
             }
             else{
                 // Seems the user attempts to 'switch' to exactly the same controller he came from!
-                if(![frontNavigationController.topViewController isKindOfClass:[RearViewController class]] ){
+                if(![frontNavigationController.topViewController isKindOfClass:[YHRearViewController class]] ){
+                    
                     UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:dvc];
                     [revealController setFrontViewController:navigation animated:YES];
+                    
                 }
                 else{
                     [revealController revealToggle:self];

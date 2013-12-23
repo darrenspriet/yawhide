@@ -1,18 +1,18 @@
 //
-//  PostalFinderViewController.m
+//  YHPostalFinderViewController.m
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
-#import "PostalFinderViewController.h"
+#import "YHPostalFinderViewController.h"
 
-@interface PostalFinderViewController ()
+@interface YHPostalFinderViewController ()
 
 @end
 
-@implementation PostalFinderViewController
+@implementation YHPostalFinderViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

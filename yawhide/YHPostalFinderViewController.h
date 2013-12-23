@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
-@protocol PostalViewControllerDelegate <NSObject>
+@protocol YHPostalViewControllerDelegate <NSObject>
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude;
 @end
 
-@interface PostalFinderViewController : UIViewController<UITextFieldDelegate>
-@property (nonatomic, weak) id<PostalViewControllerDelegate> delegate;
+@interface YHPostalFinderViewController : UIViewController<UITextFieldDelegate>
+@property (nonatomic, weak) id<YHPostalViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UITextField *postalCode;
 
 @end
