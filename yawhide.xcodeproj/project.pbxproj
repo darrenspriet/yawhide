@@ -25,9 +25,12 @@
 		E09045661867C2F100FA81B4 /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E09045641867C2F100FA81B4 /* reveal-icon@2x.png */; };
 		E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045691867C31600FA81B4 /* SWRevealViewController.m */; };
 		E090456D1867C39E00FA81B4 /* SideBarTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090456C1867C39E00FA81B4 /* SideBarTableViewController.m */; };
-		E09045701867C6DB00FA81B4 /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090456F1867C6DB00FA81B4 /* FrontViewController.m */; };
 		E09045731867C6F400FA81B4 /* RearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045721867C6F400FA81B4 /* RearViewController.m */; };
 		E09045761867CE3900FA81B4 /* MenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045751867CE3900FA81B4 /* MenuCell.m */; };
+		E09045781867E1E500FA81B4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E09045771867E1E500FA81B4 /* CoreLocation.framework */; };
+		E090457A1867E1EB00FA81B4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E09045791867E1EB00FA81B4 /* MapKit.framework */; };
+		E090457D1867E30100FA81B4 /* FrontViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090457C1867E30100FA81B4 /* FrontViewTableViewController.m */; };
+		E09045801867E65400FA81B4 /* PostalFinderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090457F1867E65400FA81B4 /* PostalFinderViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,12 +68,16 @@
 		E09045691867C31600FA81B4 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		E090456B1867C39E00FA81B4 /* SideBarTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideBarTableViewController.h; sourceTree = "<group>"; };
 		E090456C1867C39E00FA81B4 /* SideBarTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideBarTableViewController.m; sourceTree = "<group>"; };
-		E090456E1867C6DB00FA81B4 /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrontViewController.h; sourceTree = "<group>"; };
-		E090456F1867C6DB00FA81B4 /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrontViewController.m; sourceTree = "<group>"; };
 		E09045711867C6F400FA81B4 /* RearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RearViewController.h; sourceTree = "<group>"; };
 		E09045721867C6F400FA81B4 /* RearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RearViewController.m; sourceTree = "<group>"; };
 		E09045741867CE3900FA81B4 /* MenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCell.h; sourceTree = "<group>"; };
 		E09045751867CE3900FA81B4 /* MenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCell.m; sourceTree = "<group>"; };
+		E09045771867E1E500FA81B4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		E09045791867E1EB00FA81B4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		E090457B1867E30100FA81B4 /* FrontViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrontViewTableViewController.h; sourceTree = "<group>"; };
+		E090457C1867E30100FA81B4 /* FrontViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrontViewTableViewController.m; sourceTree = "<group>"; };
+		E090457E1867E65400FA81B4 /* PostalFinderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostalFinderViewController.h; sourceTree = "<group>"; };
+		E090457F1867E65400FA81B4 /* PostalFinderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostalFinderViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +85,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E090457A1867E1EB00FA81B4 /* MapKit.framework in Frameworks */,
+				E09045781867E1E500FA81B4 /* CoreLocation.framework in Frameworks */,
 				E090452D1867C10500FA81B4 /* CoreGraphics.framework in Frameworks */,
 				E090452F1867C10500FA81B4 /* UIKit.framework in Frameworks */,
 				E090452B1867C10500FA81B4 /* Foundation.framework in Frameworks */,
@@ -120,6 +129,8 @@
 		E09045291867C10500FA81B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E09045791867E1EB00FA81B4 /* MapKit.framework */,
+				E09045771867E1E500FA81B4 /* CoreLocation.framework */,
 				E090452A1867C10500FA81B4 /* Foundation.framework */,
 				E090452C1867C10500FA81B4 /* CoreGraphics.framework */,
 				E090452E1867C10500FA81B4 /* UIKit.framework */,
@@ -140,10 +151,12 @@
 				E090456C1867C39E00FA81B4 /* SideBarTableViewController.m */,
 				E09045741867CE3900FA81B4 /* MenuCell.h */,
 				E09045751867CE3900FA81B4 /* MenuCell.m */,
-				E090456E1867C6DB00FA81B4 /* FrontViewController.h */,
-				E090456F1867C6DB00FA81B4 /* FrontViewController.m */,
+				E090457B1867E30100FA81B4 /* FrontViewTableViewController.h */,
+				E090457C1867E30100FA81B4 /* FrontViewTableViewController.m */,
 				E09045711867C6F400FA81B4 /* RearViewController.h */,
 				E09045721867C6F400FA81B4 /* RearViewController.m */,
+				E090457E1867E65400FA81B4 /* PostalFinderViewController.h */,
+				E090457F1867E65400FA81B4 /* PostalFinderViewController.m */,
 				E09045451867C10500FA81B4 /* Images.xcassets */,
 				E09045311867C10500FA81B4 /* Supporting Files */,
 			);
@@ -299,12 +312,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E090456D1867C39E00FA81B4 /* SideBarTableViewController.m in Sources */,
+				E09045801867E65400FA81B4 /* PostalFinderViewController.m in Sources */,
 				E09045761867CE3900FA81B4 /* MenuCell.m in Sources */,
 				E090453B1867C10500FA81B4 /* AppDelegate.m in Sources */,
 				E09045371867C10500FA81B4 /* main.m in Sources */,
+				E090457D1867E30100FA81B4 /* FrontViewTableViewController.m in Sources */,
 				E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */,
 				E09045731867C6F400FA81B4 /* RearViewController.m in Sources */,
-				E09045701867C6DB00FA81B4 /* FrontViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
