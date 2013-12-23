@@ -30,6 +30,7 @@
     [self.revealButtonItem setAction: @selector( revealToggle: )];
     [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
     [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self setStoresArray:[[NSMutableArray alloc]init]];
     [self setLocationManager:[[CLLocationManager alloc]init]];
     [self.locationManager setDelegate:self];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
@@ -59,15 +60,27 @@
         NSData* data = [NSData dataWithContentsOfURL:
                         [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
         
+        if (data==nil) {
+            NSLog(@"got no data");
+        }else{
+            
         NSError* error;
         
         NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
                                                                    options:kNilOptions
                                                                      error:&error];
-        for(NSArray *dict in dictionary){
-            [self.storesArray addObject:dict];
+        if (error) {
+            NSLog(@"this is an error in calling the stores");
         }
-        [self.tableView reloadData];
+        else{
+            NSLog(@"all went as planned");
+            for(NSArray *dict in dictionary){
+                [self.storesArray addObject:dict];
+            }
+            [self.tableView reloadData];
+        }
+
+    }
     }
     [self.locationManager stopUpdatingLocation];
     
@@ -94,21 +107,33 @@
 }
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude
 {
-    NSLog(@"did dismiss");
     [self dismissViewControllerAnimated:YES completion:NULL];
-//
-//    NSData* data = [NSData dataWithContentsOfURL:
-//                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",latitude,longitude]]];
-//    
-//    NSError* error2;
-//    
-//    NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
-//                                                               options:kNilOptions
-//                                                                 error:&error2];
-//    for(NSArray *dict in dictionary){
-//        [self.storesArray addObject:dict];
-//    }
-//    [self.tableView reloadData];
+    
+    NSData* data = [NSData dataWithContentsOfURL:
+                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",latitude,longitude]]];
+    if (data==nil) {
+        NSLog(@"got no data");
+    }else{
+    
+    
+    NSError* error2;
+    
+    NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+                                                               options:kNilOptions
+                                                                 error:&error2];
+
+
+    if (error2) {
+        NSLog(@"this is an error in calling the stores");
+    }
+    else{
+        for(NSArray *dict in dictionary){
+            [self.storesArray addObject:dict];
+        }
+        [self.tableView reloadData];
+        NSLog(@"all went as planned");
+    }
+    }
 }
 
 #pragma mark - Table view data source
@@ -132,7 +157,9 @@
     //add this
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+    
     NSString *storeName = [[[self.storesArray objectAtIndex:indexPath.row] objectForKey:@"flyer"] objectForKey:@"storeName"];
+    NSLog(@"storename is %@", storeName);
     [cell.textLabel setText:storeName];
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
     

@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "MenuCell.h"
+#import "FrontViewTableViewController.h"
+#import "RearViewController.h"
+
+
 
 
 @interface SideBarTableViewController : UITableViewController
