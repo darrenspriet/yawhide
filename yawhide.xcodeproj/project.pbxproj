@@ -15,13 +15,19 @@
 		E090453B1867C10500FA81B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E090453A1867C10500FA81B4 /* AppDelegate.m */; };
 		E090453E1867C10500FA81B4 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E090453C1867C10500FA81B4 /* Main_iPhone.storyboard */; };
 		E09045411867C10500FA81B4 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E090453F1867C10500FA81B4 /* Main_iPad.storyboard */; };
-		E09045441867C10500FA81B4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045431867C10500FA81B4 /* ViewController.m */; };
 		E09045461867C10500FA81B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E09045451867C10500FA81B4 /* Images.xcassets */; };
 		E090454D1867C10500FA81B4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090454C1867C10500FA81B4 /* XCTest.framework */; };
 		E090454E1867C10500FA81B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452A1867C10500FA81B4 /* Foundation.framework */; };
 		E090454F1867C10500FA81B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452E1867C10500FA81B4 /* UIKit.framework */; };
 		E09045571867C10500FA81B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E09045551867C10500FA81B4 /* InfoPlist.strings */; };
 		E09045591867C10500FA81B4 /* yawhideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045581867C10500FA81B4 /* yawhideTests.m */; };
+		E09045651867C2F100FA81B4 /* reveal-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E09045631867C2F100FA81B4 /* reveal-icon.png */; };
+		E09045661867C2F100FA81B4 /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E09045641867C2F100FA81B4 /* reveal-icon@2x.png */; };
+		E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045691867C31600FA81B4 /* SWRevealViewController.m */; };
+		E090456D1867C39E00FA81B4 /* SideBarTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090456C1867C39E00FA81B4 /* SideBarTableViewController.m */; };
+		E09045701867C6DB00FA81B4 /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090456F1867C6DB00FA81B4 /* FrontViewController.m */; };
+		E09045731867C6F400FA81B4 /* RearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045721867C6F400FA81B4 /* RearViewController.m */; };
+		E09045761867CE3900FA81B4 /* MenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045751867CE3900FA81B4 /* MenuCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,14 +53,24 @@
 		E090453A1867C10500FA81B4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E090453D1867C10500FA81B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		E09045401867C10500FA81B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		E09045421867C10500FA81B4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		E09045431867C10500FA81B4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E09045451867C10500FA81B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E090454B1867C10500FA81B4 /* yawhideTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = yawhideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E090454C1867C10500FA81B4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		E09045541867C10500FA81B4 /* yawhideTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "yawhideTests-Info.plist"; sourceTree = "<group>"; };
 		E09045561867C10500FA81B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E09045581867C10500FA81B4 /* yawhideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = yawhideTests.m; sourceTree = "<group>"; };
+		E09045631867C2F100FA81B4 /* reveal-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon.png"; sourceTree = "<group>"; };
+		E09045641867C2F100FA81B4 /* reveal-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon@2x.png"; sourceTree = "<group>"; };
+		E09045681867C31600FA81B4 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		E09045691867C31600FA81B4 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		E090456B1867C39E00FA81B4 /* SideBarTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideBarTableViewController.h; sourceTree = "<group>"; };
+		E090456C1867C39E00FA81B4 /* SideBarTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideBarTableViewController.m; sourceTree = "<group>"; };
+		E090456E1867C6DB00FA81B4 /* FrontViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrontViewController.h; sourceTree = "<group>"; };
+		E090456F1867C6DB00FA81B4 /* FrontViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrontViewController.m; sourceTree = "<group>"; };
+		E09045711867C6F400FA81B4 /* RearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RearViewController.h; sourceTree = "<group>"; };
+		E09045721867C6F400FA81B4 /* RearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RearViewController.m; sourceTree = "<group>"; };
+		E09045741867CE3900FA81B4 /* MenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCell.h; sourceTree = "<group>"; };
+		E09045751867CE3900FA81B4 /* MenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				E09045301867C10500FA81B4 /* yawhide */,
+				E09045671867C31600FA81B4 /* SWRevealViewController */,
 				E09045521867C10500FA81B4 /* yawhideTests */,
 				E09045291867C10500FA81B4 /* Frameworks */,
 				E09045281867C10500FA81B4 /* Products */,
@@ -114,12 +131,19 @@
 		E09045301867C10500FA81B4 /* yawhide */ = {
 			isa = PBXGroup;
 			children = (
+				E09045621867C2CC00FA81B4 /* Images */,
 				E09045391867C10500FA81B4 /* AppDelegate.h */,
 				E090453A1867C10500FA81B4 /* AppDelegate.m */,
 				E090453C1867C10500FA81B4 /* Main_iPhone.storyboard */,
 				E090453F1867C10500FA81B4 /* Main_iPad.storyboard */,
-				E09045421867C10500FA81B4 /* ViewController.h */,
-				E09045431867C10500FA81B4 /* ViewController.m */,
+				E090456B1867C39E00FA81B4 /* SideBarTableViewController.h */,
+				E090456C1867C39E00FA81B4 /* SideBarTableViewController.m */,
+				E09045741867CE3900FA81B4 /* MenuCell.h */,
+				E09045751867CE3900FA81B4 /* MenuCell.m */,
+				E090456E1867C6DB00FA81B4 /* FrontViewController.h */,
+				E090456F1867C6DB00FA81B4 /* FrontViewController.m */,
+				E09045711867C6F400FA81B4 /* RearViewController.h */,
+				E09045721867C6F400FA81B4 /* RearViewController.m */,
 				E09045451867C10500FA81B4 /* Images.xcassets */,
 				E09045311867C10500FA81B4 /* Supporting Files */,
 			);
@@ -153,6 +177,25 @@
 				E09045551867C10500FA81B4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E09045621867C2CC00FA81B4 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				E09045631867C2F100FA81B4 /* reveal-icon.png */,
+				E09045641867C2F100FA81B4 /* reveal-icon@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		E09045671867C31600FA81B4 /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E09045681867C31600FA81B4 /* SWRevealViewController.h */,
+				E09045691867C31600FA81B4 /* SWRevealViewController.m */,
+			);
+			name = SWRevealViewController;
+			path = yawhide/SWRevealViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,8 +276,10 @@
 			files = (
 				E09045411867C10500FA81B4 /* Main_iPad.storyboard in Resources */,
 				E09045461867C10500FA81B4 /* Images.xcassets in Resources */,
+				E09045661867C2F100FA81B4 /* reveal-icon@2x.png in Resources */,
 				E090453E1867C10500FA81B4 /* Main_iPhone.storyboard in Resources */,
 				E09045351867C10500FA81B4 /* InfoPlist.strings in Resources */,
+				E09045651867C2F100FA81B4 /* reveal-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,9 +298,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E09045441867C10500FA81B4 /* ViewController.m in Sources */,
+				E090456D1867C39E00FA81B4 /* SideBarTableViewController.m in Sources */,
+				E09045761867CE3900FA81B4 /* MenuCell.m in Sources */,
 				E090453B1867C10500FA81B4 /* AppDelegate.m in Sources */,
 				E09045371867C10500FA81B4 /* main.m in Sources */,
+				E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */,
+				E09045731867C6F400FA81B4 /* RearViewController.m in Sources */,
+				E09045701867C6DB00FA81B4 /* FrontViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

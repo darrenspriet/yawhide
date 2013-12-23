@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  SideBarTableViewController.h
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MenuCell.h"
 
-@interface ViewController : UIViewController
+
+@interface SideBarTableViewController : UITableViewController
 
 @end
