@@ -77,7 +77,95 @@ var date;
 var data = {}
 , div = 'div.card > div.card-plain > div.card-inset > table > ';
 
+var getBest = function (ob, cb){
+	var bestPercent = 0
+	,  bestSav = 0
+	, extra = ''
+	, test1 = /[0-9]\/\$/g /** ex 3/$ */
+	, test2 = /\s[0-9]/g  /** ex _5 */
+	, test3 = /[0-9]+%/g
+	, number = /\d\d/
+	, getNumber = /[0-9][\.,][0-9][0-9]/ /** $3.99*/
+	, getNumber2 = /[0-9][\.,][0-9][0-9]/
+	, num = 1;
+	/** tests 3 for 5 dollars */
+	if(test1.test(ob.price)){
+		/** tests if sav doesn't have on 3 */
+		if(!test2.test(ob.sav)){
+			if(ob.sav === '' || !number.test(ob.sav)){
+				//console.log('sav is: ' + ob.sav + 'hahaha');
+				bestSav = 0;
+				bestPercent = 0;
+				extra = 'has 2/$5 but no savings'
+			}
+			else{
+				var tmp = getNumber2.exec(ob.sav)[0];
+				//tmp = tmp.replace('$', '');
+				//console.log(ob.price + " " + tmp);
 
+				var splitted = ob.price.split('/$');
+				
+				tmp = tmp / splitted[0];
+				bestSav = Math.round(tmp*100)/100;
+				//console.log(tmp);
+				bestPercent = Math.round(tmp / (tmp + (splitted[1] / splitted[0]))*100)/100;
+				extra = 'price has n for some price deal'
+			}
+			
+		}
+		/** tests if sav does have a 3*/
+		else{
+			var tmp = getNumber.exec(ob.sav)[0]
+			, splitted = ob.price.split('/$');
+			tmp = tmp.replace('$', '');
+			tmp /= splitted[0];
+			bestSav = Math.round(tmp*100)/100;
+			bestPercent = Math.round(tmp / (tmp + (splitted[1]/splitted[0]))*100)/100;
+			extra = 'price has n for some price, sav only has the savings, no number'
+		}
+	}
+	/** is price has a percent in it */
+	else if (ob.price.indexOf('%') > -1){
+		bestSav = getNumber.exec(ob.sav) !== null ? getNumber.exec(ob.sav)[0] : 0;
+		bestPercent = test3.exec(ob.price)[0].replace('%', '');
+		bestPercent /= 100;
+		extra = 'price has percent'
+	}
+	/** doesn't have a price in sav */
+	else if (getNumber.exec(ob.sav) === null){
+		var savLower = ob.sav.toLowerCase();
+		/** buy 1 get one free deal */
+		if(savLower.indexOf('buy') > -1 && savLower.indexOf('get') > -1 && savLower.indexOf('free') > -1){
+			bestSav = 'Buy 1 Get 1 Free';
+			bestPercent = 0.5;
+			extra = 'buy1get1free';
+		}
+		/** no savings so we dont know %tage */
+		else{
+			bestSav = 0;
+			bestPercent = 0;
+			extra = 'no savings';
+		}
+	}
+	/** has a price and savings */
+	else{
+		if(ob.price === ''){
+			var tmp = parseFloat(getNumber2.exec(ob.sav)[0])
+			bestSav = tmp;
+			bestPrice = 0;
+			extra = 'has reg savings but no price';
+		}
+		else{
+			//console.log(ob.price + ", " + ob.sav);
+			var tmp = parseFloat(getNumber2.exec(ob.sav)[0])
+			, tmp2 = parseFloat(getNumber2.exec(ob.price)[0]);
+			bestSav = tmp;
+			bestPercent = Math.round(tmp / (tmp2 + tmp)*100)/100;
+			extra = 'has simple price and simple savings';
+		}		
+	}
+	cb(bestPercent, bestSav, extra);
+}
 app.get('/readLocalFlyers', function (req, res){
 	var latestFolder;
 	fs.readdir('./sobeys/', function (err, folders){
@@ -108,10 +196,11 @@ app.get('/readLocalFlyers', function (req, res){
 							//var info = [];
 
 							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
-								console.log('no flyer at file: ' + flyerPart);
+								//console.log('no flyer at file: ' + flyerPart);
+								console.log('');
 							}
 							else {
-								console.log(flyerPart);
+								//console.log(flyerPart);
 								$('.container .toggle-last .one-third .flyer-card .card-top').each(function (a, html){
 									var url = ''
 									, price = ''
@@ -159,16 +248,52 @@ app.get('/readLocalFlyers', function (req, res){
 																		if(class3.children.length > 1 && class3.children[1].children.length > 0){
 																			sav = class3.children[1].children[0].data;
 																			sav = sav.replace(/&amp;/g, '&');
-																			sav = sav.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"|");
+																			sav = sav.replace(/[^a-zA-Z0-9+;():,\.$-\s*!%&\r\n\/]+/g,"|");
+																			var savSplit = sav.split(' ')
+																			, tmp = ''
+																			, count = 0;
+																			for (var l = 0; l < savSplit.length; l++) {
+																				if(savSplit[l].indexOf('|') > -1){
+																					//console.log(savSplit[l]);
+																					tmp += '$0.' + savSplit[l].replace('|', '') + ' ';
+																					count++;
+																					//console.log(tmp2);
+																				}
+																				else if (!isNaN(savSplit[l]) && savSplit[l].indexOf('$') === -1 && count === 0){
+																					tmp += '$'+savSplit[l] + ' ';
+																					count++;
+																				}
+																				else if (savSplit[l].indexOf('/') > -1){
+																					//console.log(savSplit[l]);
+																					tmp += '$'+savSplit[l] + ' ';
+																				}
+																				else{
+																					tmp += savSplit[l] + ' ';
+																				}
+																			};
+																			sav = tmp
+																			sav = sav.replace('100 g', '100g');
+																			sav = sav.replace(' /100g', '/100g');
+																			sav = sav.replace('lb ,ea', 'lb,ea');
+																			sav = sav.replace('lb, ea', 'lb,ea');
+																			sav = sav.replace('$$', '$');
+																			//sav = sav.replace('|', '$');
+																			//console.log('sav: ' + sav);
 																		}
 																	}
 																	else if (class3.attribs.class.indexOf('price-promos')) {
 																		
 																		if(class3.children.length > 1){
+
 																			if(class3.children[1].children.length > 1){
 																				savings = '$' + class3.children[0].data+'.';
 																				savings1 = class3.children[1].children[0].data;
 																				savings2 = class3.children[1].children[1].children[0].data;
+																			}
+																			else if (class3.children[0].data.indexOf('%') > -1){
+																				savings = 'noPrice';
+																				savings1 = class3.children[0].data;
+																				savings2 = class3.children[1].children[0].data;
 																			}
 																			else if (class3.children[0].data.indexOf('/') === -1){
 																				savings = '$0' + class3.children[0].data;
@@ -180,6 +305,7 @@ app.get('/readLocalFlyers', function (req, res){
 																				savings1 = class3.children[1].children[0].data;
 																			}
 																			var price = savings + savings1 + savings2;
+																			//console.log('price: ' + price);
 																		}
 																	}
 																}
@@ -192,65 +318,30 @@ app.get('/readLocalFlyers', function (req, res){
 											//
 											
 											/** gets the best savings from the price */
-											var  savArr= sav.split(' ');
-											for (var i = savArr.length - 1; i >= 0; i--) {
-												var z = savArr[i];
-												/** price is in cents then! */
-												if(savArr[i].indexOf('|') > -1){
-													sav = sav.replace(z, '$0.' + z.replace('|', ''));
-													bestSav = '$0.' + z.replace('|', '');
-													/** check if sav has a / in it*/
-													if(price.indexOf('/') > -1){
-														var priceArr = price.split('/');
-														for (var i = priceArr.length - 1; i >= 0; i--) {
-															if(priceArr[i].indexOf('$') > -1){
-																var parsedPrice = parseFloat(priceArr[i].substr(1))
-																, parsedBest = parseFloat(bestSav.substr(1));
-																bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
-															}
-														};
-													}
-													else{
-														var parsedPrice = parseFloat(price.substr(1))
-														, parsedBest = parseFloat(bestSav.substr(1));
-														bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
-													}
-													break;
-												}
-												else if(savArr[i] !== '' && !isNaN(savArr[i])){
-													sav = sav.replace(z, '$' + z);
-													bestSav = '$' + z;
-													/** check if sav has a / in it*/
-													if(price.indexOf('/') > -1){
-														var priceArr = price.split('/');
-														for (var i = priceArr.length - 1; i >= 0; i--) {
-															if(priceArr[i].indexOf('$') > -1){
-																var parsedPrice = parseFloat(priceArr[i].substr(1))
-																, parsedBest = parseFloat(bestSav.substr(1));
-																bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
-															}
-														};
-													}
-													else{
-														var parsedPrice = parseFloat(price.substr(1))
-														, parsedBest = parseFloat(bestSav.substr(1));
-														bestPercent = Math.round(parsedBest / (parsedBest + parsedPrice) * 100);
-													}
-													break;
-												}
-											};
+											//console.log('\n' + sav + " " + price);
+											var priceSav = {};
+											priceSav.price = price;
+											priceSav.sav = sav;
+											//console.log(h);
+											var listOfFrenchStores = ['34'];
+											if(listOfFrenchStores.indexOf(h) === -1){
+												getBest(priceSav, function (percent, sav2, extra){
+													var ob = {};
+													ob.item = item;
+													ob.price = price;
+													ob.savings = sav;
+													ob.url = url;
+													ob.description = desc;
+													ob.bestPercent = percent;
+													ob.bestSav = sav2;
+													ob.extra = extra;
+													info.push(ob);
+												});
+											}
 											
 
 											//console.log('************************************' + item + " " + price + " " + sav+ " " + url + " " + desc + " " + bestPercent + "% " + bestSav + " " + flyerDate);
-											var ob = {};
-											ob.item = item;
-											ob.price = price;
-											ob.savings = sav;
-											ob.url = url;
-											ob.description = desc;
-											ob.bestPercent = bestPercent;
-											ob.bestSav = bestSav;
-											info.push(ob);
+											
 											// tell async that the iterator has completed
 
 										}
@@ -265,12 +356,14 @@ app.get('/readLocalFlyers', function (req, res){
 
 						console.log('iterating done');
 						var urlNum = h.split('.')[0];
-						console.log(info);
+						//console.log(info);
 						Sobeys.getStoreByUrlNum(urlNum, function (err7, store){
 							if (err7) throw err7;
 							if(!err7 && store !== null){
 								Sobeys.makeFlyer(store, info, function (err8){
 									if (err8) throw err8;
+									if(h > 288)
+										console.log('done');
 								});
 							}
 							else{
@@ -507,6 +600,39 @@ app.get('/getSobeyFlyer/:id', function (req, res){
 			res.send(store);
 		}
 	})
+});
+
+var test = [
+	{'sav': 'save up to $3.97', 'price': '3/$20.00'}
+	, {'sav': 'save up to $2.50/lb', 'price': '$8.99/lb'}
+	, {'sav': 'save up to $0.9/lb', 'price': '$5.49/lb'}
+	, {'sav': 'save up to $0.79', 'price': '2/$4.00'}
+	, {'sav': 'save up to $0.97 on 3', 'price': '3/$5.00'}
+	, {'sav': 'this week', 'price': '$9.99/ea.'}
+	, {'sav': 'save up to $0.70/lb,ea', 'price': '$1.79/lb'}
+	, {'sav': 'save $0.30', 'price': '$0.99/ea'}
+	, {'sav': 'save up to $9.77 on 3', 'price': '3/$9.99'}
+	, {'sav': 'save up to $3.00', 'price': '$12.99/ea'}
+	, {'sav': 'save $0.20/100g', 'price': '$1.79/100g'}
+	, {'sav': '', 'price': '$3.35/100g'}
+	, {'sav': 'save up to $0.30', 'price': '$0.69/ea'}
+	, {'sav': 'save this week', 'price': 'noPrice15%off'}
+	]
+
+app.get('/deal', function (req, res){
+	var info = [];
+	for (var y = test.length - 1; y>= 0; y--) {
+		getBest(test[y], function (percent, sav, extra){
+			var ob = {};
+			ob.bestPercent = percent;
+			ob.bestSav = sav;
+			ob.extra = extra;
+			info.push(ob);
+		});
+	};
+	console.log('info is: ');
+	console.log(info);
+	res.end();
 });
 
 http.createServer(app).listen(app.get('port'), function () {
