@@ -26,10 +26,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UINavigationController *frontNav = (id)self.revealViewController.frontViewController;
-    NSLog(@"what is the top nav%@", frontNav);
-    NSLog(@"what is the top controller%@", frontNav.topViewController);
-    self.frontController = (YHFrontViewTableViewController*)frontNav.topViewController;
+
+//    UINavigationController *frontNav = (id)self.revealViewController.frontViewController;
+//    NSLog(@"what is the top nav%@", frontNav);
+//    NSLog(@"what is the top controller%@", frontNav.topViewController);
+//    self.frontController = (YHFrontViewTableViewController*)frontNav.topViewController;
 
     
     
@@ -67,11 +68,11 @@
     switch ( indexPath.row )
     {
         case 0:
-            CellIdentifier = @"Front";
+            CellIdentifier = @"Stores";
             break;
             
         case 1:
-            CellIdentifier = @"Back";
+            CellIdentifier = @"Change Location";
             break;
             
     }
@@ -121,46 +122,91 @@
         SWRevealViewControllerSegue* revealSegue = (SWRevealViewControllerSegue*) segue;
         SWRevealViewController* revealController = self.revealViewController;
         UINavigationController *frontNavigationController = (id)revealController.frontViewController;  // <-- we know it is a NavigationController
-        
-        
+        UITableViewCell *cell = sender;
+
 
         
 //      NSAssert( revealController != nil, @"oops! must have a revealViewController" );
 //      NSAssert( [revealController.frontViewController isKindOfClass: [UINavigationController class]], @"oops!  for this segue we want a permanent navigation controller in the front!" );
         
         revealSegue.performBlock = ^(SWRevealViewControllerSegue* rvc_segue, UIViewController* svc, UIViewController* dvc){
-            UITableViewCell *cell = sender;
             NSLog(@"what is dvc%@", dvc);
             NSLog(@"what is svc%@", svc);
             NSLog(@"this is revela segue%@", rvc_segue);
-            if ([cell.textLabel.text isEqualToString:@"Front"] ) {
+            if ([cell.textLabel.text isEqualToString:@"Stores"] ) {
                 if (![frontNavigationController.topViewController isKindOfClass:[YHFrontViewTableViewController class]] ){
-                    
-//                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-//                    //sets it to the initialViewController on that storyboard
-                    UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:self.frontController ];
-                    [revealController setFrontViewController:navigation animated:YES];
-                }
-                else{
-                    [revealController revealToggle:self];
-                    
-                }
-            }
-            else{
-                // Seems the user attempts to 'switch' to exactly the same controller he came from!
-                if(![frontNavigationController.topViewController isKindOfClass:[YHRearViewController class]] ){
-                    
                     UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:dvc];
                     [revealController setFrontViewController:navigation animated:YES];
-                    
                 }
                 else{
                     [revealController revealToggle:self];
+
                 }
             }
+//            else{
+//                // Seems the user attempts to 'switch' to exactly the same controller he came from!
+//                if(![frontNavigationController.topViewController isKindOfClass:[YHRearViewController class]] ){
+//                    UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:dvc];
+//                    [revealController setFrontViewController:navigation animated:YES];
+//                }
+//                else{
+//                    [revealController revealToggle:self];
+//                }
+//            }
         };
     }
 }
+- (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude{
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    NSData* data = [NSData dataWithContentsOfURL:
+                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",latitude,longitude]]];
+    if (data==nil) {
+        NSLog(@"got no data");
+    }else{
+        
+        
+        NSError* error2;
+        
+        NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+                                                                   options:kNilOptions
+                                                                     error:&error2];
+        
+        
+        if (error2) {
+            NSLog(@"this is an error in calling the stores");
+        }
+        else{
+            [[[YHDataManager sharedData] storesArray] removeAllObjects];
+            for(NSArray *dict in dictionary){
+                [[[YHDataManager sharedData] storesArray] addObject:dict];
+            }
+            NSLog(@"loaded stores");
+        }
+    }
+    SWRevealViewController* revealController = self.revealViewController;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    //sets it to the initialViewController on that storyboard
+    UINavigationController *frontViewController = [storyboard instantiateViewControllerWithIdentifier:@"frontnavigation" ];
+    [revealController setFrontViewController:frontViewController animated:YES];
+
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"what is the index path %ld", (long)indexPath.row);
+    if (indexPath.row==1) {
+
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        //sets it to the initialViewController on that storyboard
+        YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
+        viewController.delegate = self;
+        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
+        [nav.navigationBar setBarStyle:UIBarStyleBlack];
+        nav.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:nav animated:YES completion:NULL];
+
+    }
+}
+
 
 /*
  // Override to support conditional editing of the table view.

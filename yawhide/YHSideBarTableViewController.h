@@ -14,8 +14,9 @@
 
 
 
-@interface YHSideBarTableViewController : UITableViewController
+@interface YHSideBarTableViewController : UITableViewController <YHPostalViewControllerDelegate>
 @property (nonatomic, strong) YHFrontViewTableViewController *frontController;
 @property (nonatomic, strong) YHRearViewController *rearController;
+
 
 @end

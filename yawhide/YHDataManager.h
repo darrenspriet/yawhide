@@ -13,4 +13,7 @@
 //As singleton Object that is called at the beginning of the Application
 + (YHDataManager*) sharedData;
 
+@property (nonatomic, strong) NSMutableArray *storesArray;
+
+
 @end

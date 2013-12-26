@@ -21,5 +21,11 @@
     }
 }
 
+-(id)init{
+    [self setStoresArray:[[NSMutableArray alloc]init]];
+    return self;
+
+}
+
 
 @end

@@ -26,15 +26,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.revealButtonItem setTarget: self.revealViewController];
-    [self.revealButtonItem setAction: @selector( revealToggle: )];
-    [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
-    [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    [self setStoresArray:[[NSMutableArray alloc]init]];
-    [self setLocationManager:[[CLLocationManager alloc]init]];
-    [self.locationManager setDelegate:self];
-    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-    [self.locationManager startUpdatingLocation];
+    if ([[[YHDataManager sharedData] storesArray] count]==0) {
+        [self.revealButtonItem setTarget: self.revealViewController];
+        [self.revealButtonItem setAction: @selector( revealToggle: )];
+        [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
+        [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+        [self setLocationManager:[[CLLocationManager alloc]init]];
+        [self.locationManager setDelegate:self];
+        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [self.locationManager startUpdatingLocation];
+    }
+    else{
+        [self.revealButtonItem setTarget: self.revealViewController];
+        [self.revealButtonItem setAction: @selector( revealToggle: )];
+        [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
+        [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+        [self.tableView reloadData];
+    }
     
 }
 
@@ -56,7 +64,8 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
-    if (self.storesArray.count==0) {
+
+    if ([[[YHDataManager sharedData] storesArray] count]==0) {
         NSLog(@"new location is%@", newLocation);
         NSData* data = [NSData dataWithContentsOfURL:
                         [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
@@ -74,10 +83,12 @@
             NSLog(@"this is an error in calling the stores");
         }
         else{
-            NSLog(@"all went as planned");
+            [[[YHDataManager sharedData] storesArray] removeAllObjects];
+            NSLog(@"loaded all the stores");
             for(NSArray *dict in dictionary){
-                [self.storesArray addObject:dict];
+                [[[YHDataManager sharedData] storesArray] addObject:dict];
             }
+
             [self.tableView reloadData];
         }
 
@@ -128,9 +139,11 @@
         NSLog(@"this is an error in calling the stores");
     }
     else{
+        [[[YHDataManager sharedData] storesArray] removeAllObjects];
         for(NSArray *dict in dictionary){
-            [self.storesArray addObject:dict];
+            [[[YHDataManager sharedData] storesArray] addObject:dict];
         }
+
         [self.tableView reloadData];
         NSLog(@"all went as planned");
     }
@@ -148,7 +161,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.storesArray.count;
+    return [[[YHDataManager sharedData] storesArray] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -159,7 +172,7 @@
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
     
-    NSString *storeName = [[[self.storesArray objectAtIndex:indexPath.row] objectForKey:@"flyer"] objectForKey:@"storeName"];
+    NSString *storeName = [[[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"] objectForKey:@"storeName"];
     NSLog(@"storename is %@", storeName);
     [cell.textLabel setText:storeName];
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
