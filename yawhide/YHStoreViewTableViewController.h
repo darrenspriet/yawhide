@@ -1,5 +1,5 @@
 //
-//  YHFrontViewTableViewController.h
+//  YHStoreViewTableViewController.h
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-22.
@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "YHPostalFinderViewController.h"
+#import "YHStoreCell.h"
+#import "YHStoreDetailsTableViewController.h"
 
 
 
-@interface YHFrontViewTableViewController : UITableViewController <CLLocationManagerDelegate,UIGestureRecognizerDelegate, YHPostalViewControllerDelegate>
+@interface YHStoreViewTableViewController : UITableViewController <CLLocationManagerDelegate,UIGestureRecognizerDelegate, YHPostalViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (strong, nonatomic) UIActivityIndicatorView * activityIndicator;

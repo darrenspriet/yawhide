@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E03FF032186E13E40051C1A0 /* YHStoreDetailsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E03FF031186E13E40051C1A0 /* YHStoreDetailsTableViewController.m */; };
+		E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */; };
 		E05321501868CCDC008CE716 /* YHDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E053214F1868CCDC008CE716 /* YHDataManager.m */; };
 		E090452B1867C10500FA81B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452A1867C10500FA81B4 /* Foundation.framework */; };
 		E090452D1867C10500FA81B4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452C1867C10500FA81B4 /* CoreGraphics.framework */; };
@@ -30,8 +32,9 @@
 		E09045761867CE3900FA81B4 /* YHMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E09045751867CE3900FA81B4 /* YHMenuCell.m */; };
 		E09045781867E1E500FA81B4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E09045771867E1E500FA81B4 /* CoreLocation.framework */; };
 		E090457A1867E1EB00FA81B4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E09045791867E1EB00FA81B4 /* MapKit.framework */; };
-		E090457D1867E30100FA81B4 /* YHFrontViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090457C1867E30100FA81B4 /* YHFrontViewTableViewController.m */; };
+		E090457D1867E30100FA81B4 /* YHStoreViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090457C1867E30100FA81B4 /* YHStoreViewTableViewController.m */; };
 		E09045801867E65400FA81B4 /* YHPostalFinderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090457F1867E65400FA81B4 /* YHPostalFinderViewController.m */; };
+		E0FF765F186E0C11000F656A /* YHStoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0FF765E186E0C11000F656A /* YHStoreCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E03FF030186E13E40051C1A0 /* YHStoreDetailsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailsTableViewController.h; sourceTree = "<group>"; };
+		E03FF031186E13E40051C1A0 /* YHStoreDetailsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreDetailsTableViewController.m; sourceTree = "<group>"; };
+		E03FF033186E14850051C1A0 /* YHStoreDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailCell.h; sourceTree = "<group>"; };
+		E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreDetailCell.m; sourceTree = "<group>"; };
 		E053214E1868CCDC008CE716 /* YHDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHDataManager.h; sourceTree = "<group>"; };
 		E053214F1868CCDC008CE716 /* YHDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHDataManager.m; sourceTree = "<group>"; };
 		E09045271867C10500FA81B4 /* yawhide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yawhide.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,10 +84,12 @@
 		E09045751867CE3900FA81B4 /* YHMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHMenuCell.m; sourceTree = "<group>"; };
 		E09045771867E1E500FA81B4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		E09045791867E1EB00FA81B4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		E090457B1867E30100FA81B4 /* YHFrontViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHFrontViewTableViewController.h; sourceTree = "<group>"; };
-		E090457C1867E30100FA81B4 /* YHFrontViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHFrontViewTableViewController.m; sourceTree = "<group>"; };
+		E090457B1867E30100FA81B4 /* YHStoreViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreViewTableViewController.h; sourceTree = "<group>"; };
+		E090457C1867E30100FA81B4 /* YHStoreViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreViewTableViewController.m; sourceTree = "<group>"; };
 		E090457E1867E65400FA81B4 /* YHPostalFinderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHPostalFinderViewController.h; sourceTree = "<group>"; };
 		E090457F1867E65400FA81B4 /* YHPostalFinderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHPostalFinderViewController.m; sourceTree = "<group>"; };
+		E0FF765D186E0C11000F656A /* YHStoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreCell.h; sourceTree = "<group>"; };
+		E0FF765E186E0C11000F656A /* YHStoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,9 +118,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E03FF02C186E131B0051C1A0 /* Side Bar */ = {
+			isa = PBXGroup;
+			children = (
+				E090456B1867C39E00FA81B4 /* YHSideBarTableViewController.h */,
+				E090456C1867C39E00FA81B4 /* YHSideBarTableViewController.m */,
+				E09045741867CE3900FA81B4 /* YHMenuCell.h */,
+				E09045751867CE3900FA81B4 /* YHMenuCell.m */,
+			);
+			name = "Side Bar";
+			sourceTree = "<group>";
+		};
+		E03FF02D186E133C0051C1A0 /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				E090457B1867E30100FA81B4 /* YHStoreViewTableViewController.h */,
+				E090457C1867E30100FA81B4 /* YHStoreViewTableViewController.m */,
+				E0FF765D186E0C11000F656A /* YHStoreCell.h */,
+				E0FF765E186E0C11000F656A /* YHStoreCell.m */,
+			);
+			name = Stores;
+			sourceTree = "<group>";
+		};
+		E03FF02E186E13570051C1A0 /* Location Modal */ = {
+			isa = PBXGroup;
+			children = (
+				E090457E1867E65400FA81B4 /* YHPostalFinderViewController.h */,
+				E090457F1867E65400FA81B4 /* YHPostalFinderViewController.m */,
+			);
+			name = "Location Modal";
+			sourceTree = "<group>";
+		};
+		E03FF02F186E13BC0051C1A0 /* Store Details */ = {
+			isa = PBXGroup;
+			children = (
+				E03FF030186E13E40051C1A0 /* YHStoreDetailsTableViewController.h */,
+				E03FF031186E13E40051C1A0 /* YHStoreDetailsTableViewController.m */,
+				E03FF033186E14850051C1A0 /* YHStoreDetailCell.h */,
+				E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */,
+			);
+			name = "Store Details";
+			sourceTree = "<group>";
+		};
 		E053214D1868CC8D008CE716 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				E09045391867C10500FA81B4 /* YHAppDelegate.h */,
+				E090453A1867C10500FA81B4 /* YHAppDelegate.m */,
 				E053214E1868CCDC008CE716 /* YHDataManager.h */,
 				E053214F1868CCDC008CE716 /* YHDataManager.m */,
 			);
@@ -154,20 +207,14 @@
 		E09045301867C10500FA81B4 /* yawhide */ = {
 			isa = PBXGroup;
 			children = (
-				E09045391867C10500FA81B4 /* YHAppDelegate.h */,
-				E090453A1867C10500FA81B4 /* YHAppDelegate.m */,
 				E090453C1867C10500FA81B4 /* Main_iPhone.storyboard */,
 				E090453F1867C10500FA81B4 /* Main_iPad.storyboard */,
-				E090456B1867C39E00FA81B4 /* YHSideBarTableViewController.h */,
-				E090456C1867C39E00FA81B4 /* YHSideBarTableViewController.m */,
-				E09045741867CE3900FA81B4 /* YHMenuCell.h */,
-				E09045751867CE3900FA81B4 /* YHMenuCell.m */,
-				E090457B1867E30100FA81B4 /* YHFrontViewTableViewController.h */,
-				E090457C1867E30100FA81B4 /* YHFrontViewTableViewController.m */,
+				E03FF02C186E131B0051C1A0 /* Side Bar */,
+				E03FF02D186E133C0051C1A0 /* Stores */,
+				E03FF02F186E13BC0051C1A0 /* Store Details */,
+				E03FF02E186E13570051C1A0 /* Location Modal */,
 				E09045711867C6F400FA81B4 /* YHRearViewController.h */,
 				E09045721867C6F400FA81B4 /* YHRearViewController.m */,
-				E090457E1867E65400FA81B4 /* YHPostalFinderViewController.h */,
-				E090457F1867E65400FA81B4 /* YHPostalFinderViewController.m */,
 				E09045451867C10500FA81B4 /* Images.xcassets */,
 				E09045621867C2CC00FA81B4 /* Images */,
 				E053214D1868CC8D008CE716 /* Helpers */,
@@ -327,12 +374,15 @@
 				E090456D1867C39E00FA81B4 /* YHSideBarTableViewController.m in Sources */,
 				E09045801867E65400FA81B4 /* YHPostalFinderViewController.m in Sources */,
 				E05321501868CCDC008CE716 /* YHDataManager.m in Sources */,
+				E03FF032186E13E40051C1A0 /* YHStoreDetailsTableViewController.m in Sources */,
 				E09045761867CE3900FA81B4 /* YHMenuCell.m in Sources */,
 				E090453B1867C10500FA81B4 /* YHAppDelegate.m in Sources */,
 				E09045371867C10500FA81B4 /* main.m in Sources */,
-				E090457D1867E30100FA81B4 /* YHFrontViewTableViewController.m in Sources */,
+				E090457D1867E30100FA81B4 /* YHStoreViewTableViewController.m in Sources */,
 				E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */,
+				E0FF765F186E0C11000F656A /* YHStoreCell.m in Sources */,
 				E09045731867C6F400FA81B4 /* YHRearViewController.m in Sources */,
+				E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

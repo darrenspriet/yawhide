@@ -91,7 +91,7 @@
             NSLog(@"what is svc%@", svc);
             NSLog(@"this is revela segue%@", rvc_segue);
             if ([cell.textLabel.text isEqualToString:@"Stores"] ) {
-                if (![frontNavigationController.topViewController isKindOfClass:[YHFrontViewTableViewController class]] ){
+                if (![frontNavigationController.topViewController isKindOfClass:[YHStoreViewTableViewController class]] ){
                     UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:dvc];
                     [revealController setFrontViewController:navigation animated:YES];
                 }

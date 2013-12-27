@@ -8,14 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "YHMenuCell.h"
-#import "YHFrontViewTableViewController.h"
+#import "YHStoreViewTableViewController.h"
 #import "YHRearViewController.h"
 
 
 
 
 @interface YHSideBarTableViewController : UITableViewController <YHPostalViewControllerDelegate>
-@property (nonatomic, strong) YHFrontViewTableViewController *frontController;
 @property (nonatomic, strong) YHRearViewController *rearController;
 
 

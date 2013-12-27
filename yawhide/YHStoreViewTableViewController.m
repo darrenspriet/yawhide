@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
-#import "YHFrontViewTableViewController.h"
+#import "YHStoreViewTableViewController.h"
 
-@interface YHFrontViewTableViewController ()
+@interface YHStoreViewTableViewController ()
 
 @end
 
-@implementation YHFrontViewTableViewController
+@implementation YHStoreViewTableViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -182,20 +182,52 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     
-    //add this
-    if (cell == nil)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+     static NSString *CellIdentifier = @"Store Cell";
+    YHStoreCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
+    if (cell == nil){
+        cell = [[YHStoreCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
     NSString *storeName = [[[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"] objectForKey:@"storeName"];
-    NSLog(@"storename is %@", storeName);
-    [cell.textLabel setText:storeName];
-    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+//    NSLog(@"what is in the flyer%@", [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"]);
+    [cell.storeName setText:storeName];
+    [cell.noFlyerDetail setText:@""];
+    if ([[[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"] objectForKey:@"currFlyer"]!=0) {
+        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    }
+    else{
+        [cell.noFlyerDetail setText:@"Not Available"];
+
+    }
     
     return cell;
 }
 
+#pragma mark - Prepare for Segue
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    NSInteger row = [[self tableView].indexPathForSelectedRow row];
+    NSMutableArray *storeArray = [NSMutableArray arrayWithArray:[[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"flyer"] objectForKey:@"currFlyer"]];
+    
+    YHStoreDetailsTableViewController *storeDetailsViewController = segue.destinationViewController;
+    [storeDetailsViewController setStoreDetailsArray:storeArray];
+
+}
+
+//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+//        //sets it to the initialViewController on that storyboard
+//        YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
+//        [viewController setDelegate:self];
+//        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
+//        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismissModalView)];
+//        [viewController.navigationItem setLeftBarButtonItem:cancelButton];
+//        [nav.navigationBar setBarStyle:UIBarStyleDefault];
+//        [nav setModalPresentationStyle:UIModalPresentationFullScreen];
+//        [self presentViewController:nav animated:YES completion:NULL];
+//        
+//    }
+//}
 
 
 /*
