@@ -23,22 +23,9 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
 
-//    UINavigationController *frontNav = (id)self.revealViewController.frontViewController;
-//    NSLog(@"what is the top nav%@", frontNav);
-//    NSLog(@"what is the top controller%@", frontNav.topViewController);
-//    self.frontController = (YHFrontViewTableViewController*)frontNav.topViewController;
-
-    
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,6 +35,13 @@
 }
 
 #pragma mark - Table view data source
+
+//Creates a invisible footer to get rid of extra cells created
+//Creates a invisible footer to get rid of extra cells created
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    UIView *view = [[UIView alloc] init];
+    return view;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -81,40 +75,8 @@
     
     return cell;
 }
-- (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender
-{
-    NSLog(@"this is sender %@", sender);
-    
-    //    if ( [segue.destinationViewController isKindOfClass: [ColorViewController class]] &&
-    //        [sender isKindOfClass:[UITableViewCell class]] &&[sender hasText: @"Back"]){
-    //
-    //    }
-    //    if ( [segue.destinationViewController isKindOfClass: [ColorViewController class]] &&
-    //        [sender isKindOfClass:[UITableViewCell class]] )
-    //    {
-    //        // sender is the table view cell that was selected
-    //        UITableViewCell *cell = sender;
-    //        NSLog(@"cell info %@", cell.textLabel.text);
-    //        if ([cell.textLabel.text isEqualToString:@"BACK"] ) {
-    //            [self performSelector:@selector(goToSecondButton) withObject:nil afterDelay:.5];
-    //
-    //            [self.delegate clickedBackButton];
-    //
-    //            NSLog(@"back button pressed");
-    //        }
-    //        else{
-    //            // get the text of the label in the cell with tag 0
-    //            UILabel* c = [(SWUITableViewCell *)sender label];
-    //            ColorViewController* cvc = segue.destinationViewController;
-    //            cvc.delegate = self;
-    //            cvc.color = c.textColor;
-    //            cvc.text = c.text;
-    //        }
-    //        //Sets the TableView Controller as the delegate of the current View Controller
-    //        [self setDelegate:(id<MenuViewControllerDelegate>)segue.destinationViewController];
-    //
-    //
-    //    }
+
+- (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender{
     
     // configure the segue.
     if ([segue isKindOfClass: [SWRevealViewControllerSegue class]] )
@@ -123,11 +85,6 @@
         SWRevealViewController* revealController = self.revealViewController;
         UINavigationController *frontNavigationController = (id)revealController.frontViewController;  // <-- we know it is a NavigationController
         UITableViewCell *cell = sender;
-
-
-        
-//      NSAssert( revealController != nil, @"oops! must have a revealViewController" );
-//      NSAssert( [revealController.frontViewController isKindOfClass: [UINavigationController class]], @"oops!  for this segue we want a permanent navigation controller in the front!" );
         
         revealSegue.performBlock = ^(SWRevealViewControllerSegue* rvc_segue, UIViewController* svc, UIViewController* dvc){
             NSLog(@"what is dvc%@", dvc);
@@ -143,16 +100,6 @@
 
                 }
             }
-//            else{
-//                // Seems the user attempts to 'switch' to exactly the same controller he came from!
-//                if(![frontNavigationController.topViewController isKindOfClass:[YHRearViewController class]] ){
-//                    UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:dvc];
-//                    [revealController setFrontViewController:navigation animated:YES];
-//                }
-//                else{
-//                    [revealController revealToggle:self];
-//                }
-//            }
         };
     }
 }
@@ -164,7 +111,6 @@
     if (data==nil) {
         NSLog(@"got no data");
     }else{
-        
         
         NSError* error2;
         
@@ -192,19 +138,24 @@
 
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"what is the index path %ld", (long)indexPath.row);
     if (indexPath.row==1) {
-
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         //sets it to the initialViewController on that storyboard
         YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
-        viewController.delegate = self;
+        [viewController setDelegate:self];
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
-        [nav.navigationBar setBarStyle:UIBarStyleBlack];
-        nav.modalPresentationStyle = UIModalPresentationFullScreen;
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismissModalView)];
+        [viewController.navigationItem setLeftBarButtonItem:cancelButton];
+        [nav.navigationBar setBarStyle:UIBarStyleDefault];
+        [nav setModalPresentationStyle:UIModalPresentationFullScreen];
         [self presentViewController:nav animated:YES completion:NULL];
 
     }
+}
+
+//This is to dismiss the Modal View
+-(void)dismissModalView{
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 

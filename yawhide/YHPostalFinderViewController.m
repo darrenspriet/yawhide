@@ -26,9 +26,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.largeActivityIndicator setHidden:YES];
     [self.postalCode becomeFirstResponder];
-    
-	// Do any additional setup after loading the view.
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,20 +55,6 @@
         [textField reloadInputViews];
     }
     
-    if (textField.text.length==2) {
-        //        UITextRange *selectedRange = [textField selectedTextRange];
-        //        NSInteger offset = [textField offsetFromPosition:textField.endOfDocument toPosition:selectedRange.end];
-        //        NSString *output = [textField.text  stringByAppendingString:@"Pi"];
-        //        NSLog(@"what is this %@fsdasd", output);
-        //        textField.text = output;
-        //
-        ////        UITextPosition *newPos = [textField positionFromPosition:textField.endOfDocument offset:offset];
-        ////        textField.selectedTextRange = [textField textRangeFromPosition:newPos toPosition:4];
-        ////        NSLog(@"what is the range %@", textField.selectedTextRange);
-        //        [self selectTextForInput:textField
-        //                            atRange:NSMakeRange(3, 4)];
-        
-    }
     if (textField.text.length >= 6 && range.length == 0)
     {
         
@@ -114,39 +100,19 @@
     [self checkPostalCodeAndSubmit];
     
 }
+
 -(void)checkPostalCodeAndSubmit{
     if ([self checkPostalCode:self.postalCode.text]==1) {
+        [self.largeActivityIndicator startAnimating];
         NSLog(@"postal code is good");
         CLGeocoder *geocoder = [[CLGeocoder alloc] init];
         [geocoder geocodeAddressString:self.postalCode.text completionHandler:^(NSArray *placemarks, NSError *error) {
-            
             CLPlacemark *placemark = [placemarks objectAtIndex:0];
-            NSLog(@"placemark %@",placemark);
-            //String to hold address
-            NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-            NSLog(@"addressDictionary %@", placemark.addressDictionary);
-            
-            NSLog(@"placemark %@",placemark.region);
-            NSLog(@"placemark %@",placemark.country);  // Give Country Name
-            NSLog(@"placemark %@",placemark.locality); // Extract the city name
-            NSLog(@"location %@",placemark.name);
-            NSLog(@"location %@",placemark.ocean);
-            NSLog(@"location %@",placemark.postalCode);
-            NSLog(@"location %@",placemark.subLocality);
-            
-            NSLog(@"location %@",placemark.location);
             NSLog(@"latitude %f",placemark.location.coordinate.latitude);
             NSLog(@"longitude %f",placemark.location.coordinate.longitude);
             
-            //Print the location to console
-            NSLog(@"I am currently at %@",locatedAt);
-            NSLog(@"this is the placemarks %@", placemarks);
-            //        NSLog(@"placemark at %@", [placemarks objectAtIndex:0]);
-            //       [placemarks objectAtIndex:0].longitude;
-            
-            //Error checking
-            \
             [self.delegate didDismissPresentedViewControllerWithLatitude:placemark.location.coordinate.latitude andLongitude:placemark.location.coordinate.longitude];
+            [self.largeActivityIndicator stopAnimating];
             
         }];
     }
@@ -162,4 +128,66 @@
     
 }
 
+- (IBAction)getMyLocation:(UIButton *)sender {
+    [self setLocationManager:[[CLLocationManager alloc]init]];
+    [self.locationManager setDelegate:self];
+    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    //    NSLog(@"didFailWithError: %@", error);
+    //    UIAlertView *errorAlert = [[UIAlertView alloc]
+    //                               initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    //    [errorAlert show];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    [self.locationManager stopUpdatingLocation];
+    
+    NSLog(@"new location is%@", newLocation);
+    NSData* data = [NSData dataWithContentsOfURL:
+                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
+    
+    if (data==nil) {
+        NSLog(@"got no data");
+    }else{
+        
+        NSError* error;
+        NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+                                                                   options:kNilOptions
+                                                                     error:&error];
+        if (error) {
+            NSLog(@"this is an error in calling the stores");
+        }
+        else{
+            [[[YHDataManager sharedData] storesArray] removeAllObjects];
+            NSLog(@"loaded all the stores");
+            for(NSArray *dict in dictionary){
+                [[[YHDataManager sharedData] storesArray] addObject:dict];
+            }
+            [self.largeActivityIndicator stopAnimating];
+            [self.delegate didDismissPresentedViewControllerWithLatitude:newLocation.coordinate.latitude andLongitude:newLocation.coordinate.longitude];
+        }
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    
+    if (status == kCLAuthorizationStatusDenied) {
+        NSLog(@"user Denied Authorization");
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Location Service Not Authorized"
+                                                          message:@"Please enable Location Services for YawHide in System Settings or enter your postal code manually"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+    }
+    else if (status == kCLAuthorizationStatusAuthorized) {
+        NSLog(@"user Allowed Authorization");
+        [self.locationManager startUpdatingLocation];
+        [self.largeActivityIndicator startAnimating];
+    }
+}
 @end

@@ -8,13 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
+
 
 @protocol YHPostalViewControllerDelegate <NSObject>
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude;
 @end
 
-@interface YHPostalFinderViewController : UIViewController<UITextFieldDelegate>
+@interface YHPostalFinderViewController : UIViewController<UITextFieldDelegate, CLLocationManagerDelegate>
 @property (nonatomic, weak) id<YHPostalViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UITextField *postalCode;
+- (IBAction)getMyLocation:(UIButton *)sender;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *largeActivityIndicator;
 
 @end

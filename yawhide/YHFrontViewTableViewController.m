@@ -26,6 +26,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.activityIndicator setHidden:YES];
+    self.activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.activityIndicator setColor:[UIColor blackColor]];
+    self.activityIndicator.center = CGPointMake(self.view.frame.size.width / 2.0, (self.view.frame.size.height / 2.0)-self.navigationController.navigationBar.frame.size.height-[[UIApplication sharedApplication] statusBarFrame].size.height);
+    [self.view addSubview: self.activityIndicator];
+    
     if ([[[YHDataManager sharedData] storesArray] count]==0) {
         [self.revealButtonItem setTarget: self.revealViewController];
         [self.revealButtonItem setAction: @selector( revealToggle: )];
@@ -35,6 +41,7 @@
         [self.locationManager setDelegate:self];
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [self.locationManager startUpdatingLocation];
+
     }
     else{
         [self.revealButtonItem setTarget: self.revealViewController];
@@ -56,16 +63,17 @@
 #pragma mark - CLLocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    //    NSLog(@"didFailWithError: %@", error);
-    //    UIAlertView *errorAlert = [[UIAlertView alloc]
-    //                               initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    //    [errorAlert show];
+//        NSLog(@"didFailWithError: %@", error);
+//        UIAlertView *errorAlert = [[UIAlertView alloc]
+//                                   initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [errorAlert show];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
+    [self.locationManager stopUpdatingLocation];
 
-    if ([[[YHDataManager sharedData] storesArray] count]==0) {
+
         NSLog(@"new location is%@", newLocation);
         NSData* data = [NSData dataWithContentsOfURL:
                         [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
@@ -88,13 +96,12 @@
             for(NSArray *dict in dictionary){
                 [[[YHDataManager sharedData] storesArray] addObject:dict];
             }
-
             [self.tableView reloadData];
+            [self.activityIndicator stopAnimating];
+
         }
 
     }
-    }
-    [self.locationManager stopUpdatingLocation];
     
 }
 
@@ -107,14 +114,17 @@
         YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
         viewController.delegate = self;
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
-        [nav.navigationBar setBarStyle:UIBarStyleBlack];
+        [nav.navigationBar setBarStyle:UIBarStyleDefault];
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:nav animated:YES completion:NULL];
         
         
     }
     else if (status == kCLAuthorizationStatusAuthorized) {
+
         NSLog(@"user Allowed Authorization");
+        [self.activityIndicator startAnimating];
+
     }
 }
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude
@@ -151,6 +161,12 @@
 }
 
 #pragma mark - Table view data source
+
+//Creates a invisible footer to get rid of extra cells created
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    UIView *view = [[UIView alloc] init];
+    return view;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
