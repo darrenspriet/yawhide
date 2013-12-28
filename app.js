@@ -188,11 +188,13 @@ app.get('/readLocalFlyers', function (req, res){
 //folders3.forEach(function (flyerPart){
      				async.map(folders3
      					, function (flyerPart, complete) {
+
      					fs.readFile('./sobeys/'+latestFolder + '/' + h + '/' + flyerPart, 'utf8', function (err4, data){
 
 							/** this is each 1 of 20 parts of a flyer */
 							if (err4) throw err4;
 							var $ = cheerio.load(data);
+
 							//var info = [];
 
 							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
@@ -213,7 +215,7 @@ app.get('/readLocalFlyers', function (req, res){
 									, savings1 = ''
 									, savings2 = ''
 									, flyerDate = '';
-
+									console.log('flyerPart: '+flyerPart);
 									for (var i = html.children.length - 1; i >= 0; i--) {
 
 										if(html.children[i].type === 'tag') {
@@ -319,24 +321,28 @@ app.get('/readLocalFlyers', function (req, res){
 											
 											/** gets the best savings from the price */
 											//console.log('\n' + sav + " " + price);
-											var priceSav = {};
-											priceSav.price = price;
-											priceSav.sav = sav;
-											//console.log(h);
-											var listOfFrenchStores = ['34'];
-											if(listOfFrenchStores.indexOf(h) === -1){
-												getBest(priceSav, function (percent, sav2, extra){
-													var ob = {};
-													ob.item = item;
-													ob.price = price;
-													ob.savings = sav;
-													ob.url = url;
-													ob.description = desc;
-													ob.bestPercent = percent;
-													ob.bestSav = sav2;
-													ob.extra = extra;
-													info.push(ob);
-												});
+											if(url !== '' && item !== ''){
+												var priceSav = {};
+												priceSav.price = price;
+												priceSav.sav = sav;
+												//console.log(h);
+												var listOfFrenchStores = ['34'];
+												if(listOfFrenchStores.indexOf(h) === -1){
+													getBest(priceSav, function (percent, sav2, extra){
+														var ob = {};
+														ob.item = item;
+														ob.price = price;
+														ob.savings = sav;
+														ob.url = url;
+														ob.description = desc;
+														ob.bestPercent = percent;
+														ob.bestSav = sav2;
+														ob.extra = extra;
+														info.push(ob);
+														console.log(ob);
+														console.log(i);
+													});
+												}
 											}
 											
 
@@ -356,7 +362,7 @@ app.get('/readLocalFlyers', function (req, res){
 
 						console.log('iterating done');
 						var urlNum = h.split('.')[0];
-						//console.log(info);
+						console.log(info);
 						Sobeys.getStoreByUrlNum(urlNum, function (err7, store){
 							if (err7) throw err7;
 							if(!err7 && store !== null){
@@ -545,9 +551,13 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
-			console.log(flyer);
+			/*for (var i = flyer.length - 1; i >= 0; i--) {
+				flyer[i]
+			};
+			var ob = {};
+			ob.regularFlyer = */
 			console.log('the flyers');
-			res.send(flyer);
+			res.send(ob);
 		}
 	});
 });
