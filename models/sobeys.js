@@ -161,6 +161,16 @@ var getAllStores = function(cb){
         , cb );
 }
 
+var updateFlyerDateAndInterval = function (flyerdate, time, url, cb){
+	Sobey.findOneAndUpdate(
+		{urlNumber:url}
+		, {
+			currentInterval : flyerdate
+			, currFlyerDate : time
+		}
+		, cb);
+}
+
 module.exports.makeStore = makeStore;
 module.exports.updateCurrentIntervalById = updateCurrentIntervalById;
 module.exports.getStoreById = getStoreById;
@@ -169,3 +179,4 @@ module.exports.getStoreByStoreName = getStoreByStoreName;
 module.exports.getStoreByUrlNum = getStoreByUrlNum;
 module.exports.getNearestStores = getNearestStores;
 module.exports.getAllStores = getAllStores;
+module.exports.updateFlyerDateAndInterval = updateFlyerDateAndInterval;
