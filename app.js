@@ -198,8 +198,7 @@ app.get('/readLocalFlyers', function (req, res){
 							//var info = [];
 
 							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
-								//console.log('no flyer at file: ' + flyerPart);
-								console.log('');
+								console.log('no flyer at file: ' + flyerPart);
 							}
 							else {
 								//console.log(flyerPart);
@@ -215,7 +214,6 @@ app.get('/readLocalFlyers', function (req, res){
 									, savings1 = ''
 									, savings2 = ''
 									, flyerDate = '';
-									console.log('flyerPart: '+flyerPart);
 									for (var i = html.children.length - 1; i >= 0; i--) {
 
 										if(html.children[i].type === 'tag') {
@@ -339,17 +337,9 @@ app.get('/readLocalFlyers', function (req, res){
 														ob.bestSav = sav2;
 														ob.extra = extra;
 														info.push(ob);
-														console.log(ob);
-														console.log(i);
 													});
 												}
 											}
-											
-
-											//console.log('************************************' + item + " " + price + " " + sav+ " " + url + " " + desc + " " + bestPercent + "% " + bestSav + " " + flyerDate);
-											
-											// tell async that the iterator has completed
-
 										}
 
 									};
@@ -362,7 +352,6 @@ app.get('/readLocalFlyers', function (req, res){
 
 						console.log('iterating done');
 						var urlNum = h.split('.')[0];
-						console.log(info);
 						Sobeys.getStoreByUrlNum(urlNum, function (err7, store){
 							if (err7) throw err7;
 							if(!err7 && store !== null){
