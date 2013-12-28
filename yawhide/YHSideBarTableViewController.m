@@ -22,10 +22,22 @@
     }
     return self;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    NSLog(@"view will appear");
+    if ([[[YHDataManager sharedData] menuArray]count]!=0) {
+        [self setMenuArray :[[NSMutableArray alloc]init]];
+        [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
+    }
+    else{
+        [[YHDataManager sharedData]setSideBarCells:0];
+        [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
+    }
+    [self.tableView reloadData];
+}
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -36,7 +48,6 @@
 
 #pragma mark - Table view data source
 
-//Creates a invisible footer to get rid of extra cells created
 //Creates a invisible footer to get rid of extra cells created
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [[UIView alloc] init];
@@ -52,55 +63,63 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 2;
+    return [self.menuArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
     
-    switch ( indexPath.row )
-    {
-        case 0:
-            CellIdentifier = @"Stores";
-            break;
-            
-        case 1:
-            CellIdentifier = @"Change Location";
-            break;
-            
+    NSString * CellIdentifier = [self.menuArray objectAtIndex:indexPath.row];
+    
+    YHMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil){
+        cell = [[YHMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath: indexPath];
     
     return cell;
 }
 
 - (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender{
     
-    // configure the segue.
-    if ([segue isKindOfClass: [SWRevealViewControllerSegue class]] )
-    {
-        SWRevealViewControllerSegue* revealSegue = (SWRevealViewControllerSegue*) segue;
-        SWRevealViewController* revealController = self.revealViewController;
-        UINavigationController *frontNavigationController = (id)revealController.frontViewController;  // <-- we know it is a NavigationController
-        UITableViewCell *cell = sender;
-        
-        revealSegue.performBlock = ^(SWRevealViewControllerSegue* rvc_segue, UIViewController* svc, UIViewController* dvc){
-            NSLog(@"what is dvc%@", dvc);
-            NSLog(@"what is svc%@", svc);
-            NSLog(@"this is revela segue%@", rvc_segue);
-            if ([cell.textLabel.text isEqualToString:@"Stores"] ) {
-                if (![frontNavigationController.topViewController isKindOfClass:[YHStoreViewTableViewController class]] ){
-                    UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:dvc];
-                    [revealController setFrontViewController:navigation animated:YES];
-                }
-                else{
-                    [revealController revealToggle:self];
-
-                }
-            }
-        };
+    SWRevealViewController* revealController = self.revealViewController;
+    UINavigationController *frontNavigationController = (id)revealController.frontViewController;  // <-- we know it is a NavigationController
+    UITableViewCell *cell = sender;
+    
+    if ([cell.textLabel.text isEqualToString:@"Stores"] ) {
+        if (![frontNavigationController.topViewController isKindOfClass:[YHStoreViewTableViewController class]] ){
+            YHStoreViewTableViewController* storeController = segue.destinationViewController;
+            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
+            [revealController setFrontViewController:navigation animated:YES];
+        }
+        else{
+            [revealController revealToggle:self];
+            
+        }
+    }
+    else if ([cell.textLabel.text isEqualToString:@"Sort By Savings"] ) {
+        if (![frontNavigationController.topViewController isKindOfClass:[YHSavingsTableViewController class]] ){
+            YHSavingsTableViewController* storeController = segue.destinationViewController;
+            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"sortSavings"]];
+            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
+            [revealController setFrontViewController:navigation animated:YES];
+        }
+        else{
+            [revealController revealToggle:self];
+            
+        }
+    }
+    else if ([cell.textLabel.text isEqualToString:@"Regular Flyer"] ) {
+        if (![frontNavigationController.topViewController isKindOfClass:[YHStoreDetailsTableViewController class]] ){
+            YHStoreDetailsTableViewController* storeController = segue.destinationViewController;
+            [storeController setStoreDetailsArray:[[[[YHDataManager sharedData] storeDictionary]  objectForKey:@"flyer"] objectForKey:@"currFlyer"]];
+            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
+            [revealController setFrontViewController:navigation animated:YES];
+        }
+        else{
+            [revealController revealToggle:self];
+            
+        }
     }
 }
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude{
@@ -135,10 +154,13 @@
     //sets it to the initialViewController on that storyboard
     UINavigationController *frontViewController = [storyboard instantiateViewControllerWithIdentifier:@"frontnavigation" ];
     [revealController setFrontViewController:frontViewController animated:YES];
-
+    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row==1) {
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if ([cell.textLabel.text isEqualToString:@"Change Location"] ) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         //sets it to the initialViewController on that storyboard
         YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
@@ -149,7 +171,7 @@
         [nav.navigationBar setBarStyle:UIBarStyleDefault];
         [nav setModalPresentationStyle:UIModalPresentationFullScreen];
         [self presentViewController:nav animated:YES completion:NULL];
-
+        
     }
 }
 

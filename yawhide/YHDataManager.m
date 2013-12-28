@@ -23,8 +23,29 @@
 
 -(id)init{
     [self setStoresArray:[[NSMutableArray alloc]init]];
+    [self setMenuArray:[[NSMutableArray alloc]init]];
+    [self setStoreDictionary:[[NSMutableDictionary alloc]init]];
     return self;
 
+}
+
+-(void)setSideBarCells:(int)choice{
+    [self setMenuArray:[[NSMutableArray alloc]init]];
+    [self.menuArray removeAllObjects];
+    switch (choice) {
+        case 0:{
+            [self.menuArray addObject:@"Stores"];
+            [self.menuArray addObject:@"Change Location"];
+            break;
+        }
+        case 1:{
+            [self.menuArray addObject:@"Regular Flyer"];
+            [self.menuArray addObject:@"Sort By Savings"];
+            [self.menuArray addObject:@"Sort By Percent"];
+            
+            break;
+        }
+    }
 }
 
 

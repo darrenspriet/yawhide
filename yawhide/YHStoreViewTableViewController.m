@@ -72,8 +72,8 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     [self.locationManager stopUpdatingLocation];
-
-
+    if ([[[YHDataManager sharedData] storesArray]count] ==0) {
+        
         NSLog(@"new location is%@", newLocation);
         NSData* data = [NSData dataWithContentsOfURL:
                         [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
@@ -102,7 +102,7 @@
         }
 
     }
-    
+    }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
@@ -207,12 +207,14 @@
 #pragma mark - Prepare for Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
+    [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
     NSMutableArray *storeArray = [NSMutableArray arrayWithArray:[[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"flyer"] objectForKey:@"currFlyer"]];
-    
     YHStoreDetailsTableViewController *storeDetailsViewController = segue.destinationViewController;
+    [[YHDataManager sharedData] setSideBarCells:1];
     [storeDetailsViewController setStoreDetailsArray:storeArray];
-
 }
+
+
 
 //-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 //        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];

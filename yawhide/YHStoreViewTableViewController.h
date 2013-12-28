@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
+
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "YHPostalFinderViewController.h"
@@ -15,6 +16,7 @@
 
 
 @interface YHStoreViewTableViewController : UITableViewController <CLLocationManagerDelegate,UIGestureRecognizerDelegate, YHPostalViewControllerDelegate>
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (strong, nonatomic) UIActivityIndicatorView * activityIndicator;

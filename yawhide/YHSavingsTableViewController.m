@@ -1,18 +1,18 @@
 //
-//  YHStoreDetailsTableViewController.m
+//  YHSavingsTableViewController.m
 //  yawhide
 //
 //  Created by Darren Spriet on 2013-12-27.
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
-#import "YHStoreDetailsTableViewController.h"
+#import "YHSavingsTableViewController.h"
 
-@interface YHStoreDetailsTableViewController ()
+@interface YHSavingsTableViewController ()
 
 @end
 
-@implementation YHStoreDetailsTableViewController
+@implementation YHSavingsTableViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -30,10 +30,10 @@
     [self.revealButtonItem setAction: @selector( revealToggle: )];
     [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
     [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -70,13 +70,13 @@
     if (cell == nil){
         cell = [[YHStoreDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-//    NSLog(@"what is the array %@", self.storeDetailsArray);
+    //    NSLog(@"what is the array %@", self.storeDetailsArray);
     [cell.itemName setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"item"]];
     [cell.price setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"price"]];
-//    [cell.itemImage setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"url"]]]];
+    //    [cell.itemImage setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"url"]]]];
     NSString *imageURL=@"https://s3.amazonaws.com/sobeys-web-production/flyer/products/images/000/158/008/original/SOB_PR064B_139_UF_Jan1_Page2_img25.jpg";
     
-
+    
     
     //Starts a dispatch to get the image and then sets it to the cell
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -93,7 +93,6 @@
     
     NSLog(@"this is happeing");
 }
-
 
 /*
 // Override to support conditional editing of the table view.
