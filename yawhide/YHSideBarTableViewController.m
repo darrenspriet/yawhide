@@ -112,7 +112,7 @@
     else if ([cell.textLabel.text isEqualToString:@"Regular Flyer"] ) {
         if (![frontNavigationController.topViewController isKindOfClass:[YHStoreDetailsTableViewController class]] ){
             YHStoreDetailsTableViewController* storeController = segue.destinationViewController;
-            [storeController setStoreDetailsArray:[[[[YHDataManager sharedData] storeDictionary]  objectForKey:@"flyer"] objectForKey:@"currFlyer"]];
+            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]];
             UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
             [revealController setFrontViewController:navigation animated:YES];
         }

@@ -189,11 +189,11 @@
     if (cell == nil){
         cell = [[YHStoreCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    NSString *storeName = [[[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"] objectForKey:@"storeName"];
+    NSString *storeName = [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row]  objectForKey:@"storeName"];
 //    NSLog(@"what is in the flyer%@", [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"]);
     [cell.storeName setText:storeName];
     [cell.noFlyerDetail setText:@""];
-    if ([[[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"] objectForKey:@"currFlyer"]!=0) {
+    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"currFlyer"]!=0) {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     else{
@@ -208,7 +208,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
     [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
-    NSMutableArray *storeArray = [NSMutableArray arrayWithArray:[[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"flyer"] objectForKey:@"currFlyer"]];
+    NSMutableArray *storeArray = [NSMutableArray arrayWithArray:[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"currFlyer"]];
     YHStoreDetailsTableViewController *storeDetailsViewController = segue.destinationViewController;
     [[YHDataManager sharedData] setSideBarCells:1];
     [storeDetailsViewController setStoreDetailsArray:storeArray];

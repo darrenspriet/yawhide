@@ -73,9 +73,10 @@
 //    NSLog(@"what is the array %@", self.storeDetailsArray);
     [cell.itemName setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"item"]];
     [cell.price setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"price"]];
-//    [cell.itemImage setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"url"]]]];
+
     NSString *imageURL=@"https://s3.amazonaws.com/sobeys-web-production/flyer/products/images/000/158/008/original/SOB_PR064B_139_UF_Jan1_Page2_img25.jpg";
     
+//    NSString *imageURL=[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"url"];
 
     
     //Starts a dispatch to get the image and then sets it to the cell
