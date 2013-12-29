@@ -210,6 +210,7 @@
     [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
     NSMutableArray *storeArray = [NSMutableArray arrayWithArray:[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"currFlyer"]];
     YHStoreDetailsTableViewController *storeDetailsViewController = segue.destinationViewController;
+    [storeDetailsViewController setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"storeName"]]];
     [[YHDataManager sharedData] setSideBarCells:1];
     [storeDetailsViewController setStoreDetailsArray:storeArray];
 }

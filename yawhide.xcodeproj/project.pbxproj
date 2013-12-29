@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E0024D97186E737900C43594 /* YHSavingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0024D96186E737900C43594 /* YHSavingsTableViewController.m */; };
+		E01846E118706B7900CE7816 /* YHPercentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E01846E018706B7900CE7816 /* YHPercentTableViewController.m */; };
 		E03FF032186E13E40051C1A0 /* YHStoreDetailsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E03FF031186E13E40051C1A0 /* YHStoreDetailsTableViewController.m */; };
 		E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */; };
 		E05321501868CCDC008CE716 /* YHDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E053214F1868CCDC008CE716 /* YHDataManager.m */; };
@@ -51,6 +52,8 @@
 /* Begin PBXFileReference section */
 		E0024D95186E737900C43594 /* YHSavingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHSavingsTableViewController.h; sourceTree = "<group>"; };
 		E0024D96186E737900C43594 /* YHSavingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHSavingsTableViewController.m; sourceTree = "<group>"; };
+		E01846DF18706B7900CE7816 /* YHPercentTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHPercentTableViewController.h; sourceTree = "<group>"; };
+		E01846E018706B7900CE7816 /* YHPercentTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHPercentTableViewController.m; sourceTree = "<group>"; };
 		E03FF030186E13E40051C1A0 /* YHStoreDetailsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailsTableViewController.h; sourceTree = "<group>"; };
 		E03FF031186E13E40051C1A0 /* YHStoreDetailsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreDetailsTableViewController.m; sourceTree = "<group>"; };
 		E03FF033186E14850051C1A0 /* YHStoreDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailCell.h; sourceTree = "<group>"; };
@@ -161,6 +164,8 @@
 				E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */,
 				E0024D95186E737900C43594 /* YHSavingsTableViewController.h */,
 				E0024D96186E737900C43594 /* YHSavingsTableViewController.m */,
+				E01846DF18706B7900CE7816 /* YHPercentTableViewController.h */,
+				E01846E018706B7900CE7816 /* YHPercentTableViewController.m */,
 			);
 			name = "Store Details";
 			sourceTree = "<group>";
@@ -388,6 +393,7 @@
 				E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */,
 				E0FF765F186E0C11000F656A /* YHStoreCell.m in Sources */,
 				E09045731867C6F400FA81B4 /* YHRearViewController.m in Sources */,
+				E01846E118706B7900CE7816 /* YHPercentTableViewController.m in Sources */,
 				E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

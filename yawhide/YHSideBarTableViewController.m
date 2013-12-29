@@ -85,22 +85,13 @@
     SWRevealViewController* revealController = self.revealViewController;
     UINavigationController *frontNavigationController = (id)revealController.frontViewController;  // <-- we know it is a NavigationController
     UITableViewCell *cell = sender;
+    NSLog(@"what is the front navigation controller %@", frontNavigationController.topViewController);
+    NSLog(@"what is the text %@", cell.textLabel.text);
+    
     
     if ([cell.textLabel.text isEqualToString:@"Stores"] ) {
         if (![frontNavigationController.topViewController isKindOfClass:[YHStoreViewTableViewController class]] ){
             YHStoreViewTableViewController* storeController = segue.destinationViewController;
-            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
-            [revealController setFrontViewController:navigation animated:YES];
-        }
-        else{
-            [revealController revealToggle:self];
-            
-        }
-    }
-    else if ([cell.textLabel.text isEqualToString:@"Sort By Savings"] ) {
-        if (![frontNavigationController.topViewController isKindOfClass:[YHSavingsTableViewController class]] ){
-            YHSavingsTableViewController* storeController = segue.destinationViewController;
-            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"sortSavings"]];
             UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
             [revealController setFrontViewController:navigation animated:YES];
         }
@@ -114,6 +105,7 @@
             YHStoreDetailsTableViewController* storeController = segue.destinationViewController;
             [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]];
             UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
+            [storeController setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
             [revealController setFrontViewController:navigation animated:YES];
         }
         else{
@@ -121,6 +113,34 @@
             
         }
     }
+    else if ([cell.textLabel.text isEqualToString:@"Sort By Savings"] ) {
+        if (![frontNavigationController.topViewController isKindOfClass:[YHSavingsTableViewController class]] ){
+            YHSavingsTableViewController* storeController = segue.destinationViewController;
+            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]];
+            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
+            [storeController setTitle:[NSString stringWithFormat:@"%@ - Best Savings",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
+            [revealController setFrontViewController:navigation animated:YES];
+        }
+        else{
+            [revealController revealToggle:self];
+            
+        }
+    }
+    else if ([cell.textLabel.text isEqualToString:@"Sort By Percent"] ) {
+        if (![frontNavigationController.topViewController isKindOfClass:[YHPercentTableViewController class]] ){
+            YHPercentTableViewController *storeController = segue.destinationViewController;
+            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]];
+            NSLog(@"what is the object%@", [[YHDataManager sharedData] storeDictionary]);
+            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
+            [storeController setTitle:[NSString stringWithFormat:@"%@ - Best Percentage",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
+            [revealController setFrontViewController:navigation animated:YES];
+        }
+        else{
+            [revealController revealToggle:self];
+            
+        }
+    }
+
 }
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude{
     

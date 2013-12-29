@@ -13,6 +13,8 @@
 #import "YHRearViewController.h"
 #import "YHSavingsTableViewController.h"
 #import "YHStoreDetailsTableViewController.h"
+#import "YHPercentTableViewController.h"
+
 
 
 
