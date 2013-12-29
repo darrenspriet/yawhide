@@ -9,6 +9,9 @@
 
 #import <UIKit/UIKit.h>
 #import "YHStoreDetailCell.h"
+#import "YHSideBarTableViewController.h"
+
+
 
 
 @interface YHStoreDetailsTableViewController : UITableViewController <UIGestureRecognizerDelegate>

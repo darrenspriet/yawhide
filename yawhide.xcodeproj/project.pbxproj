@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		E0024D97186E737900C43594 /* YHSavingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0024D96186E737900C43594 /* YHSavingsTableViewController.m */; };
 		E01846E118706B7900CE7816 /* YHPercentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E01846E018706B7900CE7816 /* YHPercentTableViewController.m */; };
+		E01846EE1870C69B00CE7816 /* Categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E01846EC1870C69B00CE7816 /* Categories@2x.png */; };
+		E01846EF1870C69B00CE7816 /* Categories.png in Resources */ = {isa = PBXBuildFile; fileRef = E01846ED1870C69B00CE7816 /* Categories.png */; };
+		E01846F21870C93700CE7816 /* YHStoreDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E01846F11870C93700CE7816 /* YHStoreDetailsViewController.m */; };
 		E03FF032186E13E40051C1A0 /* YHStoreDetailsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E03FF031186E13E40051C1A0 /* YHStoreDetailsTableViewController.m */; };
 		E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */; };
 		E05321501868CCDC008CE716 /* YHDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E053214F1868CCDC008CE716 /* YHDataManager.m */; };
@@ -54,6 +57,10 @@
 		E0024D96186E737900C43594 /* YHSavingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHSavingsTableViewController.m; sourceTree = "<group>"; };
 		E01846DF18706B7900CE7816 /* YHPercentTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHPercentTableViewController.h; sourceTree = "<group>"; };
 		E01846E018706B7900CE7816 /* YHPercentTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHPercentTableViewController.m; sourceTree = "<group>"; };
+		E01846EC1870C69B00CE7816 /* Categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Categories@2x.png"; sourceTree = "<group>"; };
+		E01846ED1870C69B00CE7816 /* Categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Categories.png; sourceTree = "<group>"; };
+		E01846F01870C93700CE7816 /* YHStoreDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailsViewController.h; sourceTree = "<group>"; };
+		E01846F11870C93700CE7816 /* YHStoreDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreDetailsViewController.m; sourceTree = "<group>"; };
 		E03FF030186E13E40051C1A0 /* YHStoreDetailsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailsTableViewController.h; sourceTree = "<group>"; };
 		E03FF031186E13E40051C1A0 /* YHStoreDetailsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreDetailsTableViewController.m; sourceTree = "<group>"; };
 		E03FF033186E14850051C1A0 /* YHStoreDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailCell.h; sourceTree = "<group>"; };
@@ -124,7 +131,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E03FF02C186E131B0051C1A0 /* Side Bar */ = {
+		E03FF02C186E131B0051C1A0 /* Left Side Bar */ = {
 			isa = PBXGroup;
 			children = (
 				E090456B1867C39E00FA81B4 /* YHSideBarTableViewController.h */,
@@ -132,7 +139,7 @@
 				E09045741867CE3900FA81B4 /* YHMenuCell.h */,
 				E09045751867CE3900FA81B4 /* YHMenuCell.m */,
 			);
-			name = "Side Bar";
+			name = "Left Side Bar";
 			sourceTree = "<group>";
 		};
 		E03FF02D186E133C0051C1A0 /* Stores */ = {
@@ -166,6 +173,8 @@
 				E0024D96186E737900C43594 /* YHSavingsTableViewController.m */,
 				E01846DF18706B7900CE7816 /* YHPercentTableViewController.h */,
 				E01846E018706B7900CE7816 /* YHPercentTableViewController.m */,
+				E01846F01870C93700CE7816 /* YHStoreDetailsViewController.h */,
+				E01846F11870C93700CE7816 /* YHStoreDetailsViewController.m */,
 			);
 			name = "Store Details";
 			sourceTree = "<group>";
@@ -219,7 +228,7 @@
 			children = (
 				E090453C1867C10500FA81B4 /* Main_iPhone.storyboard */,
 				E090453F1867C10500FA81B4 /* Main_iPad.storyboard */,
-				E03FF02C186E131B0051C1A0 /* Side Bar */,
+				E03FF02C186E131B0051C1A0 /* Left Side Bar */,
 				E03FF02D186E133C0051C1A0 /* Stores */,
 				E03FF02F186E13BC0051C1A0 /* Store Details */,
 				E03FF02E186E13570051C1A0 /* Location Modal */,
@@ -265,6 +274,8 @@
 		E09045621867C2CC00FA81B4 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E01846EC1870C69B00CE7816 /* Categories@2x.png */,
+				E01846ED1870C69B00CE7816 /* Categories.png */,
 				E09045631867C2F100FA81B4 /* reveal-icon.png */,
 				E09045641867C2F100FA81B4 /* reveal-icon@2x.png */,
 			);
@@ -361,8 +372,10 @@
 				E09045461867C10500FA81B4 /* Images.xcassets in Resources */,
 				E09045661867C2F100FA81B4 /* reveal-icon@2x.png in Resources */,
 				E090453E1867C10500FA81B4 /* Main_iPhone.storyboard in Resources */,
+				E01846EE1870C69B00CE7816 /* Categories@2x.png in Resources */,
 				E09045351867C10500FA81B4 /* InfoPlist.strings in Resources */,
 				E09045651867C2F100FA81B4 /* reveal-icon.png in Resources */,
+				E01846EF1870C69B00CE7816 /* Categories.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +406,7 @@
 				E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */,
 				E0FF765F186E0C11000F656A /* YHStoreCell.m in Sources */,
 				E09045731867C6F400FA81B4 /* YHRearViewController.m in Sources */,
+				E01846F21870C93700CE7816 /* YHStoreDetailsViewController.m in Sources */,
 				E01846E118706B7900CE7816 /* YHPercentTableViewController.m in Sources */,
 				E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */,
 			);
