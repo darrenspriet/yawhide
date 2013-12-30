@@ -31,12 +31,14 @@
     [self.activityIndicator setColor:[UIColor blackColor]];
     self.activityIndicator.center = CGPointMake(self.view.frame.size.width / 2.0, (self.view.frame.size.height / 2.0)-self.navigationController.navigationBar.frame.size.height-[[UIApplication sharedApplication] statusBarFrame].size.height);
     [self.view addSubview: self.activityIndicator];
+    [self.revealButtonItem setTarget: self.revealViewController];
+    [self.revealButtonItem setAction: @selector( revealToggle: )];
+    [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
+    [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self.revealViewController tapGestureRecognizer];
+
     
     if ([[[YHDataManager sharedData] storesArray] count]==0) {
-        [self.revealButtonItem setTarget: self.revealViewController];
-        [self.revealButtonItem setAction: @selector( revealToggle: )];
-        [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
-        [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
         [self setLocationManager:[[CLLocationManager alloc]init]];
         [self.locationManager setDelegate:self];
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
@@ -44,13 +46,19 @@
 
     }
     else{
-        [self.revealButtonItem setTarget: self.revealViewController];
-        [self.revealButtonItem setAction: @selector( revealToggle: )];
-        [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
-        [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
         [self.tableView reloadData];
     }
     
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self.revealViewController setRightViewController:nil];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    //sets it to the initialViewController on that storyboard
+    YHSideBarTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"sideBarView" ];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
+    [self.revealViewController setRearViewController:nav];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -208,8 +216,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
     [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
-    YHStoreDetailsTableViewController *storeDetailsViewController = segue.destinationViewController;
-    [[YHDataManager sharedData] setSideBarCells:1];
+
 }
 
 

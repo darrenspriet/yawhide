@@ -28,17 +28,20 @@
     [super viewDidLoad];
     [self.revealButtonItem setTarget: self.revealViewController];
     [self.revealButtonItem setAction: @selector( rightRevealToggle: )];
-    [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
-    [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    //sets it to the initialViewController on that storyboard
-    YHSideBarTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"sideBarView" ];
-    [self.revealViewController setRightViewController:viewController];
-    [self setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
-    [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
-
 
     
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    //sets it to the initialViewController on that storyboard
+    YHCategoryTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"categoryTableView" ];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
+    [viewController setDelegate:self];
+
+    
+    [self.revealViewController setRearViewController:nil];
+    [self setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
+    [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
+    [self.revealViewController setRightViewController:nav];
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -46,12 +49,24 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"view store detail will disapear");
+    [self.revealViewController setRightViewController:nil];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    NSLog(@"view  store detail will apear");
+    
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [self enableControls];
+    NSLog(@"view store detail did appear");
+}
 //Creates a invisible footer to get rid of extra cells created
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [[UIView alloc] init];
@@ -126,5 +141,14 @@
             break;
         }
     }
+}
+
+- (void)disableControls{
+    [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
+    
+}
+-(void)enableControls{
+    [self.navigationController.interactivePopGestureRecognizer setEnabled:YES];
+    
 }
 @end
