@@ -11,7 +11,8 @@ var express = require('express')
 , Geocoder = require('node-geocoder-ca').Geocoder
 , geocoder = new Geocoder()
 , s = require('./algorithms/sobeyFunc')
-, async = require('async');
+, async = require('async')
+, ce = require('cloneextend');
 
 app = express();
 
@@ -182,22 +183,24 @@ app.get('/readLocalFlyers', function (req, res){
 				fs.readdir('./sobeys/'+latestFolder + '/' + h + '/', function (err3, folders3){
 					if(err3)throw err3;
 					/** this is each flyer part */
-					var info = [];
+					var info = []
+					, flyerDate = '';
 					
 					//async.forEach(folders3, function (flyerPart, callback){ 
 //folders3.forEach(function (flyerPart){
      				async.map(folders3
      					, function (flyerPart, complete) {
+
      					fs.readFile('./sobeys/'+latestFolder + '/' + h + '/' + flyerPart, 'utf8', function (err4, data){
 
 							/** this is each 1 of 20 parts of a flyer */
 							if (err4) throw err4;
 							var $ = cheerio.load(data);
+
 							//var info = [];
 
 							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
-								//console.log('no flyer at file: ' + flyerPart);
-								console.log('');
+								console.log('no flyer at file: ' + flyerPart);
 							}
 							else {
 								//console.log(flyerPart);
@@ -211,9 +214,7 @@ app.get('/readLocalFlyers', function (req, res){
 									, bestPercent = ''
 									, savings = ''
 									, savings1 = ''
-									, savings2 = ''
-									, flyerDate = '';
-
+									, savings2 = '';
 									for (var i = html.children.length - 1; i >= 0; i--) {
 
 										if(html.children[i].type === 'tag') {
@@ -314,36 +315,34 @@ app.get('/readLocalFlyers', function (req, res){
 													}
 												};
 											}
-											flyerDate = $('.container .site-section .site-section-content .fancy-heading .h3-editorial').text();
+											if(flyerDate === ''){
+												flyerDate = $('.container .site-section .site-section-content .fancy-heading .h3-editorial').text();
+											}
 											//
 											
 											/** gets the best savings from the price */
 											//console.log('\n' + sav + " " + price);
-											var priceSav = {};
-											priceSav.price = price;
-											priceSav.sav = sav;
-											//console.log(h);
-											var listOfFrenchStores = ['34'];
-											if(listOfFrenchStores.indexOf(h) === -1){
-												getBest(priceSav, function (percent, sav2, extra){
-													var ob = {};
-													ob.item = item;
-													ob.price = price;
-													ob.savings = sav;
-													ob.url = url;
-													ob.description = desc;
-													ob.bestPercent = percent;
-													ob.bestSav = sav2;
-													ob.extra = extra;
-													info.push(ob);
-												});
+											if(url !== '' && item !== ''){
+												var priceSav = {};
+												priceSav.price = price;
+												priceSav.sav = sav;
+												//console.log(h);
+												var listOfFrenchStores = ['34'];
+												if(listOfFrenchStores.indexOf(h) === -1){
+													getBest(priceSav, function (percent, sav2, extra){
+														var ob = {};
+														ob.item = item;
+														ob.price = price;
+														ob.savings = sav;
+														ob.url = url;
+														ob.description = desc;
+														ob.bestPercent = percent;
+														ob.bestSav = sav2;
+														ob.extra = extra;
+														info.push(ob);
+													});
+												}
 											}
-											
-
-											//console.log('************************************' + item + " " + price + " " + sav+ " " + url + " " + desc + " " + bestPercent + "% " + bestSav + " " + flyerDate);
-											
-											// tell async that the iterator has completed
-
 										}
 
 									};
@@ -356,14 +355,16 @@ app.get('/readLocalFlyers', function (req, res){
 
 						console.log('iterating done');
 						var urlNum = h.split('.')[0];
-						//console.log(info);
 						Sobeys.getStoreByUrlNum(urlNum, function (err7, store){
 							if (err7) throw err7;
 							if(!err7 && store !== null){
 								Sobeys.makeFlyer(store, info, function (err8){
 									if (err8) throw err8;
-									if(h > 288)
-										console.log('done');
+									Sobeys.updateFlyerDateAndInterval(flyerDate, new Date().getTime(), urlNum, function (err9){
+										if(err9) throw err;
+										if(h > 288)
+											console.log('done');
+									});
 								});
 							}
 							else{
@@ -372,10 +373,6 @@ app.get('/readLocalFlyers', function (req, res){
 						});
 						
 					});
-					
-						
-					
-					
 				});
 			});
 		});
@@ -464,6 +461,7 @@ app.get('/makeStore', function (req, res){
 									tmp2+=' ';
 							}
 						}
+						tmp2 = tmp2.replace('&amp;', '&');
 						storename = tmp2;
 					});
 					$('.push--desk--one-half table tbody tr').each(function (i, html){
@@ -532,6 +530,19 @@ app.get('/makeStore', function (req, res){
 
 // });
 
+var sortBestPercent = function (ob, cb){
+	ob.sort(function (a,b){
+		return b.bestPercent-a.bestPercent;
+	});
+	cb(ob);
+}
+
+var sortBestSav = function (ob, cb){
+	ob.sort(function (a,b){
+		return b.bestSav-a.bestSav;
+	});
+	cb(ob);
+}
 
 app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
     var elat = req.params.elat;
@@ -545,16 +556,36 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
-			var finalOb = [];
+			var arr = [];
 			for (var i = flyer.length - 1; i >= 0; i--) {
 				var ob = {};
-				ob.sortSavings = s.findBestDollarDeal(flyer[i].currFlyer);
-				ob.sortPercent = s.findBestPercentageDeal(flyer[i].currFlyer);
-				ob.flyer = flyer[i];
-				finalOb.push(ob);
+				ob.storeName = flyer[i].storeName;
+				ob.storeLocation = flyer[i].storeLocation;
+				ob.urlNumber = flyer[i].urlNumber;
+				ob.city = flyer[i].city;
+				ob.postalCode = flyer[i].postalCode;
+				ob.storeHours = flyer[i].storeHours;
+				ob.location = flyer[i].location;
+				ob.currentInterval = flyer[i].currentInterval;
+				ob.currFlyerDate = flyer[i].currFlyerDate;
+				ob.regularFlyer = flyer[i].currFlyer;
+				/** here i have to give sortBestPercent a clone of the currFlyer or else
+						sort will just mutate the original flyer which isn't good */
+				sortBestPercent(ce.clone(flyer[i].currFlyer), function (cb){
+					ob.bestPercentFlyer = cb;
+					sortBestSav(ce.clone(flyer[i].currFlyer), function (cb2){
+						ob.bestSavFlyer = cb2;
+						arr.push(ob);
+
+						//console.log(ob + i + '\n');
+					});
+					//console.log(cb);
+					
+				});
+
 			};
 			console.log('the flyers');
-			res.send(finalOb);
+			res.send(arr);
 		}
 	});
 });

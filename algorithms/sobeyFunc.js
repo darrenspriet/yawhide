@@ -277,6 +277,8 @@ var findBestPercentageDeal = function (arrOfObs){
 	return result.concat(rest);
 }
 
+
+
 module.exports.categories = categories;
 module.exports.findBuy1Get1Free = findBuy1Get1Free;
 module.exports.findBestDollarDeal = findBestDollarDeal;
