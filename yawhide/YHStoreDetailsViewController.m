@@ -33,7 +33,11 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
     YHSideBarTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"sideBarView" ];
-    self.revealViewController.rightViewController =viewController;
+    [self.revealViewController setRightViewController:viewController];
+    [self setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
+    [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
+
+
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -104,14 +108,20 @@
 - (IBAction)segmentControlPressed:(UISegmentedControl *)sender {
     switch ([sender selectedSegmentIndex]) {
         case 1:{
+            [self setTitle:[NSString stringWithFormat:@"%@ - Savings",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
+            [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"bestSavFlyer"]]];
               [self.tableview reloadData];
             break;
         }
         case 2:{
+            [self setTitle:[NSString stringWithFormat:@"%@ - Percent",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
+            [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"bestPercentFlyer"]]];
               [self.tableview reloadData];
             break;
         }
         default:{
+            [self setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
+            [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
               [self.tableview reloadData];
             break;
         }

@@ -24,7 +24,6 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     NSLog(@"view will appear");
-    NSLog(@"what is the count of the menuArray %d", [[[YHDataManager sharedData] menuArray]count]);
     if ([[[YHDataManager sharedData] menuArray]count]!=0) {
         [self setMenuArray :[[NSMutableArray alloc]init]];
         [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];

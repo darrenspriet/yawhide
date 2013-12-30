@@ -193,7 +193,7 @@
 //    NSLog(@"what is in the flyer%@", [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"flyer"]);
     [cell.storeName setText:storeName];
     [cell.noFlyerDetail setText:@""];
-    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"currFlyer"]!=0) {
+    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"regularFlyer"]!=0) {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     else{
@@ -208,11 +208,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
     [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
-    NSMutableArray *storeArray = [NSMutableArray arrayWithArray:[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"currFlyer"]];
     YHStoreDetailsTableViewController *storeDetailsViewController = segue.destinationViewController;
-    [storeDetailsViewController setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"storeName"]]];
     [[YHDataManager sharedData] setSideBarCells:1];
-    [storeDetailsViewController setStoreDetailsArray:storeArray];
 }
 
 
