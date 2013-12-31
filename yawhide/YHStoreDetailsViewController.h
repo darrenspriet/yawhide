@@ -19,5 +19,6 @@
 
 @property (nonatomic, strong) NSMutableArray *storeDetailsArray;
 - (IBAction)segmentControlPressed:(UISegmentedControl *)sender;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segment;
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 @end

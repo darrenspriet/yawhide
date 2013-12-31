@@ -39,6 +39,7 @@
 		E090457A1867E1EB00FA81B4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E09045791867E1EB00FA81B4 /* MapKit.framework */; };
 		E090457D1867E30100FA81B4 /* YHStoreViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090457C1867E30100FA81B4 /* YHStoreViewTableViewController.m */; };
 		E09045801867E65400FA81B4 /* YHPostalFinderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E090457F1867E65400FA81B4 /* YHPostalFinderViewController.m */; };
+		E0FE459B18722C8F009A9780 /* YHRightCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0FE459A18722C8F009A9780 /* YHRightCategoryCell.m */; };
 		E0FF765F186E0C11000F656A /* YHStoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0FF765E186E0C11000F656A /* YHStoreCell.m */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +102,8 @@
 		E090457C1867E30100FA81B4 /* YHStoreViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreViewTableViewController.m; sourceTree = "<group>"; };
 		E090457E1867E65400FA81B4 /* YHPostalFinderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHPostalFinderViewController.h; sourceTree = "<group>"; };
 		E090457F1867E65400FA81B4 /* YHPostalFinderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHPostalFinderViewController.m; sourceTree = "<group>"; };
+		E0FE459918722C8F009A9780 /* YHRightCategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHRightCategoryCell.h; sourceTree = "<group>"; };
+		E0FE459A18722C8F009A9780 /* YHRightCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHRightCategoryCell.m; sourceTree = "<group>"; };
 		E0FF765D186E0C11000F656A /* YHStoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreCell.h; sourceTree = "<group>"; };
 		E0FF765E186E0C11000F656A /* YHStoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -136,6 +139,8 @@
 			children = (
 				E01846F6187109C400CE7816 /* YHCategoryTableViewController.h */,
 				E01846F7187109C400CE7816 /* YHCategoryTableViewController.m */,
+				E0FE459918722C8F009A9780 /* YHRightCategoryCell.h */,
+				E0FE459A18722C8F009A9780 /* YHRightCategoryCell.m */,
 			);
 			name = "Right Side Bar Categories";
 			sourceTree = "<group>";
@@ -415,6 +420,7 @@
 				E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */,
 				E0FF765F186E0C11000F656A /* YHStoreCell.m in Sources */,
 				E01846F21870C93700CE7816 /* YHStoreDetailsViewController.m in Sources */,
+				E0FE459B18722C8F009A9780 /* YHRightCategoryCell.m in Sources */,
 				E01846E118706B7900CE7816 /* YHPercentTableViewController.m in Sources */,
 				E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */,
 			);

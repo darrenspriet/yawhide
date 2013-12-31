@@ -152,6 +152,15 @@
     
     if (data==nil) {
         NSLog(@"got no data");
+        UIAlertView *noData = [[UIAlertView alloc]
+                               initWithTitle:@"Sorry "
+                               message:@"Our Server Must Be Down"
+                               delegate:nil
+                               cancelButtonTitle:@"OK"
+                               otherButtonTitles:nil];
+        [noData show];
+        [self.largeActivityIndicator stopAnimating];
+        
     }else{
         
         NSError* error;

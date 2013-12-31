@@ -11,11 +11,15 @@
 @end
 
 #import <UIKit/UIKit.h>
+#import "YHRightCategoryCell.h"
+
 
 
 
 @interface YHCategoryTableViewController : UITableViewController
 @property (nonatomic, weak) id<YHCategoryTableViewControllerDelegate> delegate;
+@property (nonatomic, strong) NSMutableArray *categoryArray;
+
 
 
 @end
