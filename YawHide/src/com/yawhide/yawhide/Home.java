@@ -21,10 +21,14 @@ import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.AsyncHttpResponse;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +44,9 @@ public class Home extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
+		
+		final Context context = this;
+		
 		btnShowLocation = (Button) findViewById(R.id.btnShowLocation);
 
 		// show location button click event
@@ -56,8 +62,8 @@ public class Home extends Activity {
 
 					final double latitude = gps.getLatitude();
 					final double longitude = gps.getLongitude();
-
-					String url = "http://192.168.1.113:3000/getNearestStores/42.49/-80.5467/50";
+					System.out.println("lat and long are: " + latitude + " " + longitude);
+					String url = "http://192.168.1.102:3000/getNearestStores/"+latitude + "/" + longitude + "/" +"20";
 					AsyncHttpClient.getDefaultInstance().getJSONArray(url, new AsyncHttpClient.JSONArrayCallback() {
 
 						@Override
@@ -69,29 +75,35 @@ public class Home extends Activity {
 		                        return;
 		                        
 		                    }
-							TextView mTextView;
 							String mString;
-
-							mTextView = (TextView) findViewById(R.id.mTextView);
-							for (int i = arg2.length() - 1; i >= 0; i--) {
+							
+							String[] stringArr = new String[5];
+							System.out.println("there are: " + arg2.length() + " flyers");
+							System.out.println("\n\n");
+							for(int i = arg2.length() - 1; i >= 0; i--){
 								try {
-									JSONArray jj = arg2.getJSONObject(i).getJSONArray("currFlyer");
-									for (int j = jj.length() - 1; j >= 0; j--) {
-										System.out.println(jj.getJSONObject(i));
-									}
+									System.out.println(arg2.getJSONObject(i).get("storeName"));
 								} catch (JSONException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-							};
-							mTextView.setText(arg2.toString());
-						
+							}
+							//mTextView.setText(arg2.toString());
+							//System.out.println(arg2);
 							// \n is for new line
 							Toast.makeText(
 									getApplicationContext(),
 									"Your Location is - \nLat: " + latitude
-											+ "\nLong: " + longitude + " something...." + arg2, 20000)
+											+ "\nLong: " + longitude + "\nLength: " + arg2.length(), 5000)
 									.show();
+							LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout1);
+							LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+							for (int i = 0; i < arg2.length(); i++) {
+								Button myButton = new Button(context);
+								myButton.setText("Add Me");
+								ll.addView(myButton, lp);
+								System.out.println(i);
+							}
+							
 						}
 					    // Callback is invoked with any exceptions/errors, and the result, if available.
 					   

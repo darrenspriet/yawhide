@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,30 +6,31 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Home" >
+    tools:context=".Home"
+    android:id="@+id/linearLayout1" >
 
     <Button
         android:id="@+id/btnShowLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
         android:text="Show Location" />
 
-    <EditText
-        android:id="@+id/mTextView"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/btnShowLocation"
-        android:layout_marginTop="21dp"
-        android:ems="10"
-        android:inputType="textMultiLine" >
+        android:layout_marginTop="32dp" >
 
-        <requestFocus />
-    </EditText>
+        <TextView
+            android:id="@+id/mTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10" >
+        </TextView>
+        
+        
+        
+    </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>
