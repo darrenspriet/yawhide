@@ -1,4 +1,4 @@
-package com.yawhide.yawhide.library;
+package com.yawhide.yawhide;
 
 import java.io.BufferedReader;
 import java.io.IOException;
