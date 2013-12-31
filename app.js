@@ -666,7 +666,7 @@ app.get('/deal', function (req, res){
 	res.end();
 });
 
-http.createServer(app).listen(app.get('port'), function () {
+http.createServer(app).listen(3000, '192.168.1.100', function () {
 	console.log("Express server listening on port " + app.get('port'));
 });
 

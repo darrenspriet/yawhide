@@ -106,7 +106,7 @@ public class Home extends Activity {
     		}
     	});
     }
-    private class JSONParse extends AsyncTask<String, String, JSONObject> {
+    private class JSONParse extends AsyncTask<String, String, JSONArray> {
          private ProgressDialog pDialog;
         @Override
         protected void onPreExecute() {
@@ -121,23 +121,26 @@ public class Home extends Activity {
             pDialog.show();
         }
         @Override
-        protected JSONObject doInBackground(String... args) {
+        protected JSONArray doInBackground(String... args) {
             JSONParser jParser = new JSONParser();
             // Getting JSON from URL
             System.out.println(latitude + " " + longitude + " test");
-            String url = "http://192.168.1.100:3000/getNearestStores/" + latitude +"/"+ longitude +"/20";
+            String lat = String.valueOf(latitude);
+            String lon = String.valueOf(longitude);
+            String url = "http://192.168.1.100:3000/getNearestStores/" + lat +"/"+ lon +"/20";
             System.out.println(url);
-            JSONObject json = jParser.getJSONFromUrl(url);
+            JSONArray json = jParser.getJSONFromUrl(url);
+            //System.out.println(json);
             return json;
         }
          @Override
-         protected void onPostExecute(JSONObject json) {
+         protected void onPostExecute(JSONArray json) {
              pDialog.dismiss();
              try {
                     // Getting JSON Array from URL
             	
-            	System.out.println(json);
-            	android = json.getJSONArray(TAG_OS);
+            	//System.out.println(json);
+            	android = json;
                     for(int i = 0; i < android.length(); i++){
                     JSONObject c = android.getJSONObject(i);
                     // Storing  JSON item in a Variable
