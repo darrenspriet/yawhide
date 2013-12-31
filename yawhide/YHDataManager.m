@@ -38,13 +38,6 @@
             [self.menuArray addObject:@"Change Location"];
             break;
         }
-        case 1:{
-            [self.menuArray addObject:@"Regular Flyer"];
-            [self.menuArray addObject:@"Sort By Savings"];
-            [self.menuArray addObject:@"Sort By Percent"];
-            
-            break;
-        }
     }
 }
 

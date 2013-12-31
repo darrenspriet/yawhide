@@ -29,6 +29,8 @@
     [self.revealButtonItem setTarget: self.revealViewController];
     [self.revealButtonItem setAction: @selector( rightRevealToggle: )];
 
+
+
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
@@ -50,14 +52,17 @@
 }
 
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 -(void)viewWillDisappear:(BOOL)animated{
     NSLog(@"view store detail will disapear");
     [self.revealViewController setRightViewController:nil];
+    [self.delegate addLeftController];
 }
 -(void)viewWillAppear:(BOOL)animated{
     NSLog(@"view  store detail will apear");

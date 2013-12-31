@@ -11,11 +11,12 @@
 #import <CoreLocation/CoreLocation.h>
 #import "YHPostalFinderViewController.h"
 #import "YHStoreCell.h"
-#import "YHStoreDetailsTableViewController.h"
+#import "YHStoreDetailsViewController.h"
+#import "YHSideBarTableViewController.h"
 
 
 
-@interface YHStoreViewTableViewController : UITableViewController <CLLocationManagerDelegate,UIGestureRecognizerDelegate, YHPostalViewControllerDelegate>
+@interface YHStoreViewTableViewController : UITableViewController <CLLocationManagerDelegate,UIGestureRecognizerDelegate, YHPostalViewControllerDelegate, YHStoreDetailsViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
 @property (nonatomic, strong) CLLocationManager *locationManager;

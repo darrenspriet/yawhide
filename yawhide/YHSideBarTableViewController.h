@@ -10,9 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "YHMenuCell.h"
 #import "YHStoreViewTableViewController.h"
-#import "YHSavingsTableViewController.h"
-#import "YHStoreDetailsTableViewController.h"
-#import "YHPercentTableViewController.h"
 
 
 

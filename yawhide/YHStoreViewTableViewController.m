@@ -51,13 +51,8 @@
     
 }
 
+
 -(void)viewWillAppear:(BOOL)animated{
-    [self.revealViewController setRightViewController:nil];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    //sets it to the initialViewController on that storyboard
-    YHSideBarTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"sideBarView" ];
-    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
-    [self.revealViewController setRearViewController:nav];
 
 }
 
@@ -225,7 +220,17 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
     [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
+    YHStoreDetailsViewController *viewController = segue.destinationViewController;
+    [viewController setDelegate:self];
 
+}
+-(void)addLeftController{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    //sets it to the initialViewController on that storyboard
+    YHSideBarTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"sideBarView" ];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
+    [self.revealViewController setRearViewController:nav];
+    
 }
 
 

@@ -23,23 +23,23 @@
     return self;
 }
 -(void)viewWillAppear:(BOOL)animated{
-    NSLog(@"view will appear");
+
+}
+
+- (void)viewDidLoad{
+    [super viewDidLoad];
     if ([[[YHDataManager sharedData] menuArray]count]!=0) {
         [self setMenuArray :[[NSMutableArray alloc]init]];
         [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
         [self.tableView reloadData];
-
+        
     }
     else{
         [[YHDataManager sharedData]setSideBarCells:0];
         [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
         [self.tableView reloadData];
-
+        
     }
-}
-
-- (void)viewDidLoad{
-    [super viewDidLoad];
     
 }
 
@@ -96,46 +96,6 @@
         if (![frontNavigationController.topViewController isKindOfClass:[YHStoreViewTableViewController class]] ){
             YHStoreViewTableViewController* storeController = segue.destinationViewController;
             UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
-            [revealController setFrontViewController:navigation animated:YES];
-        }
-        else{
-            [revealController revealToggle:self];
-            
-        }
-    }
-    else if ([cell.textLabel.text isEqualToString:@"Regular Flyer"] ) {
-        if (![frontNavigationController.topViewController isKindOfClass:[YHStoreDetailsTableViewController class]] ){
-            YHStoreDetailsTableViewController* storeController = segue.destinationViewController;
-            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]];
-            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
-            [storeController setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
-            [revealController setFrontViewController:navigation animated:YES];
-        }
-        else{
-            [revealController revealToggle:self];
-            
-        }
-    }
-    else if ([cell.textLabel.text isEqualToString:@"Sort By Savings"] ) {
-        if (![frontNavigationController.topViewController isKindOfClass:[YHSavingsTableViewController class]] ){
-            YHSavingsTableViewController* storeController = segue.destinationViewController;
-            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]];
-            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
-            [storeController setTitle:[NSString stringWithFormat:@"%@ - Best Savings",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
-            [revealController setFrontViewController:navigation animated:YES];
-        }
-        else{
-            [revealController revealToggle:self];
-            
-        }
-    }
-    else if ([cell.textLabel.text isEqualToString:@"Sort By Percent"] ) {
-        if (![frontNavigationController.topViewController isKindOfClass:[YHPercentTableViewController class]] ){
-            YHPercentTableViewController *storeController = segue.destinationViewController;
-            [storeController setStoreDetailsArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]];
-            NSLog(@"what is the object%@", [[YHDataManager sharedData] storeDictionary]);
-            UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:storeController];
-            [storeController setTitle:[NSString stringWithFormat:@"%@ - Best Percentage",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
             [revealController setFrontViewController:navigation animated:YES];
         }
         else{
