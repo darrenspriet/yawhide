@@ -1,13 +1,5 @@
 package com.yawhide.yawhide;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.JSONArray;
@@ -15,6 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -26,19 +21,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.yawhide.yawhide.JSONParser;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import com.koushikdutta.async.http.AsyncHttpClient;
-import com.koushikdutta.async.http.AsyncHttpResponse;
-import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.ScrollView;
 
 public class Home extends Activity {
     ListView list;
@@ -49,10 +31,9 @@ public class Home extends Activity {
     ArrayList<HashMap<String, String>> oslist = new ArrayList<HashMap<String, String>>();
     
     //JSON Node Names
-    private static final String TAG_OS = "storeLocation";
-    private static final String TAG_VER = "urlNumber";
-    private static final String TAG_NAME = "city";
-    private static final String TAG_API = "postalCode";
+    private static final String TAG_STORENAME = "storeName";
+    private static final String TAG_CITY = "city";
+    private static final String TAG_POSTALCODE = "postalCode";
     JSONArray android = null;
     
     Button btnShowLocation;
@@ -72,7 +53,14 @@ public class Home extends Activity {
         Btngetdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 new JSONParse().execute();
+            	ConnectivityManager cm = (ConnectivityManager) (Home.this).getSystemService(Context.CONNECTIVITY_SERVICE);
+            	NetworkInfo info = cm.getActiveNetworkInfo();
+            	if(info != null && info.isConnected()){
+            		new JSONParse().execute();
+            	}
+            	else{
+            		Toast.makeText(Home.this, "Please connect to wifi or turn data on", Toast.LENGTH_SHORT).show();
+            	}
             }
         });
         
@@ -144,19 +132,19 @@ public class Home extends Activity {
                     for(int i = 0; i < android.length(); i++){
                     JSONObject c = android.getJSONObject(i);
                     // Storing  JSON item in a Variable
-                    String ver = c.getString(TAG_VER);
-                    String name = c.getString(TAG_NAME);
-                    String api = c.getString(TAG_API);
+                    String ver = "Sobeys - " + c.getString(TAG_STORENAME);
+                    String name = c.getString(TAG_CITY);
+                    String api = c.getString(TAG_POSTALCODE);
                     // Adding value HashMap key => value
                     HashMap<String, String> map = new HashMap<String, String>();
-                    map.put(TAG_VER, ver);
-                    map.put(TAG_NAME, name);
-                    map.put(TAG_API, api);
+                    map.put(TAG_STORENAME, ver);
+                    map.put(TAG_CITY, name);
+                    map.put(TAG_POSTALCODE, api);
                     oslist.add(map);
                     list=(ListView)findViewById(R.id.list);
                     ListAdapter adapter = new SimpleAdapter(Home.this, oslist,
                             R.layout.list_v,
-                            new String[] { TAG_VER,TAG_NAME, TAG_API }, new int[] {
+                            new String[] { TAG_STORENAME,TAG_CITY, TAG_POSTALCODE }, new int[] {
                                     R.id.vers,R.id.name, R.id.api});
                     list.setAdapter(adapter);
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
