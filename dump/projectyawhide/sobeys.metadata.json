@@ -1,1 +1,1 @@
-{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "projectyawhide.sobeys", "name" : "_id_" } ] }
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "projectyawhide.sobeys", "name" : "_id_" }, { "v" : 1, "key" : { "urlNumber" : 1 }, "unique" : true, "ns" : "projectyawhide.sobeys", "name" : "urlNumber_1", "background" : true, "safe" : null }, { "v" : 1, "key" : { "location" : "2d" }, "ns" : "projectyawhide.sobeys", "name" : "location_2d", "background" : true, "safe" : null } ] }
