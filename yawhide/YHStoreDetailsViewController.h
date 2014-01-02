@@ -13,9 +13,11 @@
 #import "YHStoreDetailCell.h"
 #import "YHSideBarTableViewController.h"
 #import "YHCategoryTableViewController.h"
+#import "YHProductViewController.h"
 
 
-@interface YHStoreDetailsViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, YHCategoryTableViewControllerDelegate>
+
+@interface YHStoreDetailsViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, YHCategoryTableViewControllerDelegate, YHProductViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
 @property (nonatomic, weak) id<YHStoreDetailsViewControllerDelegate> delegate;

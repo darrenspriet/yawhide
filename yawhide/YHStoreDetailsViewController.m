@@ -29,20 +29,18 @@
     [self.revealButtonItem setTarget: self.revealViewController];
     [self.revealButtonItem setAction: @selector( rightRevealToggle: )];
 
-
-
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
     YHCategoryTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"categoryTableView" ];
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
     [viewController setDelegate:self];
+    [self.revealViewController setRightViewController:nav];
 
     
     [self.revealViewController setRearViewController:nil];
     [self setTitle:[NSString stringWithFormat:@"%@ - Flyer",[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]]];
     [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
-    [self.revealViewController setRightViewController:nav];
+ 
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -93,6 +91,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"what is the store details %@", [self.storeDetailsArray objectAtIndex:indexPath.row]);
     static NSString *CellIdentifier = @"Store Detail Cell";
     YHStoreDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     switch ([self.segment selectedSegmentIndex]) {
@@ -149,7 +148,7 @@
             if (cell == nil){
                 cell = [[YHStoreDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
-            //    NSLog(@"what is the array %@", self.storeDetailsArray);
+                NSLog(@"what is the array %@", [self.storeDetailsArray objectAtIndex:indexPath.row]);
             [cell.itemName setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"item"]];
             [cell.price setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"price"]];
             
@@ -175,6 +174,12 @@
     return cell;
 }
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    NSInteger row = [[self tableview].indexPathForSelectedRow row];
+
+    YHProductViewController *productView = segue.destinationViewController;
+    [productView setDelegate:self];
+    [productView setProductDictionary: [self.storeDetailsArray objectAtIndex:row]];
+    
     
     NSLog(@"this is happeing");
 }
@@ -213,6 +218,15 @@
 }
 -(void)enableControls{
     [self.navigationController.interactivePopGestureRecognizer setEnabled:YES];
+    
+}
+-(void)addRightController{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    //sets it to the initialViewController on that storyboard
+    YHCategoryTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"categoryTableView" ];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
+    [viewController setDelegate:self];
+    [self.revealViewController setRightViewController:nav];
     
 }
 @end

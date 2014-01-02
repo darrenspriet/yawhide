@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E005DDF91874D74300399345 /* YHProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DDF81874D74300399345 /* YHProductViewController.m */; };
 		E01846EE1870C69B00CE7816 /* Categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E01846EC1870C69B00CE7816 /* Categories@2x.png */; };
 		E01846EF1870C69B00CE7816 /* Categories.png in Resources */ = {isa = PBXBuildFile; fileRef = E01846ED1870C69B00CE7816 /* Categories.png */; };
 		E01846F21870C93700CE7816 /* YHStoreDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E01846F11870C93700CE7816 /* YHStoreDetailsViewController.m */; };
@@ -51,6 +52,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E005DDF71874D74300399345 /* YHProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHProductViewController.h; sourceTree = "<group>"; };
+		E005DDF81874D74300399345 /* YHProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHProductViewController.m; sourceTree = "<group>"; };
 		E01846EC1870C69B00CE7816 /* Categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Categories@2x.png"; sourceTree = "<group>"; };
 		E01846ED1870C69B00CE7816 /* Categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Categories.png; sourceTree = "<group>"; };
 		E01846F01870C93700CE7816 /* YHStoreDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailsViewController.h; sourceTree = "<group>"; };
@@ -174,6 +177,8 @@
 				E01846F11870C93700CE7816 /* YHStoreDetailsViewController.m */,
 				E03FF033186E14850051C1A0 /* YHStoreDetailCell.h */,
 				E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */,
+				E005DDF71874D74300399345 /* YHProductViewController.h */,
+				E005DDF81874D74300399345 /* YHProductViewController.m */,
 			);
 			name = "Store Details";
 			sourceTree = "<group>";
@@ -403,6 +408,7 @@
 				E090456A1867C31600FA81B4 /* SWRevealViewController.m in Sources */,
 				E0FF765F186E0C11000F656A /* YHStoreCell.m in Sources */,
 				E01846F21870C93700CE7816 /* YHStoreDetailsViewController.m in Sources */,
+				E005DDF91874D74300399345 /* YHProductViewController.m in Sources */,
 				E0FE459B18722C8F009A9780 /* YHRightCategoryCell.m in Sources */,
 				E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */,
 			);
