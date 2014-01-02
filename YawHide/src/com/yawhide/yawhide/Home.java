@@ -56,7 +56,26 @@ public class Home extends Activity {
             	ConnectivityManager cm = (ConnectivityManager) (Home.this).getSystemService(Context.CONNECTIVITY_SERVICE);
             	NetworkInfo info = cm.getActiveNetworkInfo();
             	if(info != null && info.isConnected()){
-            		new JSONParse().execute();
+            		gps = new GPSTracker(Home.this);
+
+        			// check if GPS enabled
+        			if (gps.canGetLocation()) {
+
+        				latitude = gps.getLatitude();
+        				longitude = gps.getLongitude();
+        				Toast.makeText(
+        						getApplicationContext(),
+        						"Your Location is - \nLat: " + latitude
+        						+ "\nLong: " + longitude, 5000).show();
+        					
+        				    // Callback is invoked with any exceptions/errors, and the result, if available.
+        				new JSONParse().execute();
+        			} else {
+        				// can't get location
+        				// GPS or Network is not enabled
+        				// Ask user to enable GPS/network in settings
+        				gps.showSettingsAlert();
+        			}
             	}
             	else{
             		Toast.makeText(Home.this, "Please connect to wifi or turn data on", Toast.LENGTH_SHORT).show();
@@ -115,7 +134,7 @@ public class Home extends Activity {
             System.out.println(latitude + " " + longitude + " test");
             String lat = String.valueOf(latitude);
             String lon = String.valueOf(longitude);
-            String url = "http://192.168.1.100:3000/getNearestStores/" + lat +"/"+ lon +"/20";
+            String url = "http://192.168.1.103:3000/getNearestStores/" + lat +"/"+ lon +"/20";
             System.out.println(url);
             JSONArray json = jParser.getJSONFromUrl(url);
             //System.out.println(json);
@@ -127,7 +146,7 @@ public class Home extends Activity {
              try {
                     // Getting JSON Array from URL
             	
-            	//System.out.println(json);
+            	System.out.println(json);
             	android = json;
                     for(int i = 0; i < android.length(); i++){
                     JSONObject c = android.getJSONObject(i);

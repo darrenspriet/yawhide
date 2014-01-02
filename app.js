@@ -557,7 +557,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 		}
 		else{
 			var arr = [];
-			for (var i = flyer.length - 1; i >= 0; i--) {
+			for (var i = 0; i < flyer.length; i++) {
 				var ob = {};
 				ob.storeName = flyer[i].storeName;
 				ob.storeLocation = flyer[i].storeLocation;
@@ -666,7 +666,7 @@ app.get('/deal', function (req, res){
 	res.end();
 });
 
-http.createServer(app).listen(3000, '192.168.1.100', function () {
+http.createServer(app).listen(3000, '192.168.1.103', function () {
 	console.log("Express server listening on port " + app.get('port'));
 });
 
