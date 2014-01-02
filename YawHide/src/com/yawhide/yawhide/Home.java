@@ -83,35 +83,6 @@ public class Home extends Activity {
             }
         });
         
-        btnShowLocation = (Button) findViewById(R.id.showLoc);
-
-    	// show location button click event
-    	btnShowLocation.setOnClickListener(new View.OnClickListener() {
-
-    		@Override
-    		public void onClick(View arg0) {
-    			// create class object
-    			gps = new GPSTracker(Home.this);
-
-    			// check if GPS enabled
-    			if (gps.canGetLocation()) {
-
-    				latitude = gps.getLatitude();
-    				longitude = gps.getLongitude();
-    				Toast.makeText(
-    						getApplicationContext(),
-    						"Your Location is - \nLat: " + latitude
-    						+ "\nLong: " + longitude, 5000).show();
-    					
-    				    // Callback is invoked with any exceptions/errors, and the result, if available.
-    			} else {
-    				// can't get location
-    				// GPS or Network is not enabled
-    				// Ask user to enable GPS/network in settings
-    				gps.showSettingsAlert();
-    			}
-    		}
-    	});
     }
     private class JSONParse extends AsyncTask<String, String, JSONArray> {
          private ProgressDialog pDialog;
@@ -146,10 +117,10 @@ public class Home extends Activity {
              try {
                     // Getting JSON Array from URL
             	
-            	System.out.println(json);
+            	//System.out.println(json);
             	android = json;
-                    for(int i = 0; i < android.length(); i++){
-                    JSONObject c = android.getJSONObject(i);
+            	for(int i = 0; i < android.length(); i++){
+            		JSONObject c = android.getJSONObject(i);
                     // Storing  JSON item in a Variable
                     String ver = "Sobeys - " + c.getString(TAG_STORENAME);
                     String name = c.getString(TAG_CITY);
@@ -173,7 +144,7 @@ public class Home extends Activity {
                             Toast.makeText(Home.this, "You Clicked at "+oslist.get(+position).get("name"), Toast.LENGTH_SHORT).show();
                         }
                     });
-                    }
+            	}
             } catch (JSONException e) {
                 e.printStackTrace();
             }

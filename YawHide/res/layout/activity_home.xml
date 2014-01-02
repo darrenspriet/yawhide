@@ -21,13 +21,5 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="26dp"
         android:text="Get Data" />
-
-    <Button
-        android:id="@+id/showLoc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/list"
-        android:layout_below="@+id/list"
-        android:text="Show Location" />
     
 </RelativeLayout>
