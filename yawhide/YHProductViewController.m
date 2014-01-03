@@ -36,9 +36,9 @@
     [self.itemPercentage setText:[NSString stringWithFormat:@"%.0f%@",percent, @"%OFF"]];
     [self.itemDescription setText:[self.productDictionary objectForKey:@"description"]];
 
-    NSString *imageURL=@"https://s3.amazonaws.com/sobeys-web-production/flyer/products/images/000/158/008/original/SOB_PR064B_139_UF_Jan1_Page2_img25.jpg";
+    //NSString *imageURL=@"https://s3.amazonaws.com/sobeys-web-production/flyer/products/images/000/158/008/original/SOB_PR064B_139_UF_Jan1_Page2_img25.jpg";
 
-    //    NSString *imageURL=[self.productDictionary objectForKey:@"url"];
+        NSString *imageURL=[self.productDictionary objectForKey:@"url"];
 
     
     //Starts a dispatch to get the image and then sets it to the cell
