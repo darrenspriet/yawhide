@@ -8,22 +8,17 @@
 
 
 #import <UIKit/UIKit.h>
-#import <CoreLocation/CoreLocation.h>
-#import "YHPostalFinderViewController.h"
 #import "YHStoreCell.h"
 #import "YHStoreDetailsViewController.h"
 #import "YHSideBarTableViewController.h"
 
 
 
-@interface YHStoreViewTableViewController : UITableViewController <CLLocationManagerDelegate,UIGestureRecognizerDelegate, YHPostalViewControllerDelegate>
+@interface YHStoreViewTableViewController : UITableViewController <UIGestureRecognizerDelegate>
 
 //The reveal Button for the Left Side BAr
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
-//The Location Manager so we can get the users location
-@property (nonatomic, strong) CLLocationManager *locationManager;
-//The Large Activitiy Indicator when the stores are loading
-@property (strong, nonatomic) UIActivityIndicatorView * activityIndicator;
+
 
 
 @end

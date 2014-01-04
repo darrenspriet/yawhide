@@ -28,6 +28,18 @@
     [super viewDidLoad];
     [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
     [self.tableView reloadData];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    //sets it to the initialViewController on that storyboard
+    YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
+    [viewController setDelegate:self];
+    self.postalNavigator = [[UINavigationController alloc]initWithRootViewController:viewController];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismissModalView)];
+    [viewController.navigationItem setLeftBarButtonItem:cancelButton];
+    [self.postalNavigator.navigationBar setBarStyle:UIBarStyleDefault];
+    [self.postalNavigator setModalPresentationStyle:UIModalPresentationFullScreen];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning{
@@ -88,7 +100,9 @@
 
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude{
     
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
+
     
     float distance = 50;
     NSData* data = [NSData dataWithContentsOfURL:
@@ -130,11 +144,7 @@
             NSLog(@"loaded stores");
         }
     }
-    SWRevealViewController* revealController = self.revealViewController;
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    //sets it to the initialViewController on that storyboard
-    UINavigationController *frontViewController = [storyboard instantiateViewControllerWithIdentifier:@"frontnavigation" ];
-    [revealController setFrontViewController:frontViewController animated:YES];
+
     
 }
 
@@ -144,23 +154,22 @@
     
     //This finds the cell of Change Location and brings up the Postal Finder View Controller
     if ([cell.textLabel.text isEqualToString:@"Change Location"] ) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-        //sets it to the initialViewController on that storyboard
-        YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
-        [viewController setDelegate:self];
-        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
-        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismissModalView)];
-        [viewController.navigationItem setLeftBarButtonItem:cancelButton];
-        [nav.navigationBar setBarStyle:UIBarStyleDefault];
-        [nav setModalPresentationStyle:UIModalPresentationFullScreen];
-        [self presentViewController:nav animated:YES completion:NULL];
+
+        [self presentViewController:self.postalNavigator animated:YES completion:^{
+            [self.revealViewController revealToggle:self];
+
+        }];
+
         
     }
 }
 
 //This is to dismiss the Modal View
 -(void)dismissModalView{
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.revealViewController revealToggle:self];
+    [self dismissViewControllerAnimated:YES completion:^{
+
+    }];
 }
 
 
