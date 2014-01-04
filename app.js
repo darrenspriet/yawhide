@@ -772,6 +772,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 				ob.currentInterval = flyer[i].currentInterval;
 				ob.currFlyerDate = flyer[i].currFlyerDate;
 				ob.regularFlyer = flyer[i].currFlyer;
+				ob.categories = flyer[i].categories;
 				/** here i have to give sortBestPercent a clone of the currFlyer or else
 						sort will just mutate the original flyer which isn't good */
 				sortBestPercent(ce.clone(flyer[i].currFlyer), function (cb){
