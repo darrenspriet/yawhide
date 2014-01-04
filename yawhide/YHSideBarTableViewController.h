@@ -11,13 +11,9 @@
 #import "YHMenuCell.h"
 #import "YHStoreViewTableViewController.h"
 
-
-
-
-
 @interface YHSideBarTableViewController : UITableViewController <YHPostalViewControllerDelegate>
+
+//Sets up the Array for the SideBar itself
 @property (nonatomic, strong) NSMutableArray *menuArray;
-
-
 
 @end

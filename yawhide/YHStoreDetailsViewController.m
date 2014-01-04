@@ -33,7 +33,6 @@
     //sets it to the initialViewController on that storyboard
     YHCategoryTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"categoryTableView" ];
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
-    [viewController setDelegate:self];
     [self.revealViewController setRightViewController:nav];
 
     
@@ -41,12 +40,6 @@
     [self setTitle:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]];
     [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
  
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 
@@ -58,17 +51,13 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"view store detail will disapear");
+    NSLog(@"STORE DETAILS View Will Disappear");
     [self.revealViewController setRightViewController:nil];
-    [self.delegate addLeftController];
 }
--(void)viewWillAppear:(BOOL)animated{
-    NSLog(@"view  store detail will apear");
-    
-}
+
 -(void)viewDidAppear:(BOOL)animated{
-    [self disableControls];
-    NSLog(@"view store detail did appear");
+    [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
+    NSLog(@"STORE DETAILS View Did Appear");
 }
 
 //Creates a invisible footer to get rid of extra cells created
@@ -91,7 +80,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"what is the store details %@", [self.storeDetailsArray objectAtIndex:indexPath.row]);
+//    NSLog(@"what is the store details %@", [self.storeDetailsArray objectAtIndex:indexPath.row]);
     static NSString *CellIdentifier = @"Store Detail Cell";
     YHStoreDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     switch ([self.segment selectedSegmentIndex]) {
@@ -101,7 +90,6 @@
             if (cell == nil){
                 cell = [[YHStoreDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
-            //    NSLog(@"what is the array %@", self.storeDetailsArray);
             [cell.itemName setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"item"]];
             [cell.price setText:[NSString stringWithFormat:@"Save $%@",[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"bestSav"]]];
             
@@ -148,7 +136,6 @@
             if (cell == nil){
                 cell = [[YHStoreDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
-//                NSLog(@"what is the array %@", [self.storeDetailsArray objectAtIndex:indexPath.row]);
             [cell.itemName setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"item"]];
             [cell.price setText:[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"price"]];
             
@@ -179,6 +166,8 @@
     YHProductViewController *productView = segue.destinationViewController;
     [productView setDelegate:self];
     [productView setProductDictionary: [self.storeDetailsArray objectAtIndex:row]];
+    [self.revealViewController setRearViewController:nil];
+
     
     
     NSLog(@"this is happeing");
@@ -212,20 +201,12 @@
     }
 }
 
-- (void)disableControls{
-    [self.navigationController.interactivePopGestureRecognizer setEnabled:NO];
-    
-}
--(void)enableControls{
-    [self.navigationController.interactivePopGestureRecognizer setEnabled:YES];
-    
-}
+
 -(void)addRightController{
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
     YHCategoryTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"categoryTableView" ];
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
-    [viewController setDelegate:self];
     [self.revealViewController setRightViewController:nav];
     
 }

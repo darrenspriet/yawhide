@@ -17,9 +17,4 @@
 @property (nonatomic, strong) NSMutableDictionary *storeDictionary;
 @property (nonatomic, strong) NSMutableArray *menuArray;
 
-
--(void)setSideBarCells:(int)choice;
-
-
-
 @end

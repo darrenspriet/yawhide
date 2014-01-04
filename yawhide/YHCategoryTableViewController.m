@@ -34,18 +34,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
--(void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"view will disapear");
-    [self.delegate enableControls];
-}
--(void)viewWillAppear:(BOOL)animated{
-    NSLog(@"view will apear");
 
-    [self.delegate disableControls];
-}
--(void)viewDidAppear:(BOOL)animated{
-    NSLog(@"view did appear");
-}
 
 - (void)didReceiveMemoryWarning
 {

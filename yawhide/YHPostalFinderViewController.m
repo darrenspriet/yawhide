@@ -104,12 +104,9 @@
 -(void)checkPostalCodeAndSubmit{
     if ([self checkPostalCode:self.postalCode.text]==1) {
         [self.largeActivityIndicator startAnimating];
-        NSLog(@"postal code is good");
         CLGeocoder *geocoder = [[CLGeocoder alloc] init];
         [geocoder geocodeAddressString:self.postalCode.text completionHandler:^(NSArray *placemarks, NSError *error) {
             CLPlacemark *placemark = [placemarks objectAtIndex:0];
-            NSLog(@"latitude %f",placemark.location.coordinate.latitude);
-            NSLog(@"longitude %f",placemark.location.coordinate.longitude);
             
             [self.delegate didDismissPresentedViewControllerWithLatitude:placemark.location.coordinate.latitude andLongitude:placemark.location.coordinate.longitude];
             [self.largeActivityIndicator stopAnimating];
@@ -146,9 +143,11 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     [self.locationManager stopUpdatingLocation];
     
+    float distance = 50;
+    
     NSLog(@"new location is%@", newLocation);
     NSData* data = [NSData dataWithContentsOfURL:
-                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
+                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/%f",newLocation.coordinate.latitude,newLocation.coordinate.longitude, distance]]];
     
     if (data==nil) {
         NSLog(@"got no data");

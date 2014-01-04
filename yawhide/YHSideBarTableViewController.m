@@ -22,29 +22,15 @@
     }
     return self;
 }
--(void)viewWillAppear:(BOOL)animated{
 
-}
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    if ([[[YHDataManager sharedData] menuArray]count]!=0) {
-        [self setMenuArray :[[NSMutableArray alloc]init]];
-        [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
-        [self.tableView reloadData];
-        
-    }
-    else{
-        [[YHDataManager sharedData]setSideBarCells:0];
-        [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
-        [self.tableView reloadData];
-        
-    }
-    
+    [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
+    [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -57,20 +43,17 @@
     return view;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     // Return the number of sections.
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     // Return the number of rows in the section.
     return [self.menuArray count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSString * CellIdentifier = [self.menuArray objectAtIndex:indexPath.row];
     
@@ -86,12 +69,10 @@
 - (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) sender{
     
     SWRevealViewController* revealController = self.revealViewController;
-    UINavigationController *frontNavigationController = (id)revealController.frontViewController;  // <-- we know it is a NavigationController
+    UINavigationController *frontNavigationController = (id)revealController.frontViewController;
     UITableViewCell *cell = sender;
-    NSLog(@"what is the front navigation controller %@", frontNavigationController.topViewController);
-    NSLog(@"what is the text %@", cell.textLabel.text);
     
-    
+    //We know what to do if the cell is Stores, and it reveals and shows
     if ([cell.textLabel.text isEqualToString:@"Stores"] ) {
         if (![frontNavigationController.topViewController isKindOfClass:[YHStoreViewTableViewController class]] ){
             YHStoreViewTableViewController* storeController = segue.destinationViewController;
@@ -103,15 +84,26 @@
             
         }
     }
-
 }
+
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude{
     
     [self dismissViewControllerAnimated:YES completion:NULL];
+    
+    float distance = 50;
     NSData* data = [NSData dataWithContentsOfURL:
-                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",latitude,longitude]]];
+                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/%f",latitude,longitude, distance]]];
+    
+    //If there is no data, then we show a Alert that says the Server is down
     if (data==nil) {
         NSLog(@"got no data");
+        UIAlertView *noData = [[UIAlertView alloc]
+                               initWithTitle:@"Sorry"
+                               message:@"Our Servers Must Be Down"
+                               delegate:nil
+                               cancelButtonTitle:@"OK"
+                               otherButtonTitles:nil];
+        [noData show];
     }else{
         
         NSError* error2;
@@ -120,9 +112,15 @@
                                                                    options:kNilOptions
                                                                      error:&error2];
         
-        
         if (error2) {
             NSLog(@"this is an error in calling the stores");
+            UIAlertView *noData = [[UIAlertView alloc]
+                                   initWithTitle:@"Sorry"
+                                   message:@"Our Servers Must Be Down"
+                                   delegate:nil
+                                   cancelButtonTitle:@"OK"
+                                   otherButtonTitles:nil];
+            [noData show];
         }
         else{
             [[[YHDataManager sharedData] storesArray] removeAllObjects];
@@ -139,10 +137,12 @@
     [revealController setFrontViewController:frontViewController animated:YES];
     
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
+    //This finds the cell of Change Location and brings up the Postal Finder View Controller
     if ([cell.textLabel.text isEqualToString:@"Change Location"] ) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         //sets it to the initialViewController on that storyboard
@@ -163,56 +163,5 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-/*
- #pragma mark - Navigation
- 
- // In a story board-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- 
- */
 
 @end

@@ -14,8 +14,7 @@
 
 @implementation YHStoreViewTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style{
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
@@ -23,9 +22,9 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
+    //Sets up the self.revealViewController with the gesture recogizor and the right bar as well
     [self.activityIndicator setHidden:YES];
     self.activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [self.activityIndicator setColor:[UIColor blackColor]];
@@ -37,47 +36,43 @@
     [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.revealViewController tapGestureRecognizer];
 
-    
+//Checks to see if there are no store if there isn't it starts trying to search the location else it reloads the TableView
     if ([[[YHDataManager sharedData] storesArray] count]==0) {
         [self setLocationManager:[[CLLocationManager alloc]init]];
         [self.locationManager setDelegate:self];
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [self.locationManager startUpdatingLocation];
-
     }
     else{
         [self.tableView reloadData];
     }
-    
 }
 
-
+//When the view appears it adds the LeftController also known as the RearViewController
 -(void)viewWillAppear:(BOOL)animated{
+    NSLog(@"view will appear store controller");
+    [self addLeftController];
 
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 
 #pragma mark - CLLocationManagerDelegate
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-//        NSLog(@"didFailWithError: %@", error);
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+        NSLog(@"Location Manager In Store View didFailWithError: %@", error);
 //        UIAlertView *errorAlert = [[UIAlertView alloc]
 //                                   initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 //        [errorAlert show];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-{
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    
     [self.locationManager stopUpdatingLocation];
     if ([[[YHDataManager sharedData] storesArray]count] ==0) {
-        
-        NSLog(@"new location is%@", newLocation);
         NSData* data = [NSData dataWithContentsOfURL:
                         [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
         
@@ -219,11 +214,30 @@
 #pragma mark - Prepare for Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
+
     [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
-    YHStoreDetailsViewController *viewController = segue.destinationViewController;
-    [viewController setDelegate:self];
+
 
 }
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
+    
+    NSInteger row = [[self tableView].indexPathForSelectedRow row];
+
+    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"regularFlyer"]!=0) {
+        return YES;
+    }
+    else{
+        UIAlertView *noFlyer = [[UIAlertView alloc] initWithTitle:@"No Flyer Available"
+                                                          message:@"Sorry this Location has No Flyer"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [noFlyer show];
+        return NO;
+    }
+}
+
+
 -(void)addLeftController{
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard

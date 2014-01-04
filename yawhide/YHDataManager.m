@@ -25,21 +25,11 @@
     [self setStoresArray:[[NSMutableArray alloc]init]];
     [self setMenuArray:[[NSMutableArray alloc]init]];
     [self setStoreDictionary:[[NSMutableDictionary alloc]init]];
+    [self.menuArray addObject:@"Stores"];
+    [self.menuArray addObject:@"Change Location"];
+    
     return self;
 
 }
-
--(void)setSideBarCells:(int)choice{
-    [self setMenuArray:[[NSMutableArray alloc]init]];
-    [self.menuArray removeAllObjects];
-    switch (choice) {
-        case 0:{
-            [self.menuArray addObject:@"Stores"];
-            [self.menuArray addObject:@"Change Location"];
-            break;
-        }
-    }
-}
-
 
 @end

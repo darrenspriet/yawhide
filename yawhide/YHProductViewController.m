@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     NSLog(@"what is the dictioary%@", self.productDictionary);
     
     [self.itemName setText:[self.productDictionary objectForKey:@"item"]];
@@ -52,8 +53,12 @@
 
 }
 -(void)viewWillDisappear:(BOOL)animated{
-    [self.revealViewController setRearViewController:nil];
     [self.delegate addRightController];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    NSLog(@"Product View View Will Appear");
+    [self.navigationController.interactivePopGestureRecognizer setEnabled:YES];
+
 }
 
 - (void)didReceiveMemoryWarning

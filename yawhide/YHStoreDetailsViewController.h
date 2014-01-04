@@ -5,9 +5,6 @@
 //  Created by Darren Spriet on 2013-12-29.
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
-@protocol YHStoreDetailsViewControllerDelegate <NSObject>
-- (void)addLeftController;
-@end
 
 #import <UIKit/UIKit.h>
 #import "YHStoreDetailCell.h"
@@ -17,10 +14,9 @@
 
 
 
-@interface YHStoreDetailsViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, YHCategoryTableViewControllerDelegate, YHProductViewControllerDelegate>
+@interface YHStoreDetailsViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, YHProductViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
-@property (nonatomic, weak) id<YHStoreDetailsViewControllerDelegate> delegate;
 
 @property (nonatomic, strong) NSMutableArray *storeDetailsArray;
 - (IBAction)segmentControlPressed:(UISegmentedControl *)sender;
