@@ -94,21 +94,15 @@ var getBest = function (ob, cb){
 		/** tests if sav doesn't have on 3 */
 		if(!test2.test(ob.sav)){
 			if(ob.sav === '' || !number.test(ob.sav)){
-				//console.log('sav is: ' + ob.sav + 'hahaha');
 				bestSav = 0;
 				bestPercent = 0;
 				extra = 'has 2/$5 but no savings'
 			}
 			else{
 				var tmp = getNumber2.exec(ob.sav)[0];
-				//tmp = tmp.replace('$', '');
-				//console.log(ob.price + " " + tmp);
-
 				var splitted = ob.price.split('/$');
-				
 				tmp = tmp / splitted[0];
 				bestSav = Math.round(tmp*100)/100;
-				//console.log(tmp);
 				bestPercent = Math.round(tmp / (tmp + (splitted[1] / splitted[0]))*100)/100;
 				extra = 'price has n for some price deal'
 			}
@@ -157,7 +151,6 @@ var getBest = function (ob, cb){
 			extra = 'has reg savings but no price';
 		}
 		else{
-			//console.log(ob.price + ", " + ob.sav);
 			var tmp = parseFloat(getNumber2.exec(ob.sav)[0])
 			, tmp2 = parseFloat(getNumber2.exec(ob.price)[0]);
 			bestSav = tmp;
@@ -167,43 +160,97 @@ var getBest = function (ob, cb){
 	}
 	cb(bestPercent, bestSav, extra);
 }
-app.get('/readLocalFlyers', function (req, res){
+
+app.get('/readLocalParts', function (req, res){
 	var latestFolder;
-	fs.readdir('./sobeys/', function (err, folders){
+	fs.readdir('./sobeysFlyerPart/', function (err, folders){
 		if (err) throw err;
 		/** always gets the last folder in ./sobeys/
 			because it sorts it by created date (or last mod prob)
 			*/
 		latestFolder = folders[folders.length -1];
-		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, folders2){
+		fs.readdir('./sobeysFlyerPart/' + latestFolder + '/', function (err2, folders2){
 			if (err2) throw err2;
 			console.log(latestFolder);
 			/** this is each store's flyer */
 			folders2.forEach(function (h){
-				fs.readdir('./sobeys/'+latestFolder + '/' + h + '/', function (err3, folders3){
+				fs.readdir('./sobeysFlyerPart/'+latestFolder + '/' + h + '/', function (err3, folders3){
 					if(err3)throw err3;
 					/** this is each flyer part */
-					var info = []
-					, flyerDate = '';
-					
-					//async.forEach(folders3, function (flyerPart, callback){ 
-//folders3.forEach(function (flyerPart){
-     				async.map(folders3
-     					, function (flyerPart, complete) {
+					var infoObject = {};
+					async.map(folders3, function (flyerPart, complete) {
+     					var info = [];
+     					fs.readFile('./sobeysFlyerPart/'+latestFolder + '/' + h + '/' + flyerPart, 'utf8', function (err4, data){
+     						if (err4) throw err4;
+							/** this is each 14 departments parts of a flyer 
 
-     					fs.readFile('./sobeys/'+latestFolder + '/' + h + '/' + flyerPart, 'utf8', function (err4, data){
+								bakery = 49
+								beverage = 56
+								boxedMeats = 65
+								candy = 62
+								dairy = 61
+								deli = 48
+								floral = 54
+								grocery = 51
+								household = 58
+								meat = 43
+								pet = 59
+								produce = 45
+								seafood = 44
+								spread = 57
+							*/
+							var name = '';
+							switch(flyerPart.split('.')[0]){
+								case '49':
+									name = 'bakery';
+									break;
+								case '56':
+									name = 'beverages';
+									break;
+								case '65':
+									name = 'boxedMeats';
+									break;
+								case '62':
+									name = 'candy';
+									break;
+								case '61':
+									name = 'dairy';
+									break;
+								case '48':
+									name = 'deli';
+									break;
+								case '54':
+									name = 'floral';
+									break;
+								case '51':
+									name = 'grocery';
+									break;
+								case '58':
+									name = 'household';
+									break;
+								case '43':
+									name = 'meat';
+									break;
+								case '59':
+									name = 'pet';
+									break;
+								case '45':
+									name = 'produce';
+									break;
+								case '44':
+									name = 'seafood';
+									break;
+								case '57':
+									name = 'spread';
+									break;
+							}
 
-							/** this is each 1 of 20 parts of a flyer */
-							if (err4) throw err4;
+
 							var $ = cheerio.load(data);
-
-							//var info = [];
-
 							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
 								console.log('no flyer at file: ' + flyerPart);
 							}
 							else {
-								//console.log(flyerPart);
 								$('.container .toggle-last .one-third .flyer-card .card-top').each(function (a, html){
 									var url = ''
 									, price = ''
@@ -255,17 +302,14 @@ app.get('/readLocalFlyers', function (req, res){
 																			, count = 0;
 																			for (var l = 0; l < savSplit.length; l++) {
 																				if(savSplit[l].indexOf('|') > -1){
-																					//console.log(savSplit[l]);
 																					tmp += '$0.' + savSplit[l].replace('|', '') + ' ';
 																					count++;
-																					//console.log(tmp2);
 																				}
 																				else if (!isNaN(savSplit[l]) && savSplit[l].indexOf('$') === -1 && count === 0){
 																					tmp += '$'+savSplit[l] + ' ';
 																					count++;
 																				}
 																				else if (savSplit[l].indexOf('/') > -1){
-																					//console.log(savSplit[l]);
 																					tmp += '$'+savSplit[l] + ' ';
 																				}
 																				else{
@@ -278,8 +322,6 @@ app.get('/readLocalFlyers', function (req, res){
 																			sav = sav.replace('lb ,ea', 'lb,ea');
 																			sav = sav.replace('lb, ea', 'lb,ea');
 																			sav = sav.replace('$$', '$');
-																			//sav = sav.replace('|', '$');
-																			//console.log('sav: ' + sav);
 																		}
 																	}
 																	else if (class3.attribs.class.indexOf('price-promos')) {
@@ -306,7 +348,194 @@ app.get('/readLocalFlyers', function (req, res){
 																				savings1 = class3.children[1].children[0].data;
 																			}
 																			var price = savings + savings1 + savings2;
-																			//console.log('price: ' + price);
+																		}
+																	}
+																}
+															};
+														}
+													}
+												};
+											}
+																						
+											/** gets the best savings from the price */
+											if(url !== '' && item !== ''){
+												var priceSav = {};
+												priceSav.price = price;
+												priceSav.sav = sav;
+												var listOfFrenchStores = ['34'];
+												if(listOfFrenchStores.indexOf(h) === -1){
+													getBest(priceSav, function (percent, sav2, extra){
+														//console.log(name);
+														var ob = {};
+														ob.item = item;
+														ob.price = price;
+														ob.savings = sav;
+														ob.url = url;
+														ob.description = desc;
+														ob.bestPercent = percent;
+														ob.bestSav = sav2;
+														ob.extra = extra;
+														info.push(ob);
+													});
+												}
+											}
+										}
+
+									};
+								});
+								
+							}
+							infoObject[name] = info;
+
+							complete(err4, data);
+						});
+						}
+						, function (err7, results){
+							Sobeys.addCategoryParts(h.split('.')[0], infoObject, function (err6){
+
+								if(err6) throw err6;
+								
+								if(h > 289)
+									console.log('done');
+								else{
+									console.log(h.split('.')[0])
+								}
+							});
+					});
+				});
+			});
+		});
+	});
+});
+
+app.get('/readLocalFlyers', function (req, res){
+	var latestFolder;
+	fs.readdir('./sobeys/', function (err, folders){
+		if (err) throw err;
+		/** always gets the last folder in ./sobeys/
+			because it sorts it by created date (or last mod prob)
+			*/
+		latestFolder = folders[folders.length -1];
+		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, folders2){
+			if (err2) throw err2;
+			console.log(latestFolder);
+			/** this is each store's flyer */
+			folders2.forEach(function (h){
+				fs.readdir('./sobeys/'+latestFolder + '/' + h + '/', function (err3, folders3){
+					if(err3)throw err3;
+					/** this is each flyer part */
+					var info = []
+					, flyerDate = '';
+					
+     				async.map(folders3
+     					, function (flyerPart, complete) {
+
+     					fs.readFile('./sobeys/'+latestFolder + '/' + h + '/' + flyerPart, 'utf8', function (err4, data){
+
+							/** this is each 1 of 20 parts of a flyer */
+							if (err4) throw err4;
+							var $ = cheerio.load(data);
+							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
+								console.log('no flyer at file: ' + flyerPart);
+							}
+							else {
+								$('.container .toggle-last .one-third .flyer-card .card-top').each(function (a, html){
+									var url = ''
+									, price = ''
+									, sav = ''
+									, desc = ''
+									, item = ''
+									, bestSav = ''
+									, bestPercent = ''
+									, savings = ''
+									, savings1 = ''
+									, savings2 = '';
+									for (var i = html.children.length - 1; i >= 0; i--) {
+
+										if(html.children[i].type === 'tag') {
+											var class1 = html.children[i];											
+											/** this finds url specifically from selecting a chain of classes */
+											if(class1.attribs.class === 'card-image'){
+												url = class1.attribs.style.split(' ')[1].substr(5);
+												url = url.substr(0, url.length -3);
+											}
+											else if (class1.attribs.class==='card-inset'){
+												for (var j = class1.children.length - 1; j >= 0; j--) {
+													var class2 = class1.children[j];
+													if(class2.type === 'tag'){
+														/** finds the desc */
+														if (class2.name === 'p'){
+															desc = class2.children[0].data;
+															desc = desc.replace(/&amp;/g, '&');
+															desc = desc.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"'");
+														}
+														/** finds the item name */
+														else if(class2.attribs.class.indexOf('h6') > -1){
+															item = class2.children[0].data;
+															item = item.replace(/&amp;/g, '&');
+															item = item.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"'");
+														}
+														/** finds the price and savings */
+														else if (class2.attribs.class.indexOf('price')>-1){
+															for (var k = class2.children.length - 1; k >= 0; k--) {
+																var class3 = class2.children[k];
+																if(class3.type === 'tag'){
+																	if(class3.attribs.class.indexOf('price-amount')){
+																		if(class3.children.length > 1 && class3.children[1].children.length > 0){
+																			sav = class3.children[1].children[0].data;
+																			sav = sav.replace(/&amp;/g, '&');
+																			sav = sav.replace(/[^a-zA-Z0-9+;():,\.$-\s*!%&\r\n\/]+/g,"|");
+																			var savSplit = sav.split(' ')
+																			, tmp = ''
+																			, count = 0;
+																			for (var l = 0; l < savSplit.length; l++) {
+																				if(savSplit[l].indexOf('|') > -1){
+																					tmp += '$0.' + savSplit[l].replace('|', '') + ' ';
+																					count++;
+																				}
+																				else if (!isNaN(savSplit[l]) && savSplit[l].indexOf('$') === -1 && count === 0){
+																					tmp += '$'+savSplit[l] + ' ';
+																					count++;
+																				}
+																				else if (savSplit[l].indexOf('/') > -1){
+																					tmp += '$'+savSplit[l] + ' ';
+																				}
+																				else{
+																					tmp += savSplit[l] + ' ';
+																				}
+																			};
+																			sav = tmp
+																			sav = sav.replace('100 g', '100g');
+																			sav = sav.replace(' /100g', '/100g');
+																			sav = sav.replace('lb ,ea', 'lb,ea');
+																			sav = sav.replace('lb, ea', 'lb,ea');
+																			sav = sav.replace('$$', '$');
+																		}
+																	}
+																	else if (class3.attribs.class.indexOf('price-promos')) {
+																		
+																		if(class3.children.length > 1){
+
+																			if(class3.children[1].children.length > 1){
+																				savings = '$' + class3.children[0].data+'.';
+																				savings1 = class3.children[1].children[0].data;
+																				savings2 = class3.children[1].children[1].children[0].data;
+																			}
+																			else if (class3.children[0].data.indexOf('%') > -1){
+																				savings = 'noPrice';
+																				savings1 = class3.children[0].data;
+																				savings2 = class3.children[1].children[0].data;
+																			}
+																			else if (class3.children[0].data.indexOf('/') === -1){
+																				savings = '$0' + class3.children[0].data;
+																				savings1 = class3.children[1].children[0].data;
+																			}
+																			else{
+																				savings = class3.children[0].data + '.';
+																				savings = savings.replace('/', '/$');
+																				savings1 = class3.children[1].children[0].data;
+																			}
+																			var price = savings + savings1 + savings2;
 																		}
 																	}
 																}
@@ -318,15 +547,12 @@ app.get('/readLocalFlyers', function (req, res){
 											if(flyerDate === ''){
 												flyerDate = $('.container .site-section .site-section-content .fancy-heading .h3-editorial').text();
 											}
-											//
 											
 											/** gets the best savings from the price */
-											//console.log('\n' + sav + " " + price);
 											if(url !== '' && item !== ''){
 												var priceSav = {};
 												priceSav.price = price;
 												priceSav.sav = sav;
-												//console.log(h);
 												var listOfFrenchStores = ['34'];
 												if(listOfFrenchStores.indexOf(h) === -1){
 													getBest(priceSav, function (percent, sav2, extra){
@@ -483,33 +709,10 @@ app.get('/makeStore', function (req, res){
 						});
 					});
 					var latLng = $('#map_location').text().split(', ');
-					//console.log('latLng is: ' + latLng);
 					var lng = latLng[0].substr(1);
 					var lat = latLng[1].substr(0,latLng[1].length -1);
-					//console.log(latLngOb);
-					/*
-					var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
-				    var sensor = false;
-				    var geoOb = {};
-				    //address = '525 Market St, Philadelphia, PA 19106';
-				    
-					geocoder.geocode(address, function(err, coords) {
-					    if (err) throw err;
-					    console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
-					    console.log(coords);
-					});
-				    console.log('geoOb');
-				    console.log(geoOb);*/
-					//console.log('storename: ' + storename);
-					//console.log('storenum: ' + storenum);
-					//console.log('storeloc: ' + storeloc);
-					//console.log('urlnum: ' + urlnum);
-					//console.log('city: ' + city);
-					//console.log('postal: ' + postal);
-					//console.log('hours: ');
 					if(isEmptyObject(hours))
 						hours.open = '24 hours';
-					//console.log(hours);
 					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
 						if(err) throw err;
 						console.log(z);
@@ -666,7 +869,7 @@ app.get('/deal', function (req, res){
 	res.end();
 });
 
-http.createServer(app).listen(3000, '192.168.1.113', function () {
+http.createServer(app).listen(3000, 'localhost', function () {
 	console.log("Express server listening on port " + app.get('port'));
 });
 

@@ -19,6 +19,22 @@ var SobeySchema = new db.Schema({
 	, location: {lat: Number, long: Number}
 	, currentInterval: String
 	, currFlyerDate: Date
+	, categories: {
+		bakery: []
+		, beverages: []
+		, boxedMeats: []
+		, candy: []
+		, dairy: []
+		, deli: []
+		, floral: []
+		, grocery: []
+		, household: []
+		, meat: []
+		, pet: []
+		, produce: []
+		, seafood: []
+		, spread: []
+	}
 	, currFlyer: [/*{
 		item: String
 		, price: String
@@ -169,6 +185,33 @@ var updateFlyerDateAndInterval = function (flyerdate, time, url, cb){
 			, currFlyerDate : time
 		}
 		, cb);
+}/*
+bakery = 49
+beverage = 56
+boxedMeats = 65
+candy = 62
+dairy = 61
+deli = 48
+floral = 54
+grocery = 51
+household = 58
+meat = 43
+pet = 59
+produce = 45
+seafood = 44
+spread = 57
+*/
+var addCategoryParts = function (urlnum, infoObject, cb){
+	//console.log('\n\n\n\n');
+	//console.log('infoObject is: ');
+	//console.log(infoObject);
+	
+	Sobey.findOneAndUpdate(
+		{urlNumber : urlnum}
+		, {
+			categories : infoObject
+		}
+		, cb);
 }
 
 module.exports.makeStore = makeStore;
@@ -180,3 +223,4 @@ module.exports.getStoreByUrlNum = getStoreByUrlNum;
 module.exports.getNearestStores = getNearestStores;
 module.exports.getAllStores = getAllStores;
 module.exports.updateFlyerDateAndInterval = updateFlyerDateAndInterval;
+module.exports.addCategoryParts = addCategoryParts;

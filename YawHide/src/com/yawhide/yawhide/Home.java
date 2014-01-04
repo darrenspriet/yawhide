@@ -105,7 +105,7 @@ public class Home extends Activity {
             System.out.println(latitude + " " + longitude + " test");
             String lat = String.valueOf(latitude);
             String lon = String.valueOf(longitude);
-            String url = "http://192.168.1.103:3000/getNearestStores/" + lat +"/"+ lon +"/20";
+            String url = "http://192.168.1.113:3000/getNearestStores/" + lat +"/"+ lon +"/20";
             System.out.println(url);
             JSONArray json = jParser.getJSONFromUrl(url);
             //System.out.println(json);
