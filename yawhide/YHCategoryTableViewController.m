@@ -27,7 +27,10 @@
 {
     [super viewDidLoad];
 
-    [self setCategoryArray:[NSMutableArray arrayWithObjects:@"All", @"Meats", @"Cheese", @"Vegetables", nil]];
+
+    [self setCategoryArray:[NSMutableArray arrayWithArray:[[[[[YHDataManager sharedData] storeDictionary] objectForKey:@"categories"]  allKeys]sortedArrayUsingSelector:@selector(compare:)]]];
+//    NSLog(@"category array is %@", self.categoryArray);
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -64,10 +67,19 @@
     if (cell == nil){
         cell = [[YHRightCategoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    if (indexPath.row==0) {
+        [cell.textLabel setText:@"All"];
+        
+        return cell;
+    }
+    else{
     //    NSLog(@"what is the array %@", self.storeDetailsArray);
-    [cell.textLabel setText:[self.categoryArray objectAtIndex:indexPath.row]];
+    NSString *capitalizedCategory = [[[[self.categoryArray objectAtIndex:indexPath.row-1] substringToIndex:1] uppercaseString] stringByAppendingString:[[self.categoryArray objectAtIndex:indexPath.row-1] substringFromIndex:1]];
+
+   [cell.textLabel setText:capitalizedCategory];
     
     return cell;
+    }
 }
 
 /*
