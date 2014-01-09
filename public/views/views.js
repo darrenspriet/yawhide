@@ -44,20 +44,9 @@ var NearestStoresView = Backbone.View.extend({
 				success: function(){
 					//console.log(nearestSobeysStores);
 					var storesArray = [];
-					localStorage.clear();
+					
 					for(var i=0;i<nearestSobeysStores.length;i++){
-						var storeObj = new Object({
-							"storeName" : nearestSobeysStores.models[i].attributes.flyer.storeName,
-							"urlNumber" : nearestSobeysStores.models[i].attributes.flyer.urlNumber
-						});
-						storesArray.push(storeObj);
-						var data = JSON.stringify( nearestSobeysStores.models[i].attributes.sortSavings)
-						, data2 = JSON.stringify( nearestSobeysStores.models[i].attributes.sortPercent)
-						, data3 = JSON.stringify( nearestSobeysStores.models[i].attributes.flyer.currFlyer)
-						, store = nearestSobeysStores.models[i].attributes.flyer.urlNumber;
-						localStorage.setItem('savings'+store, data);
-						localStorage.setItem('percent'+store, data2);
-						localStorage.setItem('flyer'+store, data3);
+						storesArray.push( nearestSobeysStores.models[i].attributes);
 					}
 					//console.log(storesArray);
 
@@ -113,25 +102,18 @@ var StoreInfoView = Backbone.View.extend({
 var ViewFlyerView = Backbone.View.extend({
 
 	render:function(id){
-		var localData = JSON.parse(localStorage.getItem('flyer'+id));
-/*
+
 		var store = new GetOneSobeyStore({id: id});
 		store.fetch({
 			success: function(){
-				//console.log(store.attributes);
+				console.log(store.attributes);
 				$.get('templates/flyer.html', function(incomingTemplate){
 					var template = Handlebars.compile(incomingTemplate);
-					$('#page_container').html(template({flyer:store.attributes.currFlyer})).trigger('create');
-				}); 
-				
+					$('#page_container').html(template({storeInfo:store.attributes})).trigger('create');
+				});
 				return this;
 			}
-		});*/
-		$.get('templates/flyer.html', function (incomingTemplate){
-			var template = Handlebars.compile(incomingTemplate);
-			$('#page_container').html(template({flyer: localData})).trigger('create');
-		}); 
+		});
 	}
-
 });
 

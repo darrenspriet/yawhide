@@ -759,7 +759,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
-			var arr = [];
+			/*var arr = [];
 			for (var i = 0; i < flyer.length; i++) {
 				var ob = {};
 				ob.storeName = flyer[i].storeName;
@@ -774,7 +774,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 				ob.regularFlyer = flyer[i].currFlyer;
 				ob.categories = flyer[i].categories;
 				/** here i have to give sortBestPercent a clone of the currFlyer or else
-						sort will just mutate the original flyer which isn't good */
+						sort will just mutate the original flyer which isn't good 
 				sortBestPercent(ce.clone(flyer[i].currFlyer), function (cb){
 					ob.bestPercentFlyer = cb;
 					sortBestSav(ce.clone(flyer[i].currFlyer), function (cb2){
@@ -787,10 +787,36 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 					
 				});
 
-			};
+			};*/
 			console.log('the flyers');
-			res.send(arr);
+			res.send(flyer);
 		}
+	});
+});
+
+app.get('/viewFlyer/:url', function (req, res){
+	Sobeys.getStoreByUrlNum(req.params.url, function (err, store){
+		var ob = {};
+		ob.storeName = store.storeName;
+		ob.storeLocation = store.storeLocation;
+		ob.urlNumber = store.urlNumber;
+		ob.city = store.city;
+		ob.postalCode = store.postalCode;
+		ob.storeHours = store.storeHours;
+		ob.location = store.location;
+		ob.currentInterval =store.currentInterval;
+		ob.currFlyerDate = store.currFlyerDate;
+		ob.regularFlyer = store.currFlyer;
+		ob.categories = store.categories;
+		/** here i have to give sortBestPercent a clone of the currFlyer or else
+		sort will just mutate the original flyer which isn't good */
+		sortBestPercent(ce.clone(store.currFlyer), function (cb){
+			ob.bestPercentFlyer = cb;
+			sortBestSav(ce.clone(store.currFlyer), function (cb2){
+				ob.bestSavFlyer = cb2;
+			});			
+		});
+		res.send(ob);
 	});
 });
 
@@ -808,24 +834,6 @@ app.get('/getAllStores', function (req, res){
 	});
 });
 
-app.get('/getBestDeals/:id', function (req, res){
-	Sobeys.getStoreByUrlNum(req.params.id, function (err, flyer){
-		if (err) res.send(500, 'could not get latest flyer by id');
-		var fly = flyer.currFlyer;
-		console.log(flyer);
-		var highestSaving = []
-		, bestDeals = []
-		, bestPercent = []
-		, arr1=[]
-		, arr2=[]
-		, arr3=[]
-		, arr4=[]
-		, arr5=[]
-		, arr6=[];
-		s.categories(fly, arr1, arr2, arr3, arr4, arr5, arr6);
-		//console.log(arr6);
-	});
-});
 
 app.get('/getSobeyFlyer/:id', function (req, res){
 	Sobeys.getStoreByUrlNum(req.params.id, function (err, store){

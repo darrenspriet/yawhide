@@ -26,7 +26,7 @@ var GetOneSobeyStore = Backbone.Model.extend({
         this.id = options.id;
     },
     url: function(){
-        return getURL('/getSobeyFlyer/') +this.id;
+        return getURL('/viewFlyer/') +this.id;
     }
 }); 
 
