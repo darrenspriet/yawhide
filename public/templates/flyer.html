@@ -1,61 +1,47 @@
 	<!-- Page content -->
 	
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			
-				<div class="navbar-header">
-					<div class="navbar-brand" >YawHide</div>
-				</div>
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-header">
+		<div class="navbar-brand" >YawHide</div>
+	</div>
+</div>
+<header>
+</header>
+<div class="row">
+	<div class="col-xs-3">
+		<div class="list-group">
+			<a href="#" class="list-group-item active">Regular Flyer</a>
+			<a href="#" class="list-group-item">Best Percentage Version</a>
+			<a href="#" class="list-group-item">Best Savings Version</a>
+			{{storeInfo.categories.boxedMeats}}
+			<a href="#" class="list-group-item"><span class="badge">{{storeInfo.categories.bakery.length}}</span>Bakery</a>
 			
 		</div>
-			<header>
-
-			</header>
-		<div class="row">
-			<div class="col-xs-3">
-
-			</div>
-			<div class="col-xs-9">
-				{{#storeInfo.regularFlyer}}
-				<div class="media list-group-item">
-					<a class="pull-left">
-						<img height="100" width="100" class="media-object img-item" src="{{url}}" alt="{{item}}"></img>
-					</a>
-					<div class="media-body">
-						<h4 class="media-heading">{{item}}</h4>
-						<div class="row">
-							<div class="list-group-item col-xs-4">
-								<h5>Price: </h5>{{price}} 
-							</div>
-							<div class="list-group-item col-xs-4">
-								<h5>Savings: </h5>{{savings}} 
-							</div>
-							<div class="list-group-item col-xs-4">
-								<h5>Best Percentage: </h5>{{bestPercent}}% 
-							</div>
-						</div>
-						<div><h5>Description: </h5>{{description}}
-						</div>
-						<div>
-						</div>
-						<div>
-						</div>
-						<div>
-						</div>
-						<div>
-						</div>
-						<div>
-						</div>
-						
-						
-						
+	</div>
+	<div class="col-xs-9">
+		{{#storeInfo.regularFlyer}}
+		<div class="media list-group-item">
+			<a class="pull-left">
+				<img height="100" width="100" class="media-object img-item" src="{{url}}" alt="{{item}}"></img>
+			</a>
+			<div class="media-body">
+				<h4 class="media-heading">{{item}}</h4>
+				<div class="row">
+					<div class="list-group-item col-xs-4">
+						<h5>Price: </h5>{{price}} 
+					</div>
+					<div class="list-group-item col-xs-4">
+						<h5>Savings: </h5>{{savings}} 
+					</div>
+					<div class="list-group-item col-xs-4">
+						<h5>Best Percentage: </h5>{{bestPercent}}% 
 					</div>
 				</div>
-				{{/storeInfo.regularFlyer}}
-									
-							
-						
-				
+				<div><h5>Description: </h5>{{description}}
+			</div>
 		</div>
+		{{/storeInfo.regularFlyer}}
+</div>
 		
 		
 			
