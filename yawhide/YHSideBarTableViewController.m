@@ -104,7 +104,7 @@
 
     
     float distance = 50;
-    NSMutableData* data = [NSMutableData dataWithContentsOfURL:
+    NSData* data = [NSData dataWithContentsOfURL:
                     [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/%f",latitude,longitude, distance]]];
     
     //If there is no data, then we show a Alert that says the Server is down
@@ -121,7 +121,7 @@
         
         NSError* error2;
         
-        NSMutableDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+        NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
                                                                    options:kNilOptions
                                                                      error:&error2];
         
@@ -137,10 +137,9 @@
         }
         else{
             [[[YHDataManager sharedData] storesArray] removeAllObjects];
-            for(NSMutableArray *array in dictionary){
+            for(NSArray *array in dictionary){
                 [[[YHDataManager sharedData] storesArray] addObject:array];
             }
-            [[YHDataManager sharedData] sortFlyerArrays];
 
             
             NSLog(@"loaded stores");

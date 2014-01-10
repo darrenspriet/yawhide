@@ -18,5 +18,4 @@
 @property (nonatomic, strong) NSMutableArray *menuArray;
 
 
--(void)sortFlyerArrays;
 @end
