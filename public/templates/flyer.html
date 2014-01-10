@@ -1,6 +1,6 @@
 	<!-- Page content -->
 	
-		<div class="navbar navbar-default navbar-fixed-top">
+		<div class="navbar navbar-inverse navbar-fixed-top">
 			
 				<div class="navbar-header">
 					<div class="navbar-brand" >YawHide</div>
@@ -22,11 +22,18 @@
 					</a>
 					<div class="media-body">
 						<h4 class="media-heading">{{item}}</h4>
-						<div><h4>Savings: </h4>{{savings}} 
+						<div class="row">
+							<div class="list-group-item col-xs-4">
+								<h5>Price: </h5>{{price}} 
+							</div>
+							<div class="list-group-item col-xs-4">
+								<h5>Savings: </h5>{{savings}} 
+							</div>
+							<div class="list-group-item col-xs-4">
+								<h5>Best Percentage: </h5>{{bestPercent}}% 
+							</div>
 						</div>
-						<div><h4>Percentage Savings: </h4>{{percent}} 
-						</div>
-						<div><h4>Description: </h4>{{description}}
+						<div><h5>Description: </h5>{{description}}
 						</div>
 						<div>
 						</div>
