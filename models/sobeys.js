@@ -214,6 +214,7 @@ var addCategoryParts = function (urlnum, infoObject, cb){
 		, cb);
 }
 
+
 module.exports.makeStore = makeStore;
 module.exports.updateCurrentIntervalById = updateCurrentIntervalById;
 module.exports.getStoreById = getStoreById;

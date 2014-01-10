@@ -3,6 +3,7 @@ var Router = Backbone.Router.extend({
 	routes:{
 		"":"index"
 		, "nearestStores":"nearestStores"
+		, "nearestStoresByPostal/:postalCode":"postalStores"
 		, "storeInfo/:id": "storeInfo"
 		, "viewFlyer/:id": "viewFlyer"
 		, "storeToLocal": "store"
@@ -22,6 +23,11 @@ app_router.on('route:index', function (){
 app_router.on('route:nearestStores', function (){
 	console.log("Router is taking you to nearestStores page");
 	nearestStores.render();
+});
+
+app_router.on('route:postalStores', function (postalCode){
+	console.log("Router is taking you to nearestStoresByPostal page");
+	postalStores.render(postalCode);
 });
 
 app_router.on('route:storeInfo', function (id){
