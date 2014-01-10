@@ -16,19 +16,23 @@ $.fn.serializeObject = function() {
 
 
 var IndexView = Backbone.View.extend({
-	el:' #page_container',
-	events: {
+	el:' #page_container'
+	, events: {
 		"click #findFlyers": "findFlyersPage"
-	},
-	render: function(){
-		$.get('templates/home.html', function(incomingTemplate){
+		, "click #usePostalCode": "findViaPostal"
+	}
+	, render: function(){
+		$.get('templates/home.html', function (incomingTemplate){
 			var template = Handlebars.compile(incomingTemplate);
 			$('#page_container').html(template()).trigger('create');
 		});
 		return this;
-	}, 
-	findFlyersPage: function(){
+	}
+	, findFlyersPage: function(){
 		app_router.navigate('#/nearestStores', {trigger: true});
+	}
+	, findViaPostal: function(){
+		app_router.navigate('#/nearestStoresByPostal/'+ $("#postal").val(), {trigger: true});
 	}
 });
 
@@ -70,8 +74,23 @@ var NearestStoresView = Backbone.View.extend({
 					console.log('there was an error');
 				}
 			});
+		});
+	}
 });
-}
+
+var PostalStoresView = Backbone.View.extend({
+	el:'#page_container'
+	, events:{
+
+	}
+	, render: function(postalCode){
+		var storeByPostal = new GetNearestByPostal({postal: postalCode, maxD:10});
+		storeByPostal.fetch({
+			success:function(){
+				console.log(nearestSobeysStores);
+			}
+		})
+	}
 });
 
 var StoreInfoView = Backbone.View.extend({

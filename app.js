@@ -794,6 +794,10 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 	});
 });
 
+app.get('/GetNearestByPostal/:postal/:maxD', function (req, res){
+	
+});
+
 app.get('/viewFlyer/:url', function (req, res){
 	Sobeys.getStoreByUrlNum(req.params.url, function (err, store){
 		var ob = {};

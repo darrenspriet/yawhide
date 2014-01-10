@@ -20,6 +20,15 @@ var GetNearestSobeys = Backbone.Collection.extend({
     }
 }); 
 
+var GetNearestByPostal = Backbone.Collection.extend({
+    initialize: function(options){
+        this.postal = options.postal;
+        this.maxD = options.maxD;
+    },
+    url: function(){
+        return getURL('/getNearestByPostal/') +this.postal+'/'+this.maxD;
+    }
+}); 
 
 var GetOneSobeyStore = Backbone.Model.extend({
     initialize: function(options){
