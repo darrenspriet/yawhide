@@ -46,7 +46,7 @@ var NearestStoresView = Backbone.View.extend({
 			//var nearestSobeysStores =  new GetOneSobeyFlyer();
 			nearestSobeysStores.fetch({
 				success: function(){
-					//console.log(nearestSobeysStores);
+					console.log(nearestSobeysStores);
 					var storesArray = [];
 					
 					for(var i=0;i<nearestSobeysStores.length;i++){
