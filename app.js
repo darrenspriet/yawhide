@@ -747,6 +747,23 @@ var sortBestSav = function (ob, cb){
 	cb(ob);
 }
 
+var addCategoriesToItem = function(categories, flyer, cb){
+	var catKeys = Object.keys(categories);
+	catKeys .splice(0, 1);
+	for (var i = catKeys.length - 1; i >= 0; i--) {
+		var foodObjectArray = categories[catKeys[i]];
+		for (var j = foodObjectArray.length - 1; j >= 0; j--){
+			var itemName = foodObjectArray[j].item;
+			for (var k = flyer.length - 1; k >= 0; k--) {
+				if(flyer[k].item ==itemName){
+					flyer[k].categories = catKeys[i];
+				}
+			};
+		};
+	};
+cb(flyer);
+}
+
 app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
     var elat = req.params.elat;
     var elong = req.params.elong;
@@ -759,7 +776,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
-			/*var arr = [];
+			var arr = [];
 			for (var i = 0; i < flyer.length; i++) {
 				var ob = {};
 				ob.storeName = flyer[i].storeName;
@@ -771,14 +788,21 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 				ob.location = flyer[i].location;
 				ob.currentInterval = flyer[i].currentInterval;
 				ob.currFlyerDate = flyer[i].currFlyerDate;
-				ob.regularFlyer = flyer[i].currFlyer;
 				ob.categories = flyer[i].categories;
+				addCategoriesToItem(flyer[i].categories,flyer[i].currFlyer, function(cb){
+					ob.regularFlyer = cb;
+				});
+
 				/** here i have to give sortBestPercent a clone of the currFlyer or else
-						sort will just mutate the original flyer which isn't good 
+						sort will just mutate the original flyer which isn't good */
 				sortBestPercent(ce.clone(flyer[i].currFlyer), function (cb){
-					ob.bestPercentFlyer = cb;
-					sortBestSav(ce.clone(flyer[i].currFlyer), function (cb2){
-						ob.bestSavFlyer = cb2;
+					addCategoriesToItem(flyer[i].categories,cb, function(callback){
+						ob.bestPercentFlyer = callback;
+					});
+				sortBestSav(ce.clone(flyer[i].currFlyer), function (cb2){
+					addCategoriesToItem(flyer[i].categories,cb2, function(callback2){
+						ob.bestSavFlyer = callback2;
+					});
 						arr.push(ob);
 
 						//console.log(ob + i + '\n');
@@ -787,9 +811,10 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 					
 				});
 
-			};*/
+
+			};
 			console.log('the flyers');
-			res.send(flyer);
+			res.send(arr);
 		}
 	});
 });
