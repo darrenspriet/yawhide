@@ -10,4 +10,5 @@
 
 @interface YHRightCategoryCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *categoryName;
 @end

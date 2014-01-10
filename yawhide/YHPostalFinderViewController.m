@@ -146,7 +146,7 @@
     float distance = 50;
     
     NSLog(@"new location is%@", newLocation);
-    NSData* data = [NSData dataWithContentsOfURL:
+    NSMutableData* data = [NSMutableData dataWithContentsOfURL:
                     [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/%f",newLocation.coordinate.latitude,newLocation.coordinate.longitude, distance]]];
     
     if (data==nil) {
@@ -163,7 +163,7 @@
     }else{
         
         NSError* error;
-        NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+        NSMutableDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
                                                                    options:kNilOptions
                                                                      error:&error];
         if (error) {
@@ -172,9 +172,10 @@
         else{
             [[[YHDataManager sharedData] storesArray] removeAllObjects];
             NSLog(@"loaded all the stores");
-            for(NSArray *dict in dictionary){
-                [[[YHDataManager sharedData] storesArray] addObject:dict];
+            for(NSMutableArray *array in dictionary){
+                [[[YHDataManager sharedData] storesArray] addObject:array];
             }
+            [[YHDataManager sharedData] sortFlyerArrays];
             [self.largeActivityIndicator stopAnimating];
             [self.delegate didDismissPresentedViewControllerWithLatitude:newLocation.coordinate.latitude andLongitude:newLocation.coordinate.longitude];
         }

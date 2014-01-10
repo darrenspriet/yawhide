@@ -26,16 +26,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSMutableArray *tempArray =[NSMutableArray arrayWithArray:[[[[[YHDataManager sharedData] storeDictionary] objectForKey:@"categories"]  allKeys]sortedArrayUsingSelector:@selector(compare:)]];
+    [self setCategoryArray:[[NSMutableArray alloc]init]];
+    NSMutableDictionary * diction = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"All",@"category", @"YES" ,@"selected",  nil];
+    [self.categoryArray addObject:diction];
+    
+    for (int i=0; i< [tempArray count]; i++) {
+        NSMutableDictionary * diction = [NSMutableDictionary dictionaryWithObjectsAndKeys:[tempArray objectAtIndex:i],@"category", @"NO" ,@"selected",  nil];
+        [self.categoryArray addObject:diction];
+    }
+    NSLog(@"this is the category Array %@", self.categoryArray);
 
-
-    [self setCategoryArray:[NSMutableArray arrayWithArray:[[[[[YHDataManager sharedData] storeDictionary] objectForKey:@"categories"]  allKeys]sortedArrayUsingSelector:@selector(compare:)]]];
-//    NSLog(@"category array is %@", self.categoryArray);
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 
@@ -62,75 +63,127 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"categoryCell";
-    YHRightCategoryCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    YHRightCategoryCell *cell;
     
     if (cell == nil){
-        cell = [[YHRightCategoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     }
-    if (indexPath.row==0) {
-        [cell.textLabel setText:@"All"];
-        
-        return cell;
+    if ([[[self.categoryArray objectAtIndex:indexPath.row ] objectForKey:@"selected"] isEqualToString:@"YES"] ) {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
     else{
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+    }
+    
     //    NSLog(@"what is the array %@", self.storeDetailsArray);
-    NSString *capitalizedCategory = [[[[self.categoryArray objectAtIndex:indexPath.row-1] substringToIndex:1] uppercaseString] stringByAppendingString:[[self.categoryArray objectAtIndex:indexPath.row-1] substringFromIndex:1]];
-
-   [cell.textLabel setText:capitalizedCategory];
+    NSString *capitalizedCategory = [[[[[self.categoryArray objectAtIndex:indexPath.row ] objectForKey:@"category"] substringToIndex:1] uppercaseString] stringByAppendingString:[[[self.categoryArray objectAtIndex:indexPath.row ] objectForKey:@"category"] substringFromIndex:1]];
+    
+    [cell.categoryName setText:capitalizedCategory];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (indexPath.row!=0) {
+        NSIndexPath *indexForFirst = [NSIndexPath indexPathForRow:0 inSection:0];
+        YHRightCategoryCell *firstCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexForFirst];
+        if (firstCell.accessoryType == UITableViewCellAccessoryCheckmark)
+        {
+            [[self.categoryArray objectAtIndex:indexForFirst.row ] setObject:@"NO" forKey:@"selected"];
+            [firstCell setAccessoryType : UITableViewCellAccessoryNone];
+        }
+
+        YHRightCategoryCell *oldCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexPath];
+        if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark)
+        {
+            [[self.categoryArray objectAtIndex:indexPath.row ] setObject:@"NO" forKey:@"selected"];
+            [oldCell setAccessoryType:UITableViewCellAccessoryNone];
+        } else{
+            
+            YHRightCategoryCell *newCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexPath];
+            
+            if (newCell.accessoryType == UITableViewCellAccessoryNone)
+            {
+                [[self.categoryArray objectAtIndex:indexPath.row ] setObject:@"YES" forKey:@"selected"];
+                [newCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            }
+        }
+        
     }
+    else{
+        NSIndexPath *indexForFirst = [NSIndexPath indexPathForRow:0 inSection:0];
+        YHRightCategoryCell *firstCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexForFirst];
+        if (firstCell.accessoryType == UITableViewCellAccessoryNone )
+        {
+            [[self.categoryArray objectAtIndex:indexPath.row ] setObject:@"YES" forKey:@"selected"];
+            [firstCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+        }
+        
+        for (int i=1; i<[self.categoryArray count]+1; i++) {
+            NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
+            YHRightCategoryCell *oldCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:index];
+            if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark)
+            {
+                [[self.categoryArray objectAtIndex:index.row ] setObject:@"NO" forKey:@"selected"];
+                [oldCell setAccessoryType:UITableViewCellAccessoryNone];
+            }
+            
+        }
+    }
+
+    
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ }
+ else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 /*
-#pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-
+ #pragma mark - Navigation
+ 
+ // In a story board-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+ {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ 
  */
 
 @end

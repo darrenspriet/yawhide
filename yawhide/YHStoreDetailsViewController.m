@@ -38,6 +38,7 @@
     
     [self.revealViewController setRearViewController:nil];
     [self setTitle:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]];
+    NSLog(@"the flyer is %@", [[YHDataManager sharedData] storesArray]);
     [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
  
 }

@@ -28,7 +28,6 @@
     [super viewDidLoad];
     [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
     [self.tableView reloadData];
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
     YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
@@ -105,7 +104,7 @@
 
     
     float distance = 50;
-    NSData* data = [NSData dataWithContentsOfURL:
+    NSMutableData* data = [NSMutableData dataWithContentsOfURL:
                     [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/%f",latitude,longitude, distance]]];
     
     //If there is no data, then we show a Alert that says the Server is down
@@ -122,7 +121,7 @@
         
         NSError* error2;
         
-        NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+        NSMutableDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
                                                                    options:kNilOptions
                                                                      error:&error2];
         
@@ -138,13 +137,15 @@
         }
         else{
             [[[YHDataManager sharedData] storesArray] removeAllObjects];
-            for(NSArray *dict in dictionary){
-                [[[YHDataManager sharedData] storesArray] addObject:dict];
+            for(NSMutableArray *array in dictionary){
+                [[[YHDataManager sharedData] storesArray] addObject:array];
             }
+            [[YHDataManager sharedData] sortFlyerArrays];
+
+            
             NSLog(@"loaded stores");
         }
     }
-
     
 }
 

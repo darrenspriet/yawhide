@@ -17,4 +17,6 @@
 @property (nonatomic, strong) NSMutableDictionary *storeDictionary;
 @property (nonatomic, strong) NSMutableArray *menuArray;
 
+
+-(void)sortFlyerArrays;
 @end

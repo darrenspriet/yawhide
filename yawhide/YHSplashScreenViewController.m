@@ -59,7 +59,7 @@
     
     [self.locationManager stopUpdatingLocation];
     if ([[[YHDataManager sharedData] storesArray]count] ==0) {
-        NSData* data = [NSData dataWithContentsOfURL:
+        NSMutableData* data = [NSMutableData dataWithContentsOfURL:
                         [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",newLocation.coordinate.latitude,newLocation.coordinate.longitude]]];
         
         if (data==nil) {
@@ -77,7 +77,7 @@
             
             NSError* error;
             
-            NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+            NSMutableDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
                                                                        options:kNilOptions
                                                                          error:&error];
             if (error) {
@@ -86,9 +86,10 @@
             else{
                 [[[YHDataManager sharedData] storesArray] removeAllObjects];
                 NSLog(@"loaded all the stores");
-                for(NSArray *dict in dictionary){
-                    [[[YHDataManager sharedData] storesArray] addObject:dict];
+                for(NSMutableArray *array in dictionary){
+                    [[[YHDataManager sharedData] storesArray] addObject:array];
                 }
+                [[YHDataManager sharedData] sortFlyerArrays];
                 [self performSegueWithIdentifier:@"splashSegue" sender:self];\
                 [self.largeActivityIndicator stopAnimating];
                 
@@ -128,7 +129,7 @@
 
     }];
     
-    NSData* data = [NSData dataWithContentsOfURL:
+    NSMutableData* data = [NSMutableData dataWithContentsOfURL:
                     [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/50",latitude,longitude]]];
     if (data==nil) {
         NSLog(@"got no data");
@@ -145,7 +146,7 @@
         
         NSError* error2;
         
-        NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+        NSMutableDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
                                                                    options:kNilOptions
                                                                      error:&error2];
         
@@ -155,10 +156,11 @@
         }
         else{
             [[[YHDataManager sharedData] storesArray] removeAllObjects];
-            for(NSArray *dict in dictionary){
-                [[[YHDataManager sharedData] storesArray] addObject:dict];
+            for(NSMutableArray *array in dictionary){
+                [[[YHDataManager sharedData] storesArray] addObject:array];
             }
-            
+            [[YHDataManager sharedData] sortFlyerArrays];
+
             NSLog(@"all went as planned");
         }
     }
