@@ -61,3 +61,16 @@ var initializeMap = function(L1, L2)
 	var map=new google.maps.Map(document.getElementById("findASobeys"),mapProp);
 }
 
+$(document).ready(function(){
+
+	Handlebars.registerHelper("objectLoop", function (obj){
+		console.log('ummm');
+		console.log();
+		var str='';
+		for(var i in obj){
+			str += "<a class='list-group-item categ'><span class='badge'>" + obj[i].length + "</span>"+ i +"</a>"
+		}
+		return str;
+	});
+
+});

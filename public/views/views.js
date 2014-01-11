@@ -119,8 +119,13 @@ var StoreInfoView = Backbone.View.extend({
 });
 
 var ViewFlyerView = Backbone.View.extend({
-
-	render:function(id){
+	el:' #page_container'
+	, events:{
+		"click #regFly":"clickRegFlyer"
+		, "click #perFly":"clickPerFlyer"
+		, "click #savFly":"clickSavFlyer"
+	}
+	, render:function(id){
 
 		var store = new GetOneSobeyStore({id: id});
 		store.fetch({
@@ -133,6 +138,28 @@ var ViewFlyerView = Backbone.View.extend({
 				return this;
 			}
 		});
+	}
+	, clickRegFlyer: function(){
+		$('.flyerContainer').empty();
+		if(!$(this).hasClass('active')){
+			$(this).toggleClass('active');
+		}
+	}
+	, clickPerFlyer: function(){
+		$('.flyerContainer').empty();
+		var that = $(this);
+		if(!$(this).hasClass('active')){
+			that.toggleClass('active');
+		}
+	}
+	, clickSavFlyer: function(){
+		$('.flyerContainer').empty();
+		if($('#regFly').hasClass('active')){
+			$('#regFly').removeClass('active');
+		}
+		if(!$(this).hasClass('active')){
+			$('#savFly').toggleClass('active');
+		}
 	}
 });
 
