@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		E005DDF91874D74300399345 /* YHProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DDF81874D74300399345 /* YHProductViewController.m */; };
-		E01846EE1870C69B00CE7816 /* Categories@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E01846EC1870C69B00CE7816 /* Categories@2x.png */; };
-		E01846EF1870C69B00CE7816 /* Categories.png in Resources */ = {isa = PBXBuildFile; fileRef = E01846ED1870C69B00CE7816 /* Categories.png */; };
 		E01846F21870C93700CE7816 /* YHStoreDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E01846F11870C93700CE7816 /* YHStoreDetailsViewController.m */; };
 		E01846F8187109C400CE7816 /* YHCategoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E01846F7187109C400CE7816 /* YHCategoryTableViewController.m */; };
 		E03FF035186E14850051C1A0 /* YHStoreDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */; };
 		E05321501868CCDC008CE716 /* YHDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E053214F1868CCDC008CE716 /* YHDataManager.m */; };
+		E060ED111881CFD600ADEF0B /* reveal-right-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E060ED0F1881CFD600ADEF0B /* reveal-right-icon@2x.png */; };
+		E060ED121881CFD600ADEF0B /* reveal-right-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060ED101881CFD600ADEF0B /* reveal-right-icon.png */; };
 		E090452B1867C10500FA81B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452A1867C10500FA81B4 /* Foundation.framework */; };
 		E090452D1867C10500FA81B4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452C1867C10500FA81B4 /* CoreGraphics.framework */; };
 		E090452F1867C10500FA81B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452E1867C10500FA81B4 /* UIKit.framework */; };
@@ -73,8 +73,6 @@
 /* Begin PBXFileReference section */
 		E005DDF71874D74300399345 /* YHProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHProductViewController.h; sourceTree = "<group>"; };
 		E005DDF81874D74300399345 /* YHProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHProductViewController.m; sourceTree = "<group>"; };
-		E01846EC1870C69B00CE7816 /* Categories@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Categories@2x.png"; sourceTree = "<group>"; };
-		E01846ED1870C69B00CE7816 /* Categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Categories.png; sourceTree = "<group>"; };
 		E01846F01870C93700CE7816 /* YHStoreDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHStoreDetailsViewController.h; sourceTree = "<group>"; };
 		E01846F11870C93700CE7816 /* YHStoreDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreDetailsViewController.m; sourceTree = "<group>"; };
 		E01846F6187109C400CE7816 /* YHCategoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHCategoryTableViewController.h; sourceTree = "<group>"; };
@@ -83,6 +81,8 @@
 		E03FF034186E14850051C1A0 /* YHStoreDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHStoreDetailCell.m; sourceTree = "<group>"; };
 		E053214E1868CCDC008CE716 /* YHDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHDataManager.h; sourceTree = "<group>"; };
 		E053214F1868CCDC008CE716 /* YHDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHDataManager.m; sourceTree = "<group>"; };
+		E060ED0F1881CFD600ADEF0B /* reveal-right-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-right-icon@2x.png"; sourceTree = "<group>"; };
+		E060ED101881CFD600ADEF0B /* reveal-right-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-right-icon.png"; sourceTree = "<group>"; };
 		E09045271867C10500FA81B4 /* yawhide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yawhide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E090452A1867C10500FA81B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E090452C1867C10500FA81B4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -322,10 +322,10 @@
 			children = (
 				E0FD2DD718788F25004D5AB3 /* Launch Images */,
 				E0F43B62187851E800B50A48 /* AppIcons */,
-				E01846EC1870C69B00CE7816 /* Categories@2x.png */,
-				E01846ED1870C69B00CE7816 /* Categories.png */,
 				E09045631867C2F100FA81B4 /* reveal-icon.png */,
 				E09045641867C2F100FA81B4 /* reveal-icon@2x.png */,
+				E060ED0F1881CFD600ADEF0B /* reveal-right-icon@2x.png */,
+				E060ED101881CFD600ADEF0B /* reveal-right-icon.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -459,6 +459,7 @@
 				E09045411867C10500FA81B4 /* Main_iPad.storyboard in Resources */,
 				E09045461867C10500FA81B4 /* Images.xcassets in Resources */,
 				E0F43B73187851F900B50A48 /* AppIcon29x29.png in Resources */,
+				E060ED111881CFD600ADEF0B /* reveal-right-icon@2x.png in Resources */,
 				E09045661867C2F100FA81B4 /* reveal-icon@2x.png in Resources */,
 				E0F43B7E187851F900B50A48 /* AppIcon72x72@2x.png in Resources */,
 				E0F43B75187851F900B50A48 /* AppIcon40x40.png in Resources */,
@@ -471,15 +472,14 @@
 				E0F43B79187851F900B50A48 /* AppIcon57x57.png in Resources */,
 				E0F43B76187851F900B50A48 /* AppIcon40x40@2x.png in Resources */,
 				E0F43B7C187851F900B50A48 /* AppIcon60x60@2x.png in Resources */,
-				E01846EE1870C69B00CE7816 /* Categories@2x.png in Resources */,
 				E0F43B7A187851F900B50A48 /* AppIcon57x57@2x.png in Resources */,
 				E0F43B74187851F900B50A48 /* AppIcon29x29@2x.png in Resources */,
 				E09045351867C10500FA81B4 /* InfoPlist.strings in Resources */,
 				E0F43B82187851F900B50A48 /* iTunesArtwork@2x.png in Resources */,
 				E0F43B80187851F900B50A48 /* AppIcon76x76@2x.png in Resources */,
 				E09045651867C2F100FA81B4 /* reveal-icon.png in Resources */,
-				E01846EF1870C69B00CE7816 /* Categories.png in Resources */,
 				E0F43B77187851F900B50A48 /* AppIcon50x50.png in Resources */,
+				E060ED121881CFD600ADEF0B /* reveal-right-icon.png in Resources */,
 				E0FD2DD918788F46004D5AB3 /* Default-568@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
