@@ -35,10 +35,12 @@
         NSMutableDictionary * diction = [NSMutableDictionary dictionaryWithObjectsAndKeys:[tempArray objectAtIndex:i],@"category", @"NO" ,@"selected",  nil];
         [self.categoryArray addObject:diction];
     }
-    NSLog(@"this is the category Array %@", self.categoryArray);
 
 }
-
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.delegate reloadTablewithArray:self.categoryArray];
+        
+}
 
 - (void)didReceiveMemoryWarning
 {

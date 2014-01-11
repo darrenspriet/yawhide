@@ -26,7 +26,7 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self setMenuArray:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] menuArray]]];
+    [self setMenuArray:[NSMutableArray arrayWithObjects:@"Stores", @"Change Locations", nil]];
     [self.tableView reloadData];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard

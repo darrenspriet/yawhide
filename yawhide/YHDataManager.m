@@ -23,13 +23,10 @@
 
 -(id)init{
     [self setStoresArray:[[NSMutableArray alloc]init]];
-    [self setMenuArray:[[NSMutableArray alloc]init]];
     [self setStoreDictionary:[[NSMutableDictionary alloc]init]];
-    [self.menuArray addObject:@"Stores"];
-    [self.menuArray addObject:@"Change Location"];
-    
     return self;
 }
+
 
 
 @end

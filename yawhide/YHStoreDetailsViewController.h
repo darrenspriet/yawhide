@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Darren Spriet. All rights reserved.
 //
 
+
+
 #import <UIKit/UIKit.h>
 #import "YHStoreDetailCell.h"
 #import "YHSideBarTableViewController.h"
@@ -14,11 +16,16 @@
 
 
 
-@interface YHStoreDetailsViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, YHProductViewControllerDelegate>
+@interface YHStoreDetailsViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, YHProductViewControllerDelegate, YHCategoryTableViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *revealButtonItem;
 
 @property (nonatomic, strong) NSMutableArray *storeDetailsArray;
+@property (nonatomic, strong) NSMutableArray *regularFlyer;
+@property (nonatomic, strong) NSMutableArray *bestPercent;
+@property (nonatomic, strong) NSMutableArray *bestSavings;
+@property (nonatomic, strong) NSMutableArray *categoriesArray;
+
 - (IBAction)segmentControlPressed:(UISegmentedControl *)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segment;
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
