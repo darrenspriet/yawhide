@@ -133,6 +133,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="Get My Location">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -155,7 +156,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mrO-r4-Wwb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1691" y="1160"/>
+            <point key="canvasLocation" x="1802" y="1172"/>
         </scene>
         <!--Store Details View Controller - Yawhide-->
         <scene sceneID="Ho9-JN-qXj">
@@ -188,6 +189,7 @@
                                         </segmentedControl>
                                     </barButtonItem>
                                 </items>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="e6k-MG-tvT">
                                 <rect key="frame" x="0.0" y="65" width="320" height="459"/>
@@ -215,7 +217,7 @@
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Yd-lX-eb9">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Yd-lX-eb9">
                                                     <rect key="frame" x="11" y="10" width="59" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -238,7 +240,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Yawhide" id="gr8-af-av4">
-                        <barButtonItem key="backBarButtonItem" title=" " id="GHf-XA-hei"/>
+                        <barButtonItem key="backBarButtonItem" title=" " id="GHf-XA-hei">
+                            <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="reveal-right-icon.png" id="8ih-y0-8OE">
                             <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>
@@ -251,7 +255,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rbi-C6-rvK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2261" y="1284"/>
+            <point key="canvasLocation" x="2787" y="1284"/>
         </scene>
         <!--Product View Controller-->
         <scene sceneID="xcl-7S-A3J">
@@ -265,7 +269,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4uF-nD-xOC">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4uF-nD-xOC">
                                 <rect key="frame" x="60" y="154" width="200" height="200"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
@@ -331,7 +335,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="P0S-NS-9ET">
-                        <barButtonItem key="backBarButtonItem" title=" " id="WEP-EN-qPi"/>
+                        <barButtonItem key="backBarButtonItem" title=" " id="WEP-EN-qPi">
+                            <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="itemDescription" destination="nna-IZ-t0i" id="daI-AV-80K"/>
@@ -344,7 +350,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ilW-wp-M66" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2669" y="1291"/>
+            <point key="canvasLocation" x="3195" y="1291"/>
         </scene>
         <!--Category Table View Controller - Pick A Category-->
         <scene sceneID="75b-W6-y8A">
@@ -392,7 +398,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x8Q-u5-AhV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3551" y="1273"/>
+            <point key="canvasLocation" x="4077" y="1273"/>
         </scene>
         <!--Store View Table View Controller - YAWHIDE-->
         <scene sceneID="LTr-Ba-uYf">
@@ -439,7 +445,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="YAWHIDE" id="v5d-u6-RYh">
-                        <barButtonItem key="backBarButtonItem" title=" " id="qu6-7r-akb"/>
+                        <barButtonItem key="backBarButtonItem" title=" " id="qu6-7r-akb">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </barButtonItem>
                         <barButtonItem key="leftBarButtonItem" image="reveal-icon.png" id="hSA-eA-to7">
                             <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>
@@ -505,7 +513,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hNs-z4-MVL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3097" y="1273"/>
+            <point key="canvasLocation" x="3623" y="1273"/>
         </scene>
     </scenes>
     <resources>

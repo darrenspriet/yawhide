@@ -27,8 +27,7 @@
 {
     [super viewDidLoad];
 
-    NSLog(@"what is the dictioary%@", self.productDictionary);
-    
+    [self.navigationItem.backBarButtonItem setTintColor:[UIColor blackColor]];
     [self.itemName setText:[self.productDictionary objectForKey:@"item"]];
     [self.itemPrice setText:[self.productDictionary objectForKey:@"price"]];
     [self.itemSavings setText:[NSString stringWithFormat:@"$%@",[self.productDictionary objectForKey:@"bestSav"]]];

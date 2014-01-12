@@ -26,14 +26,17 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self setMenuArray:[NSMutableArray arrayWithObjects:@"Stores", @"Change Locations", nil]];
+    [self setMenuArray:[NSMutableArray arrayWithObjects:@"Stores", @"Change Location", nil]];
     [self.tableView reloadData];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
     YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
     [viewController setDelegate:self];
     self.postalNavigator = [[UINavigationController alloc]initWithRootViewController:viewController];
+
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismissModalView)];
+    [cancelButton setTintColor:[UIColor blackColor]];
+
     [viewController.navigationItem setLeftBarButtonItem:cancelButton];
     [self.postalNavigator.navigationBar setBarStyle:UIBarStyleDefault];
     [self.postalNavigator setModalPresentationStyle:UIModalPresentationFullScreen];

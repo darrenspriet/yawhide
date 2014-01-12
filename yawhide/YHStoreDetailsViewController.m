@@ -28,6 +28,7 @@
     [super viewDidLoad];
     [self.revealButtonItem setTarget: self.revealViewController];
     [self.revealButtonItem setAction: @selector( rightRevealToggle: )];
+    [self.navigationItem.backBarButtonItem setTintColor:[UIColor blackColor]];
     [self setRegularFlyer:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] regularFlyer]]];
     [self setBestPercent:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestPercent]]];
     [self setBestSavings:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestSavings]]];
@@ -145,8 +146,7 @@
                 //NSString *imageURL=@"https://s3.amazonaws.com/sobeys-web-production/flyer/products/images/000/158/008/original/SOB_PR064B_139_UF_Jan1_Page2_img25.jpg";
                 
                 NSString *imageURL=[[self.storeDetailsArray objectAtIndex:indexPath.row] objectForKey:@"url"];
-                
-                
+     
                 //Starts a dispatch to get the image and then sets it to the cell
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     
@@ -227,25 +227,35 @@
 }
 
 -(void)setCategories:(NSString *)chosenCategory{
-    NSMutableArray *regularArray = [NSMutableArray arrayWithArray:[[YHDataManager sharedData] regularFlyer]];
-    NSMutableArray *percentArray = [NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestPercent]];
-    NSMutableArray *savingsArray =[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestSavings]];
-    [self.regularFlyer removeAllObjects];
-    [self.bestPercent removeAllObjects];
-    [self.bestSavings removeAllObjects];
-    
-    for (int i=0; i<[regularArray count]; i++) {
-        if ([[[regularArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
-            [self.regularFlyer addObject:[regularArray objectAtIndex:i]];
-            
-        }
-        if ([[[percentArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
-            [self.bestPercent addObject:[percentArray objectAtIndex:i]];
-            
-        }
-        if ([[[savingsArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
-            [self.bestSavings addObject:[savingsArray objectAtIndex:i]];
-            
+    if ([chosenCategory isEqualToString:@"All"]) {
+        [self.regularFlyer removeAllObjects];
+        [self.bestPercent removeAllObjects];
+        [self.bestSavings removeAllObjects];
+        [self setRegularFlyer:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] regularFlyer]]];
+        [self setBestPercent:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestPercent]]];
+        [self setBestSavings:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestSavings]]];
+        
+    }else{
+        NSMutableArray *regularArray = [NSMutableArray arrayWithArray:[[YHDataManager sharedData] regularFlyer]];
+        NSMutableArray *percentArray = [NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestPercent]];
+        NSMutableArray *savingsArray =[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestSavings]];
+        [self.regularFlyer removeAllObjects];
+        [self.bestPercent removeAllObjects];
+        [self.bestSavings removeAllObjects];
+        
+        for (int i=0; i<[regularArray count]; i++) {
+            if ([[[regularArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
+                [self.regularFlyer addObject:[regularArray objectAtIndex:i]];
+                
+            }
+            if ([[[percentArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
+                [self.bestPercent addObject:[percentArray objectAtIndex:i]];
+                
+            }
+            if ([[[savingsArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
+                [self.bestSavings addObject:[savingsArray objectAtIndex:i]];
+                
+            }
         }
     }
     switch ([self.segment selectedSegmentIndex]) {
@@ -263,7 +273,7 @@
             break;
         }
     }
-
+    
     [self.tableview setContentOffset:CGPointZero animated:NO];
     [self.tableview reloadData];
 
