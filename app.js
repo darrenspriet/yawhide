@@ -856,7 +856,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			};
 			console.log('the flyers');
 			res.send(arr);*/
-			res.send(flyers);
+			res.send(flyer);
 		}
 	});
 });
