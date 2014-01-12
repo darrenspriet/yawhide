@@ -24,7 +24,6 @@
 @property (nonatomic, strong) NSMutableArray *regularFlyer;
 @property (nonatomic, strong) NSMutableArray *bestPercent;
 @property (nonatomic, strong) NSMutableArray *bestSavings;
-@property (nonatomic, strong) NSMutableArray *categoriesArray;
 
 - (IBAction)segmentControlPressed:(UISegmentedControl *)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segment;

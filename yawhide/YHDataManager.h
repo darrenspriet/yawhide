@@ -14,7 +14,13 @@
 + (YHDataManager*) sharedData;
 
 @property (nonatomic, strong) NSMutableArray *storesArray;
+@property (nonatomic, strong) NSMutableArray *regularFlyer;
+@property (nonatomic, strong) NSMutableArray *bestSavings;
+@property (nonatomic, strong) NSMutableArray *bestPercent;
+
 @property (nonatomic, strong) NSMutableDictionary *storeDictionary;
+
+-(void)sortTheBestSavingsAndPercent;
 
 
 @end

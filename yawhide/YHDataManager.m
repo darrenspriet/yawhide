@@ -23,8 +23,29 @@
 
 -(id)init{
     [self setStoresArray:[[NSMutableArray alloc]init]];
+    [self setRegularFlyer:[[NSMutableArray alloc]init]];
+    [self setBestPercent:[[NSMutableArray alloc]init]];
+    [self setBestSavings:[[NSMutableArray alloc]init]];
     [self setStoreDictionary:[[NSMutableDictionary alloc]init]];
     return self;
+}
+
+-(void)sortTheBestSavingsAndPercent{
+    NSMutableArray * regularFlyer  = [self.storeDictionary objectForKey:@"regularFlyer"];
+    [self setRegularFlyer:regularFlyer];
+
+    NSSortDescriptor * percentDescriptor = [[NSSortDescriptor alloc] initWithKey:@"bestPercent"
+                                                 ascending:NO];
+    NSArray *percentDesc = [NSArray arrayWithObject:percentDescriptor];
+    NSArray *percentArray = [regularFlyer sortedArrayUsingDescriptors:percentDesc];
+    [self setBestPercent:[NSMutableArray arrayWithArray:percentArray]];
+    
+    NSSortDescriptor * savingsDescriptor = [[NSSortDescriptor alloc] initWithKey:@"bestSav"
+                                                                       ascending:NO];
+    NSArray *savingsDesc = [NSArray arrayWithObject:savingsDescriptor];
+    NSArray *savingsArray = [regularFlyer sortedArrayUsingDescriptors:savingsDesc];
+    [self setBestSavings:[NSMutableArray arrayWithArray:savingsArray]];
+    
 }
 
 

@@ -28,11 +28,9 @@
     [super viewDidLoad];
     [self.revealButtonItem setTarget: self.revealViewController];
     [self.revealButtonItem setAction: @selector( rightRevealToggle: )];
-    [self setCategoriesArray:[[NSMutableArray alloc]init]];
-    [self setRegularFlyer:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
-    [self setBestPercent:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"bestPercentFlyer"]]];
-    [self setBestSavings:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"bestSavFlyer"]]];
-    [self.categoriesArray addObject:@"All"];
+    [self setRegularFlyer:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] regularFlyer]]];
+    [self setBestPercent:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestPercent]]];
+    [self setBestSavings:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestSavings]]];
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
@@ -219,13 +217,18 @@
 
 #pragma mark - Delegate for Category View Controller
 - (void)reloadTablewithArray:(NSMutableArray*)array{
-    [self.categoriesArray removeAllObjects];
+    NSString *categoryString = [[NSString alloc]init];
     for (int i=0; i<[array count]; i++) {
         if ([[[array objectAtIndex:i] objectForKey:@"selected"] isEqualToString:@"YES"]) {
-            [self.categoriesArray addObject:[[array objectAtIndex:i] objectForKey:@"category"]];
+            categoryString = [[array objectAtIndex:i] objectForKey:@"category"];
         }
     }
-    NSLog(@"this is the cate%@", self.categoriesArray);
+    [self setCategories:categoryString];
+}
+
+-(void)setCategories:(NSString *)chosenCategory{
+    [self.tableview setContentOffset:CGPointZero animated:NO];
     [self.tableview reloadData];
+
 }
 @end

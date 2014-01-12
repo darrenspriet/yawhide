@@ -95,6 +95,7 @@
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
 
     [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
+    [[YHDataManager sharedData] sortTheBestSavingsAndPercent];
 
 
 }

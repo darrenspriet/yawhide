@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSMutableArray *tempArray =[NSMutableArray arrayWithArray:[[[[[YHDataManager sharedData] storeDictionary] objectForKey:@"categories"]  allKeys]sortedArrayUsingSelector:@selector(compare:)]];
+    NSMutableArray *tempArray =[NSMutableArray arrayWithArray:[[[[YHDataManager sharedData] storeDictionary] objectForKey:@"categories"]  sortedArrayUsingSelector:@selector(compare:)]];
     [self setCategoryArray:[[NSMutableArray alloc]init]];
     NSMutableDictionary * diction = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"All",@"category", @"YES" ,@"selected",  nil];
     [self.categoryArray addObject:diction];
@@ -35,11 +35,11 @@
         NSMutableDictionary * diction = [NSMutableDictionary dictionaryWithObjectsAndKeys:[tempArray objectAtIndex:i],@"category", @"NO" ,@"selected",  nil];
         [self.categoryArray addObject:diction];
     }
-
+    
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [self.delegate reloadTablewithArray:self.categoryArray];
-        
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -87,55 +87,28 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (indexPath.row!=0) {
-        NSIndexPath *indexForFirst = [NSIndexPath indexPathForRow:0 inSection:0];
-        YHRightCategoryCell *firstCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexForFirst];
-        if (firstCell.accessoryType == UITableViewCellAccessoryCheckmark)
-        {
-            [[self.categoryArray objectAtIndex:indexForFirst.row ] setObject:@"NO" forKey:@"selected"];
-            [firstCell setAccessoryType : UITableViewCellAccessoryNone];
-        }
-
-        YHRightCategoryCell *oldCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexPath];
-        if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark)
-        {
-            [[self.categoryArray objectAtIndex:indexPath.row ] setObject:@"NO" forKey:@"selected"];
-            [oldCell setAccessoryType:UITableViewCellAccessoryNone];
-        } else{
-            
-            YHRightCategoryCell *newCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexPath];
-            
-            if (newCell.accessoryType == UITableViewCellAccessoryNone)
-            {
-                [[self.categoryArray objectAtIndex:indexPath.row ] setObject:@"YES" forKey:@"selected"];
-                [newCell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    YHRightCategoryCell *cell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell.accessoryType == UITableViewCellAccessoryNone){
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [[self.categoryArray objectAtIndex:indexPath.row] setObject:@"YES" forKey:@"selected"];
+        for (int i=0; i<[self.categoryArray count]; i++) {
+            if (indexPath.row==i) {
+                //Do Nothing
             }
-        }
-        
-    }
-    else{
-        NSIndexPath *indexForFirst = [NSIndexPath indexPathForRow:0 inSection:0];
-        YHRightCategoryCell *firstCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:indexForFirst];
-        if (firstCell.accessoryType == UITableViewCellAccessoryNone )
-        {
-            [[self.categoryArray objectAtIndex:indexPath.row ] setObject:@"YES" forKey:@"selected"];
-            [firstCell setAccessoryType:UITableViewCellAccessoryCheckmark];
-        }
-        
-        for (int i=1; i<[self.categoryArray count]+1; i++) {
-            NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
-            YHRightCategoryCell *oldCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:index];
-            if (oldCell.accessoryType == UITableViewCellAccessoryCheckmark)
-            {
+            else{
+                NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
+                YHRightCategoryCell *oldCell = (YHRightCategoryCell*)[tableView cellForRowAtIndexPath:index];
                 [[self.categoryArray objectAtIndex:index.row ] setObject:@"NO" forKey:@"selected"];
                 [oldCell setAccessoryType:UITableViewCellAccessoryNone];
+                
             }
-            
         }
-    }
+                [self.revealViewController revealToggle:self];
 
+    }
     
-}
+   }
 
 /*
  // Override to support conditional editing of the table view.
