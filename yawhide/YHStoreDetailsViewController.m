@@ -227,6 +227,43 @@
 }
 
 -(void)setCategories:(NSString *)chosenCategory{
+    NSMutableArray *regularArray = [NSMutableArray arrayWithArray:[[YHDataManager sharedData] regularFlyer]];
+    NSMutableArray *percentArray = [NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestPercent]];
+    NSMutableArray *savingsArray =[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestSavings]];
+    [self.regularFlyer removeAllObjects];
+    [self.bestPercent removeAllObjects];
+    [self.bestSavings removeAllObjects];
+    
+    for (int i=0; i<[regularArray count]; i++) {
+        if ([[[regularArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
+            [self.regularFlyer addObject:[regularArray objectAtIndex:i]];
+            
+        }
+        if ([[[percentArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
+            [self.bestPercent addObject:[percentArray objectAtIndex:i]];
+            
+        }
+        if ([[[savingsArray objectAtIndex:i] objectForKey:@"category"] isEqualToString:chosenCategory]) {
+            [self.bestSavings addObject:[savingsArray objectAtIndex:i]];
+            
+        }
+    }
+    switch ([self.segment selectedSegmentIndex]) {
+            
+        case 1:{
+            [self setStoreDetailsArray:[NSMutableArray arrayWithArray:self.bestSavings]];
+            break;
+        }
+        case 2:{
+            [self setStoreDetailsArray:[NSMutableArray arrayWithArray:self.bestPercent]];
+            break;
+        }
+        default:{
+            [self setStoreDetailsArray:[NSMutableArray arrayWithArray:self.regularFlyer]];
+            break;
+        }
+    }
+
     [self.tableview setContentOffset:CGPointZero animated:NO];
     [self.tableview reloadData];
 
