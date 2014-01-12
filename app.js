@@ -817,7 +817,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 			console.log("there was an error");
 		}
 		else{
-			var arr = [];
+			/*var arr = [];
 			for (var i = 0; i < flyer.length; i++) {
 				var ob = {};
 				ob.storeName = flyer[i].storeName;
@@ -835,7 +835,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 				});
 
 				/** here i have to give sortBestPercent a clone of the currFlyer or else
-						sort will just mutate the original flyer which isn't good */
+						sort will just mutate the original flyer which isn't good 
 				sortBestPercent(ce.clone(flyer[i].currFlyer), function (cb){
 					addCategoriesToItem(flyer[i].categories,cb, function(callback){
 						ob.bestPercentFlyer = callback;
@@ -855,7 +855,8 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 
 			};
 			console.log('the flyers');
-			res.send(arr);
+			res.send(arr);*/
+			res.send(flyers);
 		}
 	});
 });
