@@ -63,12 +63,18 @@ var initializeMap = function(L1, L2)
 
 $(document).ready(function(){
 
-	Handlebars.registerHelper("objectLoop", function (obj){
-		console.log('ummm');
-		console.log();
-		var str='';
-		for(var i in obj){
-			str += "<a class='list-group-item categ'><span class='badge'>" + obj[i].length + "</span>"+ i +"</a>"
+	Handlebars.registerHelper("objectLoop", function (store){
+		var str = ''
+		, len = store.categories.length;
+		var l = 0;
+		for(; l < len; l++){
+			var counter = 0
+			, categ = store.categories[l];
+			for (var i = store.regularFlyer.length - 1; i >= 0; i--) {
+				if(store.regularFlyer[i].category === categ)
+					counter++;
+			};
+			str += "<a class='list-group-item' id='categ' data-categ='"+categ+"'><span class='badge'>" + counter + "</span>"+ categ +"</a>"
 		}
 		return str;
 	});

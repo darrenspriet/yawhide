@@ -124,6 +124,7 @@ var ViewFlyerView = Backbone.View.extend({
 		"click #regFly":"clickRegFlyer"
 		, "click #perFly":"clickPerFlyer"
 		, "click #savFly":"clickSavFlyer"
+		, "click #categ" : "doCateg"
 	}
 	, render:function(id){
 
@@ -140,25 +141,93 @@ var ViewFlyerView = Backbone.View.extend({
 		});
 	}
 	, clickRegFlyer: function(){
-		$('.flyerContainer').empty();
-		if(!$(this).hasClass('active')){
-			$(this).toggleClass('active');
+		//$('.flyerContainer').empty();
+		if($('#savFly').hasClass('active')){
+			$('#savFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if ($('#perFly').hasClass('active')){
+			$('#perFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($(this).data("toggle") === 'false'){
+			$('#regFly').toggleClass('active');
+			$(this).data("toggle", "true");
+		}
+		var sort_by_reg = function(a, b) {
+			console.log($(a).data('reg') + " " +  $(b).data('reg'))
+			return $(a).data('reg') - $(b).data('reg');//a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+		}
+
+		var list = $(".flyerContainer > div").get();
+		list.sort(sort_by_reg);
+		for (var i = 0; i < list.length; i++) {
+			list[i].parentNode.appendChild(list[i]);
 		}
 	}
 	, clickPerFlyer: function(){
-		$('.flyerContainer').empty();
-		var that = $(this);
-		if(!$(this).hasClass('active')){
-			that.toggleClass('active');
+		//$('.flyerContainer').empty();
+		if($('#regFly').hasClass('active')){
+			$('#regFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($('#savFly').hasClass('active')){
+			$('#savFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($(this).data("toggle") === 'false'){
+			$('#perFly').toggleClass('active');
+			$(this).data("toggle", "true");
+		}
+		var sort_by_per = function(a, b) {
+			return $(b).data('per')-$(a).data('per');//a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+		}
+
+		var list = $(".flyerContainer > div").get();
+		list.sort(sort_by_per);
+		for (var i = 0; i < list.length; i++) {
+			list[i].parentNode.appendChild(list[i]);
 		}
 	}
 	, clickSavFlyer: function(){
-		$('.flyerContainer').empty();
+		//$('.flyerContainer').empty();
 		if($('#regFly').hasClass('active')){
 			$('#regFly').removeClass('active');
+			$(this).data("toggle", "false");
 		}
-		if(!$(this).hasClass('active')){
+		if($('#perFly').hasClass('active')){
+			$('#perFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($(this).data("toggle") === 'false'){
 			$('#savFly').toggleClass('active');
+			$(this).data("toggle", "true");
+		}
+		var sort_by_sav = function(a, b) {
+			return $(b).data('sav')-$(a).data('sav');//a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+		}
+
+		var list = $(".flyerContainer > div").get();
+		list.sort(sort_by_sav);
+		for (var i = 0; i < list.length; i++) {
+			list[i].parentNode.appendChild(list[i]);
+		}
+	}
+	, doCateg: function(event){
+		var ii = 0
+		, list = $(".flyerContainer > div").get();
+		console.log($(event.target).data());
+
+		for(;ii<list.length; ii++){
+			if($(list[ii]).data('categ') === $(event.target).data('categ')){
+				if(!$(list[ii]).is(':visible')){
+					$(list[ii]).show();
+				}
+			}
+			else{
+				$(list[ii]).hide();
+			}
+			
 		}
 	}
 });
