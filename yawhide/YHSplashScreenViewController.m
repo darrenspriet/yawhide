@@ -105,9 +105,11 @@
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         //sets it to the initialViewController on that storyboard
         YHPostalFinderViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"PostalFinderViewController" ];
-        viewController.delegate = self;
+        [viewController setDelegate:self];
+        [viewController.navigationItem setLeftBarButtonItem:nil];
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewController];
         [nav.navigationBar setBarStyle:UIBarStyleDefault];
+        nav.navigationItem.leftBarButtonItem = nil;
         nav.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:nav animated:YES completion:NULL];
         
@@ -162,6 +164,9 @@
             NSLog(@"all went as planned");
         }
     }
+}
+-(void)dismissPostalView{
+    NSLog(@"Not Doing anything here, Cancel doesn't exist");
 }
 
 

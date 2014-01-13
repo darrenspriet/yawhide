@@ -15,6 +15,8 @@
 
 @protocol YHPostalViewControllerDelegate <NSObject>
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude;
+-(void)dismissPostalView;
+
 @end
 
 @interface YHPostalFinderViewController : UIViewController<UITextFieldDelegate, CLLocationManagerDelegate>
@@ -24,5 +26,6 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *largeActivityIndicator;
+- (IBAction)cancelButton:(UIBarButtonItem *)sender;
 
 @end

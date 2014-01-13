@@ -24,12 +24,14 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self.revealButtonItem setTarget: self.revealViewController];
-    [self.revealButtonItem setAction: @selector( revealToggle: )];
+    
+//ONLY NEEDED IF WE ADD THE REVEAL CONTROLLER ON THE LEFT
+//    [self.revealButtonItem setTarget: self.revealViewController];
+//    [self.revealButtonItem setAction: @selector( revealToggle: )];
+    
     [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
     [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.revealViewController tapGestureRecognizer];
-
 
 }
 
@@ -37,7 +39,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     NSLog(@"view will appear store controller");
     [self.tableView reloadData];
-    [self addLeftController];
+//    [self addLeftController];
 
 }
 
@@ -92,10 +94,19 @@
 
 #pragma mark - Prepare for Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    NSInteger row = [[self tableView].indexPathForSelectedRow row];
+    
+    if([segue.identifier isEqualToString:@"postalFinderSegue"]){
+        UINavigationController * navController =segue.destinationViewController;
+        YHPostalFinderViewController *postalFinder = (YHPostalFinderViewController *)navController.topViewController;
+        //passes the schedule
+        [postalFinder setDelegate:self];
+    }
+    else{
+        NSInteger row = [[self tableView].indexPathForSelectedRow row];
+        [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
+        [[YHDataManager sharedData] sortTheBestSavingsAndPercent];
+    }
 
-    [[YHDataManager sharedData] setStoreDictionary:[NSMutableDictionary dictionaryWithDictionary:[[[YHDataManager sharedData] storesArray] objectAtIndex:row]]];
-    [[YHDataManager sharedData] sortTheBestSavingsAndPercent];
 
 
 }
@@ -117,7 +128,67 @@
     }
 }
 
+- (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude{
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
+    
+    
+    float distance = 50;
+    NSData* data = [NSData dataWithContentsOfURL:
+                    [NSURL URLWithString: [NSString stringWithFormat:@"http://darrenspriet.apps.runkite.com/getNearestStores/%f/%f/%f",latitude,longitude, distance]]];
+    
+    //If there is no data, then we show a Alert that says the Server is down
+    if (data==nil) {
+        NSLog(@"got no data");
+        UIAlertView *noData = [[UIAlertView alloc]
+                               initWithTitle:@"Sorry"
+                               message:@"Our Servers Must Be Down"
+                               delegate:nil
+                               cancelButtonTitle:@"OK"
+                               otherButtonTitles:nil];
+        [noData show];
+    }else{
+        
+        NSError* error2;
+        
+        NSDictionary * dictionary =[NSJSONSerialization JSONObjectWithData:data
+                                                                   options:kNilOptions
+                                                                     error:&error2];
+        
+        if (error2) {
+            NSLog(@"this is an error in calling the stores");
+            UIAlertView *noData = [[UIAlertView alloc]
+                                   initWithTitle:@"Sorry"
+                                   message:@"Our Servers Must Be Down"
+                                   delegate:nil
+                                   cancelButtonTitle:@"OK"
+                                   otherButtonTitles:nil];
+            [noData show];
+        }
+        else{
+            [[[YHDataManager sharedData] storesArray] removeAllObjects];
+            for(NSArray *array in dictionary){
+                [[[YHDataManager sharedData] storesArray] addObject:array];
+            }
+            
+            
+            NSLog(@"loaded stores");
+        }
+    }
+    
+}
 
+
+-(void)dismissPostalView{
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+    
+}
+
+
+//ONLY NEEDED IF WE ADD THE REVEAL CONTROLLER
 -(void)addLeftController{
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard

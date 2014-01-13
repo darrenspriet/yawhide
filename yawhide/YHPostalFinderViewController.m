@@ -198,4 +198,7 @@
         [self.largeActivityIndicator startAnimating];
     }
 }
+- (IBAction)cancelButton:(UIBarButtonItem *)sender {
+    [self.delegate dismissPostalView];
+}
 @end

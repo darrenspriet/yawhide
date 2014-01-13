@@ -26,11 +26,17 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+
     [self.revealButtonItem setTarget: self.revealViewController];
     [self.revealButtonItem setAction: @selector( rightRevealToggle: )];
+//    [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
+//    [self.revealViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+//    [self.revealViewController tapGestureRecognizer];
     [self setRegularFlyer:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] regularFlyer]]];
     [self setBestPercent:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestPercent]]];
     [self setBestSavings:[NSMutableArray arrayWithArray:[[YHDataManager sharedData] bestSavings]]];
+    
+
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     //sets it to the initialViewController on that storyboard
