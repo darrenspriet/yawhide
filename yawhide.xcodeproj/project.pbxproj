@@ -14,6 +14,11 @@
 		E05321501868CCDC008CE716 /* YHDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E053214F1868CCDC008CE716 /* YHDataManager.m */; };
 		E060ED111881CFD600ADEF0B /* reveal-right-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E060ED0F1881CFD600ADEF0B /* reveal-right-icon@2x.png */; };
 		E060ED121881CFD600ADEF0B /* reveal-right-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E060ED101881CFD600ADEF0B /* reveal-right-icon.png */; };
+		E07EE99A188372CE006EB96B /* LISENCE_YAWHIDE_ICONS.txt in Resources */ = {isa = PBXBuildFile; fileRef = E07EE999188372CE006EB96B /* LISENCE_YAWHIDE_ICONS.txt */; };
+		E07EE9AD18837BC6006EB96B /* postalButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E07EE9A518837BC6006EB96B /* postalButton.png */; };
+		E07EE9AE18837BC6006EB96B /* postalButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E07EE9A618837BC6006EB96B /* postalButton@2x.png */; };
+		E07EE9B1188382C6006EB96B /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = E07EE9AF188382C6006EB96B /* map.png */; };
+		E07EE9B2188382C6006EB96B /* map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E07EE9B0188382C6006EB96B /* map@2x.png */; };
 		E090452B1867C10500FA81B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452A1867C10500FA81B4 /* Foundation.framework */; };
 		E090452D1867C10500FA81B4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452C1867C10500FA81B4 /* CoreGraphics.framework */; };
 		E090452F1867C10500FA81B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E090452E1867C10500FA81B4 /* UIKit.framework */; };
@@ -83,6 +88,11 @@
 		E053214F1868CCDC008CE716 /* YHDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHDataManager.m; sourceTree = "<group>"; };
 		E060ED0F1881CFD600ADEF0B /* reveal-right-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-right-icon@2x.png"; sourceTree = "<group>"; };
 		E060ED101881CFD600ADEF0B /* reveal-right-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-right-icon.png"; sourceTree = "<group>"; };
+		E07EE999188372CE006EB96B /* LISENCE_YAWHIDE_ICONS.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LISENCE_YAWHIDE_ICONS.txt; sourceTree = "<group>"; };
+		E07EE9A518837BC6006EB96B /* postalButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = postalButton.png; sourceTree = "<group>"; };
+		E07EE9A618837BC6006EB96B /* postalButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "postalButton@2x.png"; sourceTree = "<group>"; };
+		E07EE9AF188382C6006EB96B /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
+		E07EE9B0188382C6006EB96B /* map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map@2x.png"; sourceTree = "<group>"; };
 		E09045271867C10500FA81B4 /* yawhide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yawhide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E090452A1867C10500FA81B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E090452C1867C10500FA81B4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -291,6 +301,7 @@
 		E09045311867C10500FA81B4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E07EE999188372CE006EB96B /* LISENCE_YAWHIDE_ICONS.txt */,
 				E09045321867C10500FA81B4 /* yawhide-Info.plist */,
 				E09045331867C10500FA81B4 /* InfoPlist.strings */,
 				E09045361867C10500FA81B4 /* main.m */,
@@ -322,6 +333,10 @@
 			children = (
 				E0FD2DD718788F25004D5AB3 /* Launch Images */,
 				E0F43B62187851E800B50A48 /* AppIcons */,
+				E07EE9A518837BC6006EB96B /* postalButton.png */,
+				E07EE9A618837BC6006EB96B /* postalButton@2x.png */,
+				E07EE9AF188382C6006EB96B /* map.png */,
+				E07EE9B0188382C6006EB96B /* map@2x.png */,
 				E09045631867C2F100FA81B4 /* reveal-icon.png */,
 				E09045641867C2F100FA81B4 /* reveal-icon@2x.png */,
 				E060ED0F1881CFD600ADEF0B /* reveal-right-icon@2x.png */,
@@ -467,20 +482,25 @@
 				E090453E1867C10500FA81B4 /* Main_iPhone.storyboard in Resources */,
 				E0F43B78187851F900B50A48 /* AppIcon50x50@2x.png in Resources */,
 				E0F43B81187851F900B50A48 /* iTunesArtwork.png in Resources */,
+				E07EE9B2188382C6006EB96B /* map@2x.png in Resources */,
 				E0F43B7F187851F900B50A48 /* AppIcon76x76.png in Resources */,
 				E0F43B7D187851F900B50A48 /* AppIcon72x72.png in Resources */,
 				E0F43B79187851F900B50A48 /* AppIcon57x57.png in Resources */,
 				E0F43B76187851F900B50A48 /* AppIcon40x40@2x.png in Resources */,
 				E0F43B7C187851F900B50A48 /* AppIcon60x60@2x.png in Resources */,
+				E07EE9B1188382C6006EB96B /* map.png in Resources */,
 				E0F43B7A187851F900B50A48 /* AppIcon57x57@2x.png in Resources */,
 				E0F43B74187851F900B50A48 /* AppIcon29x29@2x.png in Resources */,
 				E09045351867C10500FA81B4 /* InfoPlist.strings in Resources */,
 				E0F43B82187851F900B50A48 /* iTunesArtwork@2x.png in Resources */,
+				E07EE99A188372CE006EB96B /* LISENCE_YAWHIDE_ICONS.txt in Resources */,
+				E07EE9AD18837BC6006EB96B /* postalButton.png in Resources */,
 				E0F43B80187851F900B50A48 /* AppIcon76x76@2x.png in Resources */,
 				E09045651867C2F100FA81B4 /* reveal-icon.png in Resources */,
 				E0F43B77187851F900B50A48 /* AppIcon50x50.png in Resources */,
 				E060ED121881CFD600ADEF0B /* reveal-right-icon.png in Resources */,
 				E0FD2DD918788F46004D5AB3 /* Default-568@2x.png in Resources */,
+				E07EE9AE18837BC6006EB96B /* postalButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

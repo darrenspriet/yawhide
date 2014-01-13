@@ -125,6 +125,7 @@
 }
 - (void)didDismissPresentedViewControllerWithLatitude:(float)latitude andLongitude:(float)longitude
 {
+
     [self dismissViewControllerAnimated:YES completion:^{
         [self performSegueWithIdentifier:@"splashSegue" sender:self];
 
