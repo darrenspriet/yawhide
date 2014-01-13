@@ -31,7 +31,7 @@
 }
 
 -(void)sortTheBestSavingsAndPercent{
-    NSMutableArray * regularFlyer  = [self.storeDictionary objectForKey:@"regularFlyer"];
+    NSMutableArray * regularFlyer  = [self.storeDictionary objectForKey:@"currFlyer"];
     [self setRegularFlyer:regularFlyer];
 
     NSSortDescriptor * percentDescriptor = [[NSSortDescriptor alloc] initWithKey:@"bestPercent"

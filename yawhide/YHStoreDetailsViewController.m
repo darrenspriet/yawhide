@@ -48,7 +48,7 @@
     
     [self.revealViewController setRearViewController:nil];
     [self setTitle:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"storeName"]];
-    [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"regularFlyer"]]];
+    [self setStoreDetailsArray:[NSMutableArray arrayWithArray:[[[YHDataManager sharedData] storeDictionary] objectForKey:@"currFlyer"]]];
  
 }
 

@@ -70,21 +70,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    Sobeys
-//    125 The Queensway, Etobicoke, ON M8Y 1H6, Canada ‎
-//    +1 416-259-1758 ‎ · sobeys.com
-//bestPercentFlyer: Array[492]
-//bestSavFlyer: Array[492]
-//categories: Array[14]
-//city: "Mississauga, ON"
-//currFlyerDate: "2014-01-11T05:35:37.220Z"
-//location: Object
-//postalCode: "L5M 7L9"
-//regularFlyer: Array[492]
-//storeHours: Object
-//storeLocation: "5602 10th Line W"
-//storeName: "Mississauga"
-//urlNumber: 158
     
      static NSString *CellIdentifier = @"Store Cell";
     YHStoreCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -100,7 +85,7 @@
     [cell.address setText:storeLocation];
     [cell.city setText:[NSString stringWithFormat:@"%@, %@",city, postalCode]];
     [cell.noFlyerDetail setText:@""];
-    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"regularFlyer"]!=0) {
+    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"currFlyer"]!=0) {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     else{
@@ -133,7 +118,7 @@
     
     NSInteger row = [[self tableView].indexPathForSelectedRow row];
 
-    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"regularFlyer"]!=0) {
+    if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:row] objectForKey:@"currFlyer"]!=0) {
         return YES;
     }
     else{
