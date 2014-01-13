@@ -155,7 +155,6 @@ var ViewFlyerView = Backbone.View.extend({
 			$(this).data("toggle", "true");
 		}
 		var sort_by_reg = function(a, b) {
-			console.log($(a).data('reg') + " " +  $(b).data('reg'))
 			return $(a).data('reg') - $(b).data('reg');//a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
 		}
 
@@ -164,6 +163,7 @@ var ViewFlyerView = Backbone.View.extend({
 		for (var i = 0; i < list.length; i++) {
 			list[i].parentNode.appendChild(list[i]);
 		}
+		window.scrollTo(0,0);
 	}
 	, clickPerFlyer: function(){
 		//$('.flyerContainer').empty();
@@ -188,6 +188,7 @@ var ViewFlyerView = Backbone.View.extend({
 		for (var i = 0; i < list.length; i++) {
 			list[i].parentNode.appendChild(list[i]);
 		}
+		window.scrollTo(0,0);
 	}
 	, clickSavFlyer: function(){
 		//$('.flyerContainer').empty();
@@ -212,11 +213,12 @@ var ViewFlyerView = Backbone.View.extend({
 		for (var i = 0; i < list.length; i++) {
 			list[i].parentNode.appendChild(list[i]);
 		}
+		window.scrollTo(0,0);
 	}
 	, doCateg: function(event){
 		var ii = 0
 		, list = $(".flyerContainer > div").get();
-		console.log($(event.target).data());
+		
 
 		for(;ii<list.length; ii++){
 			if($(event.target).data('categ') === 'all'){
@@ -230,6 +232,17 @@ var ViewFlyerView = Backbone.View.extend({
 			}
 			
 		}
+		var child = $('.categToggle').children();
+		for (var i = child.length - 1; i >= 0; i--) {
+			if($(child[i]).text() == $(event.target).text()){
+				$(event.target).toggleClass('active');
+			}
+			else{
+				$(child[i]).removeClass('active');
+			}
+			
+		};		
+		window.scrollTo(0,0);
 	}
 });
 
