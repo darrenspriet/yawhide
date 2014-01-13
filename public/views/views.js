@@ -219,10 +219,11 @@ var ViewFlyerView = Backbone.View.extend({
 		console.log($(event.target).data());
 
 		for(;ii<list.length; ii++){
-			if($(list[ii]).data('categ') === $(event.target).data('categ')){
-				if(!$(list[ii]).is(':visible')){
-					$(list[ii]).show();
-				}
+			if($(event.target).data('categ') === 'all'){
+				$(list[ii]).show();
+			}
+			else if($(list[ii]).data('categ') === $(event.target).data('categ')){
+				$(list[ii]).show();
 			}
 			else{
 				$(list[ii]).hide();
