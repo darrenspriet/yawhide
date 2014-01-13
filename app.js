@@ -411,7 +411,7 @@ app.get('/readLocalParts', function (req, res){
 						});
 						}
 						, function (err7, results){
-							console.log(info.sort());
+							//console.log(info.sort());
 							Sobeys.addCategoryParts(h, info.sort(), dateOb, function (err6){
 
 								if(err6) throw err6;
