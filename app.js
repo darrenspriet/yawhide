@@ -950,7 +950,7 @@ app.get('/deal', function (req, res){
 	res.end();
 });
 
-http.createServer(app).listen(3000, 'localhost', function () {
+http.createServer(app).listen(8000, function () {
 	console.log("Express server listening on port " + app.get('port'));
 });
 
