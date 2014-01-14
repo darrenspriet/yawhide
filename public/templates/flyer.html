@@ -9,7 +9,7 @@
 </header>
 <div class="row">
 	<div class="col-xs-3">
-		<div class="list-group">
+		<div class="list-group fixedLeft">
 			<h3>Flyer Types</h3>
 			<a class="list-group-item active" data-toggle="true" id="regFly">Regular Flyer</a>
 			<a class="list-group-item" data-toggle="false" id="perFly">Best Percentage Version</a>
@@ -24,7 +24,7 @@
 		</div>
 	</div>
 	<div class="col-xs-9">
-		<div class="flyerContainer">
+		<div class="flyerContainer overflow">
 			{{#storeInfo.regularFlyer}}
 			<div class="media list-group-item" data-per="{{bestPercent}}" data-sav="{{bestSav}}" data-reg="{{@index}}" data-categ="{{category}}">
 				<a class="pull-left">
