@@ -80,10 +80,10 @@
     NSString *storeName = [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row]  objectForKey:@"storeName"];
     NSString *storeLocation = [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row]  objectForKey:@"storeLocation"];
     NSString *city = [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row]  objectForKey:@"city"];
-    NSString *postalCode = [[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row]  objectForKey:@"postalCode"];
-    [cell.storeName setText:[NSString stringWithFormat:@"%@-",storeName]];
-    [cell.address setText:storeLocation];
-    [cell.city setText:[NSString stringWithFormat:@"%@, %@",city, postalCode]];
+    NSArray *cityArray = [city componentsSeparatedByString:@","];
+    
+    [cell.storeName setText:[NSString stringWithFormat:@"%@ - Sobeys",storeName]];
+    [cell.address setText:[NSString stringWithFormat:@"%@, %@",storeLocation, cityArray[0]]];
     [cell.noFlyerDetail setText:@""];
     if ([[[[YHDataManager sharedData] storesArray] objectAtIndex:indexPath.row] objectForKey:@"currFlyer"]!=0) {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
