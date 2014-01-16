@@ -74,7 +74,7 @@ $(document).ready(function(){
 				if(store.regularFlyer[i].category === categ)
 					counter++;
 			};
-			str += "<a class='list-group-item' id='categ' data-categ='"+categ+"'><span class='badge'>" + counter + "</span>"+ categ +"</a>"
+			str += "<a class='list-group-item list-small' id='categ' data-categ='"+categ+"'><span class='badge'>" + counter + "</span>"+ categ +"</a>"
 		}
 		return str;
 	});
