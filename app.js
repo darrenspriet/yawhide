@@ -392,7 +392,7 @@ app.get('/readLocalParts', function (req, res){
 														ob.extra = extra;
 														info.push(ob);*/
 
-														Item.makeItem(item, price, sav, desc, url, extra, percent, sav2, name, h, function (errMakeItem){
+														Item.makeItem(item, price, sav, desc, url, extra, percent*100, sav2, name, h, function (errMakeItem){
 															if(errMakeItem) throw errMakeItem;
 														});
 													});
