@@ -17,7 +17,7 @@ var express = require('express')
 app = express();
 
 app.configure(function () {
-	app.set('port', process.env.PORT || 3000);
+	app.set('port', process.env.PORT || 8000);
 	app.set('view engine', 'jade');
     app.use(express.favicon());
     app.use(express.logger('dev'));
@@ -950,7 +950,7 @@ app.get('/deal', function (req, res){
 	res.end();
 });
 
-http.createServer(app).listen(3000, 'localhost', function () {
+http.createServer(app).listen(8000, function () {
 	console.log("Express server listening on port " + app.get('port'));
 });
 
