@@ -17,8 +17,28 @@ var SobeySchema = new db.Schema({
 		, Saturday: String*/
 	}
 	, location: {lat: Number, long: Number}
-	, currentInterval: String
-	, currFlyerDate: Date
+	, flyerDate:{
+		/*start:String
+		, end:String*/
+	}
+	, currFlyerDate: {type:Date, default:Date.now}
+	, categories: []
+	/*{
+		bakery: []
+		, beverages: []
+		, boxedMeats: []
+		, candy: []
+		, dairy: []
+		, deli: []
+		, floral: []
+		, grocery: []
+		, household: []
+		, meat: []
+		, pet: []
+		, produce: []
+		, seafood: []
+		, spread: []
+	}*/
 	, currFlyer: [/*{
 		item: String
 		, price: String
@@ -63,18 +83,6 @@ var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hour
 }
 
 /**
-* updates the current Inverval
-* @param {String} -id, interval
-* @return {cb} - callback
-*/
-var updateCurrentIntervalById = function (id, interval, cb){
-	Sobey.findByIdAndUpdate(
-		id
-		, {currentInterval : interval}
-		, cb);
-}
-
-/**
 * gets a sobey object by id
 * @param {String} -id
 * @return {cb} - callback
@@ -96,10 +104,7 @@ var getStoreById = function(id, cb){
 var makeFlyer = function(store, arr, cb){
 	/** make backup of old flyer */
 	var ob = {};
-	if(store.currFlyerDate == '')
-		ob.date = new Date().toISOString();
-	else
-		ob.date = store.currFlyerDate;
+	ob.date = store.currFlyerDate;
 	ob.actualFlyer = store.currFlyer;
 
 	store.currFlyerDate = new Date().toISOString();
@@ -161,11 +166,27 @@ var getAllStores = function(cb){
         , cb );
 }
 
+
+var addCategoryParts = function (urlnum, arr, date, cb){
+	//console.log('\n\n\n\n');
+	//console.log('infoObject is: ');
+	//console.log(infoObject);
+	
+	Sobey.findOneAndUpdate(
+		{urlNumber : urlnum}
+		, {
+			categories : arr
+			, flyerDate: date
+		}
+		, cb);
+}
+
+
 module.exports.makeStore = makeStore;
-module.exports.updateCurrentIntervalById = updateCurrentIntervalById;
 module.exports.getStoreById = getStoreById;
 module.exports.makeFlyer = makeFlyer;
 module.exports.getStoreByStoreName = getStoreByStoreName;
 module.exports.getStoreByUrlNum = getStoreByUrlNum;
 module.exports.getNearestStores = getNearestStores;
 module.exports.getAllStores = getAllStores;
+module.exports.addCategoryParts = addCategoryParts;

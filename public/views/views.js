@@ -16,19 +16,23 @@ $.fn.serializeObject = function() {
 
 
 var IndexView = Backbone.View.extend({
-	el:' #page_container',
-	events: {
+	el:' #page_container'
+	, events: {
 		"click #findFlyers": "findFlyersPage"
-	},
-	render: function(){
-		$.get('templates/home.html', function(incomingTemplate){
+		, "click #usePostalCode": "findViaPostal"
+	}
+	, render: function(){
+		$.get('templates/home.html', function (incomingTemplate){
 			var template = Handlebars.compile(incomingTemplate);
 			$('#page_container').html(template()).trigger('create');
 		});
 		return this;
-	}, 
-	findFlyersPage: function(){
+	}
+	, findFlyersPage: function(){
 		app_router.navigate('#/nearestStores', {trigger: true});
+	}
+	, findViaPostal: function(){
+		app_router.navigate('#/nearestStoresByPostal/'+ $("#postal").val(), {trigger: true});
 	}
 });
 
@@ -42,21 +46,11 @@ var NearestStoresView = Backbone.View.extend({
 			//var nearestSobeysStores =  new GetOneSobeyFlyer();
 			nearestSobeysStores.fetch({
 				success: function(){
-					//console.log(nearestSobeysStores);
-					var storesArray = new Array();
+					console.log(nearestSobeysStores);
+					var storesArray = [];
+					
 					for(var i=0;i<nearestSobeysStores.length;i++){
-						var storeObj = new Object({
-							"storeName" : nearestSobeysStores.models[i].attributes.flyer.storeName,
-							"urlNumber" : nearestSobeysStores.models[i].attributes.flyer.urlNumber
-						});
-						storesArray.push(storeObj);
-						var data = JSON.stringify( nearestSobeysStores.models[i].attributes.sortSavings)
-						, data2 = JSON.stringify( nearestSobeysStores.models[i].attributes.sortPercent)
-						, data3 = JSON.stringify( nearestSobeysStores.models[i].attributes.flyer.currFlyer)
-						, store = nearestSobeysStores.models[i].attributes.flyer.storeName;
-						localStorage.setItem('savings'+store, data);
-						localStorage.setItem('percent'+store, data2);
-						localStorage.setItem('flyer'+store, data3);
+						storesArray.push( nearestSobeysStores.models[i].attributes);
 					}
 					//console.log(storesArray);
 
@@ -80,8 +74,23 @@ var NearestStoresView = Backbone.View.extend({
 					console.log('there was an error');
 				}
 			});
+		});
+	}
 });
-}
+
+var PostalStoresView = Backbone.View.extend({
+	el:'#page_container'
+	, events:{
+
+	}
+	, render: function(postalCode){
+		var storeByPostal = new GetNearestByPostal({postal: postalCode, maxD:10});
+		storeByPostal.fetch({
+			success:function(){
+				console.log(nearestSobeysStores);
+			}
+		})
+	}
 });
 
 var StoreInfoView = Backbone.View.extend({
@@ -110,8 +119,14 @@ var StoreInfoView = Backbone.View.extend({
 });
 
 var ViewFlyerView = Backbone.View.extend({
-
-	render:function(id){
+	el:' #page_container'
+	, events:{
+		"click #regFly":"clickRegFlyer"
+		, "click #perFly":"clickPerFlyer"
+		, "click #savFly":"clickSavFlyer"
+		, "click #categ" : "doCateg"
+	}
+	, render:function(id){
 
 		var store = new GetOneSobeyStore({id: id});
 		store.fetch({
@@ -119,13 +134,115 @@ var ViewFlyerView = Backbone.View.extend({
 				console.log(store.attributes);
 				$.get('templates/flyer.html', function(incomingTemplate){
 					var template = Handlebars.compile(incomingTemplate);
-					$('#page_container').html(template({flyer:store.attributes.currFlyer})).trigger('create');
-				}); 
-				
+					$('#page_container').html(template({storeInfo:store.attributes})).trigger('create');
+				});
 				return this;
 			}
 		});
 	}
+	, clickRegFlyer: function(){
+		//$('.flyerContainer').empty();
+		if($('#savFly').hasClass('active')){
+			$('#savFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if ($('#perFly').hasClass('active')){
+			$('#perFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($(this).data("toggle") === 'false'){
+			$('#regFly').toggleClass('active');
+			$(this).data("toggle", "true");
+		}
+		var sort_by_reg = function(a, b) {
+			return $(a).data('reg') - $(b).data('reg');//a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+		}
 
+		var list = $(".flyerContainer > div").get();
+		list.sort(sort_by_reg);
+		for (var i = 0; i < list.length; i++) {
+			list[i].parentNode.appendChild(list[i]);
+		}
+		window.scrollTo(0,0);
+	}
+	, clickPerFlyer: function(){
+		//$('.flyerContainer').empty();
+		if($('#regFly').hasClass('active')){
+			$('#regFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($('#savFly').hasClass('active')){
+			$('#savFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($(this).data("toggle") === 'false'){
+			$('#perFly').toggleClass('active');
+			$(this).data("toggle", "true");
+		}
+		var sort_by_per = function(a, b) {
+			return $(b).data('per')-$(a).data('per');//a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+		}
+
+		var list = $(".flyerContainer > div").get();
+		list.sort(sort_by_per);
+		for (var i = 0; i < list.length; i++) {
+			list[i].parentNode.appendChild(list[i]);
+		}
+		window.scrollTo(0,0);
+	}
+	, clickSavFlyer: function(){
+		//$('.flyerContainer').empty();
+		if($('#regFly').hasClass('active')){
+			$('#regFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($('#perFly').hasClass('active')){
+			$('#perFly').removeClass('active');
+			$(this).data("toggle", "false");
+		}
+		if($(this).data("toggle") === 'false'){
+			$('#savFly').toggleClass('active');
+			$(this).data("toggle", "true");
+		}
+		var sort_by_sav = function(a, b) {
+			return $(b).data('sav')-$(a).data('sav');//a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+		}
+
+		var list = $(".flyerContainer > div").get();
+		list.sort(sort_by_sav);
+		for (var i = 0; i < list.length; i++) {
+			list[i].parentNode.appendChild(list[i]);
+		}
+		window.scrollTo(0,0);
+	}
+	, doCateg: function(event){
+		var ii = 0
+		, list = $(".flyerContainer > div").get();
+		
+
+		for(;ii<list.length; ii++){
+			if($(event.target).data('categ') === 'all'){
+				$(list[ii]).show();
+			}
+			else if($(list[ii]).data('categ') === $(event.target).data('categ')){
+				$(list[ii]).show();
+			}
+			else{
+				$(list[ii]).hide();
+			}
+			
+		}
+		var child = $('.categToggle').children();
+		for (var i = child.length - 1; i >= 0; i--) {
+			if($(child[i]).text() == $(event.target).text()){
+				$(event.target).toggleClass('active');
+			}
+			else{
+				$(child[i]).removeClass('active');
+			}
+			
+		};		
+		window.scrollTo(0,0);
+	}
 });
 

@@ -60,3 +60,23 @@ var initializeMap = function(L1, L2)
 	};
 	var map=new google.maps.Map(document.getElementById("findASobeys"),mapProp);
 }
+
+$(document).ready(function(){
+
+	Handlebars.registerHelper("objectLoop", function (store){
+		var str = ''
+		, len = store.categories.length;
+		var l = 0;
+		for(; l < len; l++){
+			var counter = 0
+			, categ = store.categories[l];
+			for (var i = store.regularFlyer.length - 1; i >= 0; i--) {
+				if(store.regularFlyer[i].category === categ)
+					counter++;
+			};
+			str += "<a class='list-group-item list-small' id='categ' data-categ='"+categ+"'><span class='badge'>" + counter + "</span>"+ categ +"</a>"
+		}
+		return str;
+	});
+
+});
