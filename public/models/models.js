@@ -39,4 +39,12 @@ var GetOneSobeyStore = Backbone.Model.extend({
     }
 }); 
 
+var GetLatLongFromPostal = Backbone.Model.extend({
+    initialize: function(options){
+        this.postal = options.postal;
+    },
+    url: function(){
+        return "http://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text='" + this.postal + "'";
+    }
+});
 

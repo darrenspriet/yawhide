@@ -21,7 +21,7 @@ var IndexView = Backbone.View.extend({
 		"click #findFlyers": "findFlyersPage"
 		, "click #usePostalCode": "findViaPostal"
 	}
-	, render: function(){
+	, render: function(e){
 		$.get('templates/home.html', function (incomingTemplate){
 			var template = Handlebars.compile(incomingTemplate);
 			$('#page_container').html(template()).trigger('create');
@@ -32,6 +32,7 @@ var IndexView = Backbone.View.extend({
 		app_router.navigate('#/nearestStores', {trigger: true});
 	}
 	, findViaPostal: function(){
+		console.log($("#postal").val())
 		app_router.navigate('#/nearestStoresByPostal/'+ $("#postal").val(), {trigger: true});
 	}
 });
@@ -42,7 +43,7 @@ var NearestStoresView = Backbone.View.extend({
 	}
 	, render: function(){
 		getLocation(function (loc){
-			var nearestSobeysStores = new GetNearestSobeys({elat: loc.latitude, elong: loc.longitude, maxD:10});
+			var nearestSobeysStores = new GetNearestSobeys({elat: loc.latitude, elong: loc.longitude, maxD:20});
 			//var nearestSobeysStores =  new GetOneSobeyFlyer();
 			nearestSobeysStores.fetch({
 				success: function(){
@@ -84,12 +85,42 @@ var PostalStoresView = Backbone.View.extend({
 
 	}
 	, render: function(postalCode){
-		var storeByPostal = new GetNearestByPostal({postal: postalCode, maxD:10});
-		storeByPostal.fetch({
-			success:function(){
-				console.log(nearestSobeysStores);
-			}
-		})
+		console.log(postalCode);
+		$.ajax({
+			url: "http://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text='" + postalCode + "'&format=json"
+			, type: "GET"
+			})
+			.done(function (json){
+				//console.log(json.query.results.place.centroid);
+				var nearestSobeysStores = new GetNearestSobeys({elat: json.query.results.place.centroid.latitude, elong: json.query.results.place.centroid.longitude, maxD:20});
+				nearestSobeysStores.fetch({
+					success: function(){
+						console.log(nearestSobeysStores);
+						var storesArray = [];
+
+						for(var i=0;i<nearestSobeysStores.length;i++){
+							storesArray.push( nearestSobeysStores.models[i].attributes);
+						}
+						$.get('../templates/nearestStores.html', function (incomingTemplate){
+							var template = Handlebars.compile(incomingTemplate);
+							$('#page_container').html(template).trigger('create');
+							var incomingStores =
+							"<div class='list-group'>"+
+							"{{#storesArray}}"+
+							"<a href='/#/viewFlyer/{{urlNumber}}' class='list-group-item text-center'>Sobeys - {{storeName}}</a>"+
+							"{{/storesArray}}"+
+							"</div>";
+
+							var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
+							$('.tablesForStore').html(html).trigger('create');
+						});					
+						return this;
+					},
+					error: function(){
+						console.log('there was an error');
+					}
+				});
+			});
 	}
 });
 
