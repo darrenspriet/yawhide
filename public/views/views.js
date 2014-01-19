@@ -32,7 +32,6 @@ var IndexView = Backbone.View.extend({
 		app_router.navigate('#/nearestStores', {trigger: true});
 	}
 	, findViaPostal: function(){
-		console.log($("#postal").val())
 		app_router.navigate('#/nearestStoresByPostal/'+ $("#postal").val(), {trigger: true});
 	}
 });
@@ -85,13 +84,11 @@ var PostalStoresView = Backbone.View.extend({
 
 	}
 	, render: function(postalCode){
-		console.log(postalCode);
 		$.ajax({
 			url: "http://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text='" + postalCode + "'&format=json"
 			, type: "GET"
 			})
 			.done(function (json){
-				//console.log(json.query.results.place.centroid);
 				var nearestSobeysStores = new GetNearestSobeys({elat: json.query.results.place.centroid.latitude, elong: json.query.results.place.centroid.longitude, maxD:20});
 				nearestSobeysStores.fetch({
 					success: function(){
