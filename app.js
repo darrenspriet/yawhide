@@ -6,8 +6,9 @@ var express = require('express')
 , request = require('request')
 , exphbs = require('express3-handlebars')
 , cheerio = require('cheerio')
-, Sobeys = require('./models/sobeys.js')
-, Item = require('./models/item.js')
+//COMMENT OUT THESE LINES OF CODE TO GET RID OF MONGOOSE
+// , Sobeys = require('./models/sobeys.js')
+// , Item = require('./models/item.js')
 , Geocoder = require('node-geocoder-ca').Geocoder
 , geocoder = new Geocoder()
 , s = require('./algorithms/sobeyFunc')
@@ -32,6 +33,78 @@ app.configure(function () {
 app.configure('development', function () {
 	app.use(express.errorHandler());
 });
+
+var mysql      = require('mysql');
+var conn = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'yawhidepassword',
+});
+
+conn.connect(function(err) {
+
+  if(err){
+  	console.log("Error is: "+ err);
+  }
+  else{
+  	console.log("working!!!!!!!!!!!");
+  	clientConnected();
+  }
+});
+
+var clientConnected = function()
+{
+	conn.query('CREATE DATABASE projectyawhide', function(err, results) {
+		if (err && err.number != conn.ERROR_DB_CREATE_EXISTS) {
+			console.log("ERROR: " + err.message);
+		}
+		else{
+		console.log('results is '+results);
+		console.log("database created OR already exists.");
+		dbCreated();
+
+	}
+	});
+};
+
+var dbCreated = function()
+{
+	conn.query('USE projectyawhide', function(err, results) {
+		if (err) {
+			console.log("ERROR: " + err.message);
+			throw err;
+		}else{
+			console.log('using test');
+			useOk();
+
+		}
+	});
+};
+
+var useOk = function()
+{
+	conn.query(
+		'CREATE TABLE table1'+
+		'(id INT(11) AUTO_INCREMENT, '+
+		'title VARCHAR(255), '+
+		'text TEXT, '+
+		'created DATETIME, '+
+		'PRIMARY KEY (id));', function(err, results) {
+			if (err && err.number != conn.ERROR_TABLE_EXISTS_ERROR) {
+				console.log("ERROR: " + err.message);
+				throw err;
+			}
+			else{
+			console.log("table ready");
+			//tableReady();
+			}
+
+		}
+	);
+};
+
+
+
 
 var isEmptyObject = function (obj) {
     var name;
