@@ -44,7 +44,9 @@ var GetLatLongFromPostal = Backbone.Model.extend({
         this.postal = options.postal;
     },
     url: function(){
-        return "http://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text='" + this.postal + "'";
+       return "http://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text='" + this.postal + "'&format=json";
+     //   return "http://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text='" + this.postal + "'";
     }
 });
+
 

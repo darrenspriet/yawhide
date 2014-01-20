@@ -84,39 +84,44 @@ var PostalStoresView = Backbone.View.extend({
 
 	}
 	, render: function(postalCode){
-		$.ajax({
-			url: "http://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text='" + postalCode + "'&format=json"
-			, type: "GET"
-			})
-			.done(function (json){
-				var nearestSobeysStores = new GetNearestSobeys({elat: json.query.results.place.centroid.latitude, elong: json.query.results.place.centroid.longitude, maxD:20});
-				nearestSobeysStores.fetch({
-					success: function(){
-						console.log(nearestSobeysStores);
-						var storesArray = [];
+		console.log(postalCode);
+				var nearestSobeysWithPostal = new GetLatLongFromPostal({postal:postalCode});
+				nearestSobeysWithPostal.fetch({
+					success:function(){
+						console.log(nearestSobeysWithPostal);
+						var nearestSobeysStores = new GetNearestSobeys({elat: nearestSobeysWithPostal.attributes.query.results.place.centroid.latitude, elong: nearestSobeysWithPostal.attributes.query.results.place.centroid.longitude, maxD:20});
+						nearestSobeysStores.fetch({
+							success: function(){
+								console.log(nearestSobeysStores);
+								var storesArray = [];
 
-						for(var i=0;i<nearestSobeysStores.length;i++){
-							storesArray.push( nearestSobeysStores.models[i].attributes);
-						}
-						$.get('../templates/nearestStores.html', function (incomingTemplate){
-							var template = Handlebars.compile(incomingTemplate);
-							$('#page_container').html(template).trigger('create');
-							var incomingStores =
-							"<div class='list-group'>"+
-							"{{#storesArray}}"+
-							"<a href='/#/viewFlyer/{{urlNumber}}' class='list-group-item text-center'>Sobeys - {{storeName}}</a>"+
-							"{{/storesArray}}"+
-							"</div>";
+								for(var i=0;i<nearestSobeysStores.length;i++){
+									storesArray.push( nearestSobeysStores.models[i].attributes);
+								}
+								$.get('../templates/nearestStores.html', function (incomingTemplate){
+									var template = Handlebars.compile(incomingTemplate);
+									$('#page_container').html(template).trigger('create');
+									var incomingStores =
+									"<div class='list-group'>"+
+									"{{#storesArray}}"+
+									"<a href='/#/viewFlyer/{{urlNumber}}' class='list-group-item text-center'>Sobeys - {{storeName}}</a>"+
+									"{{/storesArray}}"+
+									"</div>";
 
-							var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
-							$('.tablesForStore').html(html).trigger('create');
-						});					
-						return this;
-					},
-					error: function(){
-						console.log('there was an error');
+									var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
+									$('.tablesForStore').html(html).trigger('create');
+								});					
+								return this;
+							},
+							error: function(){
+								console.log('there was an error');
+							}
+						});
+						}, 
+					error:function(){
+						console.log('Error from Yahoo API');
+
 					}
-				});
 			});
 	}
 });
