@@ -15,7 +15,6 @@ var express = require('express')
 , s = require('./algorithms/sobeyFunc')
 , async = require('async')
 , ce = require('cloneextend');
-
 app = express();
 
 app.configure(function () {
@@ -46,6 +45,8 @@ app.get('/loadSQL', function (req, res){
 		}
 	})	
 });
+
+
 
 var isEmptyObject = function (obj) {
     var name;
