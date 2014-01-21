@@ -62,7 +62,7 @@ interval = setInterval(function() {
     console.log("test complete!");
     phantom.exit();
   }
-}, 250);
+}, 500);
 };
 
 
