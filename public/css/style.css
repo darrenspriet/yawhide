@@ -55,10 +55,6 @@ img {
 	
 }
 
-.fixedLeft{
-	position:fixed;
-	left:1px;
-}
 
 .overflow{
 	overflow-y: auto;

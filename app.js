@@ -6,7 +6,7 @@ var express = require('express')
 , request = require('request')
 , exphbs = require('express3-handlebars')
 , cheerio = require('cheerio')
-, Sobeys = require('./models/sobeys.js')
+, Store = require('./models/store.js')
 , Item = require('./models/item.js')
 , Geocoder = require('node-geocoder-ca').Geocoder
 , geocoder = new Geocoder()
@@ -412,7 +412,7 @@ app.get('/readLocalParts', function (req, res){
 						}
 						, function (err7, results){
 							//console.log(info.sort());
-							Sobeys.addCategoryParts(h, info.sort(), dateOb, function (err6){
+							Store.addCategoryParts(h, info.sort(), dateOb, function (err6){
 
 								if(err6) throw err6;
 								
@@ -602,12 +602,12 @@ app.get('/readLocalFlyers', function (req, res){
 
 						console.log('iterating done');
 						var urlNum = h.split('.')[0];
-						Sobeys.getStoreByUrlNum(urlNum, function (err7, store){
+						Store.getStoreByUrlNum(urlNum, function (err7, store){
 							if (err7) throw err7;
 							if(!err7 && store !== null){
-								Sobeys.makeFlyer(store, info, function (err8){
+								Store.makeFlyer(store, info, function (err8){
 									if (err8) throw err8;
-									Sobeys.updateFlyerDateAndInterval(flyerDate, new Date().getTime(), urlNum, function (err9){
+									Store.updateFlyerDateAndInterval(flyerDate, new Date().getTime(), urlNum, function (err9){
 										if(err9) throw err;
 										if(h > 288)
 											console.log('done');
@@ -734,7 +734,7 @@ app.get('/makeStore', function (req, res){
 					var lat = latLng[1].substr(0,latLng[1].length -1);
 					if(isEmptyObject(hours))
 						hours.open = '24 hours';
-					Sobeys.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
+					Store.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
 						if(err) throw err;
 						console.log(z);
 						z++;
@@ -751,7 +751,7 @@ app.get('/makeStore', function (req, res){
 });
 
 app.get('/makeFlyer', function (req, res){
-	Sobeys.getAllStores(function (err, stores){
+	Store.getAllStores(function (err, stores){
 		if(err) throw err;
 		console.log(stores.length);
 		var z = 0;
@@ -759,7 +759,7 @@ app.get('/makeFlyer', function (req, res){
 			if(z < stores.length){
 				Item.getItemFromUrlNum(stores[z].urlNumber, function (err2, items){
 					if(err2) throw err2;
-					Sobeys.makeFlyer(stores[z], items, function (err3){
+					Store.makeFlyer(stores[z], items, function (err3){
 						if(err3) throw err3;
 						console.log(z);
 						z++;
@@ -813,7 +813,7 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
 
     var maxD = req.params.maxD/111;
     console.log(elong+ " " + elat + " " + maxD);
-	Sobeys.getNearestStores( elong ,elat,maxD,function (err, flyer){
+	Store.getNearestStores( elong ,elat,maxD,function (err, flyer){
 		if(err){
 			console.log("there was an error");
 		}
@@ -867,7 +867,7 @@ app.get('/GetNearestByPostal/:postal/:maxD', function (req, res){
 });
 
 app.get('/viewFlyer/:url', function (req, res){
-	Sobeys.getStoreByUrlNum(req.params.url, function (err, store){
+	Store.getStoreByUrlNum(req.params.url, function (err, store){
 		var ob = {};
 		ob.storeName = store.storeName;
 		ob.storeLocation = store.storeLocation;
@@ -894,7 +894,7 @@ app.get('/viewFlyer/:url', function (req, res){
 
 app.get('/getAllStores', function (req, res){
 
-	Sobeys.getAllStores(function (err, flyer){
+	Store.getAllStores(function (err, flyer){
 		if(err){
 			console.log("there was an error");
 		}
@@ -908,7 +908,7 @@ app.get('/getAllStores', function (req, res){
 
 
 app.get('/getSobeyFlyer/:id', function (req, res){
-	Sobeys.getStoreByUrlNum(req.params.id, function (err, store){
+	Store.getStoreByUrlNum(req.params.id, function (err, store){
 	
 		if (err) res.send(500, 'could not get store by number')
 		else{
@@ -949,6 +949,30 @@ app.get('/deal', function (req, res){
 	console.log(info);
 	res.end();
 });
+/*
+app.get('/getMetroFlyer', function (req, res){
+	var url = 'http://www.metro.ca/flyer/index.en.html?id='
+
+	var z = 1;
+	(function loop(){
+		if(z < 296){
+			var storename = ''
+			, storeloc = ''
+			, storenum = 0
+			, urlnum = z
+			, city = ''
+			, postal = ''
+			, hours = {}
+			, interval = '';
+			request(url+z, function (r, s, b){
+				var $ = cheerio.load(b);
+				var info = [];
+
+				
+			});
+		}
+	}());
+});*/
 
 http.createServer(app).listen(8000, function () {
 	console.log("Express server listening on port " + app.get('port'));
