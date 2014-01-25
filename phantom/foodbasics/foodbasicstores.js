@@ -8,54 +8,74 @@ var startParseOfAddresses = function(){
   , loadInProgress = false
   , keepDocumentOpen = true
   ,fs =require('fs')
-  ,loading;
+  ,loading = 0
+ ,currentNumber = 0;
 
 
   page.onConsoleMessage = function(msg) {
-    console.log(msg);
+  //  console.log(msg);
   };
 
   page.onLoadStarted = function() {
     loadInProgress = true;
-    console.log("2nd load started");
+   // console.log("2nd load started");
   };
 
   page.onLoadFinished = function() {
     loading++;
     loadInProgress = false;
-    console.log("2nd load finished");
-    page.injectJs('../../lib/libsForPhantom/jquery-1.10.2.js');
-    page.injectJs('basic.js');
+   // console.log("2nd load finished");
+    page.injectJs('../phantomLibs/jquery-1.10.2.js');
+   
+    
 
   //NEED TO WRITE THE CODE THAT WILL PUT THE NUMBER INTO THE DOCUMENT SO THIS WILL KEEP GOING AND INCREENT LOADING
   if(loading % 2 === 0){
-    fs.write('1.html', page.content, 'w');
+    console.log("Got HTML FoodBasics page number: " +currentNumber);
+     fs.write('storeDetailPages/'+currentNumber+'.html', page.content, 'w');
   }
   else{
+    currentNumber++;
+    var innerHTML = '<div id="someSpecialID">'+currentNumber+'</div>';
+    var html = "$('body').append('"+innerHTML+"');";
+    fs.write('basic.js', html, 'w');
+    page.injectJs('basic.js');
+    if(currentNumber==65){
+      phantom.exit();
+    }
   }
 };
 
 
 var steps = [
-
 function() {
     //Do noting in here, do not remove
 
   },
   function() {
+          
+
     //Manipulate the page if needed!!!!!
     page.evaluate(function() {
-      var allSelects = $('select').attr('id', 'myNewSelector');
-      $("#myNewSelector")[0].selectedIndex = 1;
+      var myElem = document.getElementById('someSpecialID');
+      if (myElem != null){
+        $("input[name='searchMode']").attr('value', 'town');
+        var allSelects = $('select').attr('id', 'myNewSelector');
+        var number = $('#someSpecialID').html();
+        $("#myNewSelector")[0].selectedIndex = number;
+         $("button, input[type='submit']").attr('id', 'buttonForm');
+      }
 
-      $("button, input[type='submit']").attr('id', 'buttonForm');
-
+      
     });
   }, 
   function() {
     page.evaluate(function() {
-      //Click the form
+       var myElem = document.getElementById('someSpecialID');
+      if (myElem != null){
       $( "#buttonForm" ).click();
+    }
+
 
     });
   }, 
@@ -66,27 +86,31 @@ function() {
     });
   }
   ];
-// for (int i = 0; i<cities.length; i++){
   interval = setInterval(function() {
     if((!loadInProgress)&&(testindex==0)&&(keepDocumentOpen)){
-      console.log('2nd step '+ testindex);
+      //console.log('2nd step '+ testindex);
       page.open("http://www.foodbasics.ca/en/find-your-food-basics.html");
       keepDocumentOpen = false;
 
     }
     if (!loadInProgress && typeof steps[testindex] == "function") {
-      console.log("2nd step " + (testindex + 1));
+      //console.log("2nd step " + (testindex + 1));
       steps[testindex]();
       testindex++;
     }
     if (typeof steps[testindex] != "function"){
-      console.log("2nd test complete!");
-      phantom.exit();
+     // console.log("2nd test complete!");
+      testindex = 0;
+      loadInProgress=false;
+      keepDocumentOpen = true;
+      //phantom.exit();
     }
 
   }, 100);
-// }
-
 };
 
+
+
+
 startParseOfAddresses();
+
