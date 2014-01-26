@@ -4,9 +4,10 @@ var StoreSchema = new db.Schema({
 	storeName: String
 	, storeLocation: String
 	, storeNumber: Number
-	, urlNumber: {type:Number, unique:true}
+	, urlNumber: Number
 	, city: String
 	, postalCode: String
+	, storeType: String
 	, storeHours: {
 		/*Sunday: String
 		, Monday: String
@@ -68,8 +69,9 @@ var Store = db.mongoose.model('store', StoreSchema);
 * @param {Object} - hours, latLng
 * @return {cb} - callback
 */
-var makeStore = function (store, storeLoc, storeNum, num, city, postalCode, hours, lat,lng, cb){
+var makeStore = function (storeType, store, storeLoc, storeNum, num, city, postalCode, hours, lat,lng, cb){
 	var ins = new Store();
+	ins.storeType = storeType;
 	ins.storeName = store;
 	ins.storeLocation = storeLoc;
 	ins.storeNumber = storeNum;
@@ -148,10 +150,9 @@ var getNearestStores = function(elong,elat, maxD, callback){
 		{$near: [elat,elong]
 			,$maxDistance:maxD}}
 			,{}
-			,{limit:5}
-			, function(err, collection){ 
-				callback(null, collection);
-			});
+			,null//{limit:5}
+			, callback
+			);
     //One way, from cmd line: db.store.ensureIndex({location: "2d"})
 }
 
