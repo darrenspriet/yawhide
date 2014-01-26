@@ -434,7 +434,131 @@ app.get('/makeStoreSobeys', function (req, res){
 
 	var z = 1;
 	(function loop(){
-		if(z < 296){
+		if(z < 200){
+			var storename = ''
+			, storeloc = ''
+			, storenum = 0
+			, urlnum = z
+			, city = ''
+			, postal = ''
+			, hours = {}
+			, interval = '';
+			request(url+z, function (r, s, b){
+				var $ = cheerio.load(b);
+				var info = [];
+				if(	$('body').find('.block').length == 0){
+					$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
+						var count = 0;
+						html.children.forEach(function (i){
+							if(i.data !== '\n' && count > 1){
+								var count3 = 0;
+								i.children.forEach(function (j){
+									if(j.data !== '\n'){
+										if(j.attribs['class'].indexOf('grid__item') > -1){
+											
+											j.children.forEach(function (k){
+												if(k.data !== '\n'){
+													if(k.attribs['class'] === 'palm--hide'){
+														var str = '';
+														var count2 = 0;
+														k.children.forEach(function (l){
+															if(l.type !== 'tag'){
+																var tmp = l.data.split('\n');
+																tmp.forEach(function (m){
+																	if(m !== ''){
+																		str += m + ' ';
+																		switch(count2){
+																			case 0:
+																				storeloc = m;
+																				count2++;
+																				break;
+																			case 1:
+																				city = m;
+																				count2++;
+																				break;
+																			case 2:
+																				postal = m;
+																				count2++;
+																				break;
+																		}
+																	}
+																});
+															}
+														});
+														count2 = 0;
+													}
+													if(count3 == 6){
+														storenum = 	k.children[0].data.split('\n')[1];					
+													}
+													count3++;
+												}
+											});
+										}										
+									}
+								});
+								count3 = 0;
+							}
+							count++;
+						});
+					});
+					$('.my-store-title div div h3').each(function (i, html){
+						var tmp = html.children[0].data.split(' ');
+						var tmp2 = '';
+						for(var y = 0; y < tmp.length; y++){
+							if(y > 1){
+								tmp2 += tmp[y];
+								if(y+1 < tmp.length)
+									tmp2+=' ';
+							}
+						}
+						tmp2 = tmp2.replace('&amp;', '&');
+						storename = tmp2;
+					});
+					$('.push--desk--one-half table tbody tr').each(function (i, html){
+						var prevDay = '';
+						html.children.forEach(function (i){
+							if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
+									
+								var whole = i.children[0].data.split(' ');
+								if(whole.length == 5){
+									hours[prevDay] = i.children[0].data;
+								}
+								else if (whole.length == 1){
+									prevDay = whole[0];
+								}
+								else if (whole.length > 1 && whole.length < 5){
+									hours[prevDay] = i.children[0].data;
+								}
+							}
+						});
+					});
+					var latLng = $('#map_location').text().split(', ');
+					var lng = latLng[0].substr(1);
+					var lat = latLng[1].substr(0,latLng[1].length -1);
+					if(isEmptyObject(hours))
+						hours.open = '24 hours';
+					Store.makeStore('sobeys', storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
+						if(err) throw err;
+						console.log(z);
+						z++;
+						loop();
+					});
+				}
+				else{
+					z++;
+					loop();
+				}
+			});
+		}
+	}());
+});
+
+app.get('/makeStoreSobeys2', function (req, res){
+	var url = 'https://www.sobeys.com/en/stores/'
+
+	var z = 200;
+	(function loop(){
+		if(z < 300){
 			var storename = ''
 			, storeloc = ''
 			, storenum = 0
@@ -615,8 +739,9 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
     
 
     var maxD = req.params.maxD/111;
+    //maxD = 10/111
     console.log(elong+ " " + elat + " " + maxD);
-	Store.getNearestStores( elong ,elat,100,function (err, flyer){
+	Store.getNearestStores( elong ,elat,maxD,function (err, flyer){
 		if(err){
 			console.log("there was an error");
 		}
@@ -788,8 +913,9 @@ app.get('/getMetroStore', function (req, res){
 					var latLong = $('.store-details .where .see-more')[0].attribs.href
 					, pattern = /[0-9-,][0-9.]+/g
 					, matches = latLong.match(pattern);
-					lat = matches[0];
-					lng = matches[1];
+					lng = parseFloat(matches[0]);
+					lat = parseFloat(matches[1]);
+
 					storename = $('.store-details .left-middle .name')[0].children[0].data
 					storeloc = $('.store-details .left-middle .text')[0].children[0].data
 					postal = $('.store-details .left-middle .text')[0].children[4].data.replace(/(\r\n|\n|\r| )/gm,"")
