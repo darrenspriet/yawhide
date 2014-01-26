@@ -25,7 +25,7 @@ var startParseOfAddresses = function(){
    
         if(loading % 2 === 0){
             console.log("Got HTML FoodBasics page number: " +currentNumber);
-            fs.write('storeDetailPages/'+currentNumber+'.html', page.content, 'w');
+            fs.write('../../foodBasicStorePages/'+currentNumber+'.html', page.content, 'w');
         }
         else{
             currentNumber++;

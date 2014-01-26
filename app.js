@@ -443,6 +443,61 @@ app.get('/readLocalParts', function (req, res){
 		});
 	});
 });
+var storeArray = new Array();
+app.get('/readFoodBasicStore', function (req, res){
+	
+	for (var j=1;j< 65;  j++) {
+	fs.readFile('./foodBasicStorePages/'+j+'.html', 'utf8', function (err,data) {
+  		if (err) {
+    		return console.log(err);
+  		}
+  		var $ = cheerio.load(data);
+  		$('.resultatMagasin').each(function (a, html){
+  			var storeObject = ({
+		  		name: '',
+				address:'',
+				city:'',
+				postal:'',
+				phonenumber:''
+			});
+  			var objectArray = new Array();
+  			for (var i =0; i <html.children.length; i++) {
+  				if(html.children[i].type === 'text') {
+  					var	object = html.children[i].data;
+  					object = object.replace(/[\t,\n,']/g,'');
+  					if(/\S/.test(object)){
+  						objectArray.push(object);
+  					}
+  				}
+  			}
+  		storeObject.name = 'Food Basics';
+	  	storeObject.address = objectArray[0];
+	  	storeObject.city = objectArray[1];
+	  	storeObject.postal = objectArray[2];
+	  	storeObject.phonenumber = objectArray[3];
+
+	  	//ADD LOCATION TO THE OBJECT AS WELL!!!!
+	  // 	var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
+		 //    var sensor = false;
+		 //    var geoOb = {};
+		 //    //address = '525 Market St, Philadelphia, PA 19106';
+
+			// geocoder.geocode(address, function(err, coords) {
+			//     if (err) throw err;
+			//     console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
+			//     console.log(coords);
+			// });
+
+  		storeArray.push(storeObject);
+		});
+
+  	});
+  	}
+  			 if(j==65){
+  		res.send(storeArray);
+  	 }
+});
+
 
 app.get('/readLocalFlyers', function (req, res){
 	var latestFolder;
