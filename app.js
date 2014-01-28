@@ -443,6 +443,7 @@ app.get('/readLocalParts', function (req, res){
 		});
 	});
 });
+
 var storeArray = new Array();
 app.get('/readFoodBasicStore', function (req, res){
 	
@@ -458,7 +459,9 @@ app.get('/readFoodBasicStore', function (req, res){
 				address:'',
 				city:'',
 				postal:'',
-				phonenumber:''
+				phonenumber:'',
+				latitude:'',
+				longitude:''
 			});
   			var objectArray = new Array();
   			for (var i =0; i <html.children.length; i++) {
@@ -475,28 +478,39 @@ app.get('/readFoodBasicStore', function (req, res){
 	  	storeObject.city = objectArray[1];
 	  	storeObject.postal = objectArray[2];
 	  	storeObject.phonenumber = objectArray[3];
-
-	  	//ADD LOCATION TO THE OBJECT AS WELL!!!!
-	  // 	var address = 'sobeys ' + storeloc + ', ' + city + ', ' + postal;
-		 //    var sensor = false;
-		 //    var geoOb = {};
-		 //    //address = '525 Market St, Philadelphia, PA 19106';
-
-			// geocoder.geocode(address, function(err, coords) {
-			//     if (err) throw err;
-			//     console.log("%s geocoded to [%d, %d]", address, coords.lat, coords.lon);
-			//     console.log(coords);
-			// });
-
-  		storeArray.push(storeObject);
+	  	console.log(storeObject);
+		storeArray.push(storeObject);
 		});
 
   	});
-  	}
-  			 if(j==65){
+  	} 
+  	if(j==65){
+  	 	getGeoLocation();
   		res.send(storeArray);
-  	 }
+  	}
+
 });
+
+var getGeoLocation = function () {
+	console.log(storeArray);
+	for(var i=0;i<storeArray.length;i++){
+	var address = 'Food Basics ' + storeArray[i].address + ', ' + storeArray[i].city + ', ' + storeArray[i].postal;
+	//address = '525 Market St, Philadelphia, PA 19106';
+	geocoder.geocode(address, function(err, coords) {
+		if (err){
+			console.log(err);
+			throw err;
+		}
+		else{
+			storeArray[i].latitude = coords.latitude;
+			storeArray[i].longitude = coords.longitude;
+			console.log(storeArray);
+		}
+	});
+	}
+}
+
+
 
 
 app.get('/readLocalFlyers', function (req, res){
