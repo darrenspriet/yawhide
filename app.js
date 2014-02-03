@@ -9,13 +9,12 @@ var express = require('express')
 //COMMENT OUT THESE LINES OF CODE TO GET RID OF MONGOOSE
 // , Sobeys = require('./models/sobeys.js')
 // , Item = require('./models/item.js')
-, Stores = require('./models/stores.js')
-, Geocoder = require('node-geocoder-ca').Geocoder
-, geocoder = new Geocoder()
+// , Stores = require('./models/stores.js')
 , s = require('./algorithms/sobeyFunc')
 , async = require('async')
-, ce = require('cloneextend');
-app = express();
+, ce = require('cloneextend')
+,YQL = require('yqlp')
+,app = express();
 
 app.configure(function () {
 	app.set('port', process.env.PORT || 8000);
@@ -444,12 +443,32 @@ app.get('/readLocalParts', function (req, res){
 	});
 });
 
-var storeArray = new Array();
+
+
+
+var getGeoLocation = function (ob, cb) {
+	YQL.exec("select * from geo.places where text=@postalCode", { postalCode:ob }, function(error, response) {
+		if (error) {
+			console.log('Ut oh! Example #1 has messed up:', error);
+		} else {
+			var results = response.query.results.place.centroid;
+			var object = ({
+				lat: results.latitude,
+				long:results.longitude
+			});
+			cb(object);
+		}
+	});
+}
+
+
 app.get('/readFoodBasicStore', function (req, res){
-	
+	var storeArray = [];
+	var k = 0;
 	for (var j=1;j< 65;  j++) {
 	fs.readFile('./foodBasicStorePages/'+j+'.html', 'utf8', function (err,data) {
   		if (err) {
+  			k++;
     		return console.log(err);
   		}
   		var $ = cheerio.load(data);
@@ -460,8 +479,7 @@ app.get('/readFoodBasicStore', function (req, res){
 				city:'',
 				postal:'',
 				phonenumber:'',
-				latitude:'',
-				longitude:''
+				location: {lat: '', long:''}
 			});
   			var objectArray = new Array();
   			for (var i =0; i <html.children.length; i++) {
@@ -473,44 +491,27 @@ app.get('/readFoodBasicStore', function (req, res){
   					}
   				}
   			}
-  		storeObject.name = 'Food Basics';
-	  	storeObject.address = objectArray[0];
-	  	storeObject.city = objectArray[1];
-	  	storeObject.postal = objectArray[2];
-	  	storeObject.phonenumber = objectArray[3];
-	  	console.log(storeObject);
-		storeArray.push(storeObject);
-		});
-
-  	});
+  			storeObject.name = 'Food Basics';
+	  		storeObject.address = objectArray[0];
+	  		storeObject.city = objectArray[1];
+	  		storeObject.postal = objectArray[2];
+	  		storeObject.phonenumber = objectArray[3];
+	  		getGeoLocation(objectArray[2], function(cb){
+	  			console.log('Getting Food Basics Store Number: '+k);
+	  			storeArray[k].location = cb;
+	  			k++;
+	  		 	if(k==118){
+		 			res.send(storeArray);
+		 		}
+	  		});
+	  		storeArray.push(storeObject);
+			});
+  		});
   	} 
-  	if(j==65){
-  	 	getGeoLocation();
-  		res.send(storeArray);
-  	}
-
 });
 
-var getGeoLocation = function () {
-	console.log(storeArray);
-	for(var i=0;i<storeArray.length;i++){
-	var address = 'Food Basics ' + storeArray[i].address + ', ' + storeArray[i].city + ', ' + storeArray[i].postal;
-	//address = '525 Market St, Philadelphia, PA 19106';
-	geocoder.geocode(address, function(err, coords) {
-		if (err){
-			console.log(err);
-			throw err;
-		}
-		else{
-			storeArray[i].latitude = coords.latitude;
-			storeArray[i].longitude = coords.longitude;
-			console.log(storeArray);
-		}
-	});
-	}
-}
-
-
+//Getting the flyer from foodbasics now
+//http://www.foodbasics.ca/en/flyer-accessible.html?method=getAccessibleFlyer&idFlyer=289
 
 
 app.get('/readLocalFlyers', function (req, res){
