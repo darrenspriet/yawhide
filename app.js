@@ -40,7 +40,7 @@ var isEmptyObject = function (obj) {
     }
     return true;
 }
-
+//
 //when the root route is called, do our mobile check
 app.get('/index', function (req, res){
   // var htmlString = $("div.card-inset").html();
