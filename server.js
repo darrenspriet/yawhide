@@ -17,7 +17,7 @@ var express = require('express')
 app = express();
 
 app.configure(function () {
-	app.set('port', process.env.PORT || 8000);
+	//app.set('port', process.env.PORT || 8000);
 	app.set('view engine', 'jade');
     app.use(express.favicon());
     app.use(express.logger('dev'));
@@ -974,7 +974,7 @@ app.get('/getMetroFlyer', function (req, res){
 	}());
 });*/
 
-http.createServer(app).listen(8000, function () {
-	console.log("Express server listening on port " + app.get('port'));
+http.createServer(app).listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,process.env.OPENSHIFT_NODEJS_IP, function () {
+	console.log("Express server listening on port  8080");
 });
 
