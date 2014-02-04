@@ -80,7 +80,7 @@ var getBest = function (ob, cb){
 				var splitted = ob.price.split('/$');
 				tmp = tmp / splitted[0];
 				bestSav = Math.round(tmp*100)/100;
-				bestPercent = Math.round(tmp / (tmp + (splitted[1] / splitted[0]))*100)/100;
+				bestPercent = Math.round(tmp / (tmp + (splitted[1] / splitted[0]))*100);
 				extra = 'price has n for some price deal'
 			}
 			
@@ -92,7 +92,7 @@ var getBest = function (ob, cb){
 			tmp = tmp.replace('$', '');
 			tmp /= splitted[0];
 			bestSav = Math.round(tmp*100)/100;
-			bestPercent = Math.round(tmp / (tmp + (splitted[1]/splitted[0]))*100)/100;
+			bestPercent = Math.round(tmp / (tmp + (splitted[1]/splitted[0]))*100);
 			extra = 'price has n for some price, sav only has the savings, no number'
 		}
 	}
@@ -100,7 +100,7 @@ var getBest = function (ob, cb){
 	else if (ob.price.indexOf('%') > -1){
 		bestSav = getNumber.exec(ob.sav) !== null ? getNumber.exec(ob.sav)[0] : 0;
 		bestPercent = test3.exec(ob.price)[0].replace('%', '');
-		bestPercent /= 100;
+		//bestPercent /= 100;
 		extra = 'price has percent'
 	}
 	/** doesn't have a price in sav */
@@ -131,10 +131,11 @@ var getBest = function (ob, cb){
 			var tmp = parseFloat(getNumber2.exec(ob.sav)[0])
 			, tmp2 = parseFloat(getNumber2.exec(ob.price)[0]);
 			bestSav = tmp;
-			bestPercent = Math.round(tmp / (tmp2 + tmp)*100)/100;
+			bestPercent = Math.round(tmp / (tmp2 + tmp)*100);
 			extra = 'has simple price and simple savings';
 		}		
 	}
+
 	cb(bestPercent, bestSav, extra);
 }
 
@@ -392,7 +393,7 @@ app.get('/readLocalPartsSobeys', function (req, res){
 														ob.extra = extra;
 														info.push(ob);*/
 
-														Item.makeItem(item, price, sav, desc, url, extra, percent*100, sav2, name, h, function (errMakeItem){
+														Item.makeItem(item, price, sav, desc, url, extra, percent, sav2, name, h, function (errMakeItem){
 															if(errMakeItem) throw errMakeItem;
 														});
 													});
@@ -405,8 +406,6 @@ app.get('/readLocalPartsSobeys', function (req, res){
 							if(info.indexOf(name) === -1){
 								info.push(name);
 							}
-
-
 							complete(err4, data);
 						});
 						}
