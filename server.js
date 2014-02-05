@@ -17,7 +17,7 @@ var express = require('express')
 app = express();
 
 app.configure(function () {
-	//app.set('port', process.env.PORT || 8000);
+	app.set('port', process.env.PORT || 8000);
 	app.set('view engine', 'jade');
     app.use(express.favicon());
     app.use(express.logger('dev'));
@@ -40,7 +40,7 @@ var isEmptyObject = function (obj) {
     }
     return true;
 }
-//
+
 //when the root route is called, do our mobile check
 app.get('/index', function (req, res){
   // var htmlString = $("div.card-inset").html();
@@ -80,7 +80,7 @@ var getBest = function (ob, cb){
 				var splitted = ob.price.split('/$');
 				tmp = tmp / splitted[0];
 				bestSav = Math.round(tmp*100)/100;
-				bestPercent = Math.round(tmp / (tmp + (splitted[1] / splitted[0]))*100)/100;
+				bestPercent = Math.round(tmp / (tmp + (splitted[1] / splitted[0]))*100);
 				extra = 'price has n for some price deal'
 			}
 			
@@ -92,7 +92,7 @@ var getBest = function (ob, cb){
 			tmp = tmp.replace('$', '');
 			tmp /= splitted[0];
 			bestSav = Math.round(tmp*100)/100;
-			bestPercent = Math.round(tmp / (tmp + (splitted[1]/splitted[0]))*100)/100;
+			bestPercent = Math.round(tmp / (tmp + (splitted[1]/splitted[0]))*100);
 			extra = 'price has n for some price, sav only has the savings, no number'
 		}
 	}
@@ -100,7 +100,7 @@ var getBest = function (ob, cb){
 	else if (ob.price.indexOf('%') > -1){
 		bestSav = getNumber.exec(ob.sav) !== null ? getNumber.exec(ob.sav)[0] : 0;
 		bestPercent = test3.exec(ob.price)[0].replace('%', '');
-		bestPercent /= 100;
+		//bestPercent /= 100;
 		extra = 'price has percent'
 	}
 	/** doesn't have a price in sav */
@@ -131,14 +131,15 @@ var getBest = function (ob, cb){
 			var tmp = parseFloat(getNumber2.exec(ob.sav)[0])
 			, tmp2 = parseFloat(getNumber2.exec(ob.price)[0]);
 			bestSav = tmp;
-			bestPercent = Math.round(tmp / (tmp2 + tmp)*100)/100;
+			bestPercent = Math.round(tmp / (tmp2 + tmp)*100);
 			extra = 'has simple price and simple savings';
 		}		
 	}
+
 	cb(bestPercent, bestSav, extra);
 }
 
-app.get('/readLocalParts', function (req, res){
+app.get('/readLocalPartsSobeys', function (req, res){
 	var latestFolder;
 	fs.readdir('./sobeysFlyerPart/', function (err, folders){
 		if (err) throw err;
@@ -392,7 +393,7 @@ app.get('/readLocalParts', function (req, res){
 														ob.extra = extra;
 														info.push(ob);*/
 
-														Item.makeItem(item, price, sav, desc, url, extra, percent*100, sav2, name, h, function (errMakeItem){
+														Item.makeItem(item, price, sav, desc, url, extra, percent, sav2, name, h, function (errMakeItem){
 															if(errMakeItem) throw errMakeItem;
 														});
 													});
@@ -405,8 +406,6 @@ app.get('/readLocalParts', function (req, res){
 							if(info.indexOf(name) === -1){
 								info.push(name);
 							}
-
-
 							complete(err4, data);
 						});
 						}
@@ -416,9 +415,10 @@ app.get('/readLocalParts', function (req, res){
 
 								if(err6) throw err6;
 								
-								if(h > 289)
+								if(h > 289){
+									res.send('completed process');
 									console.log('done');
-								else{
+								}else{
 									console.log(h.split('.')[0])
 								}
 							});
@@ -428,210 +428,13 @@ app.get('/readLocalParts', function (req, res){
 		});
 	});
 });
-
-app.get('/readLocalFlyers', function (req, res){
-	var latestFolder;
-	fs.readdir('./sobeys/', function (err, folders){
-		if (err) throw err;
-		/** always gets the last folder in ./sobeys/
-			because it sorts it by created date (or last mod prob)
-			*/
-		latestFolder = folders[folders.length -1];
-		fs.readdir('./sobeys/' + latestFolder + '/', function (err2, folders2){
-			if (err2) throw err2;
-			console.log(latestFolder);
-			/** this is each store's flyer */
-			folders2.forEach(function (h){
-				fs.readdir('./sobeys/'+latestFolder + '/' + h + '/', function (err3, folders3){
-					if(err3)throw err3;
-					/** this is each flyer part */
-					var info = []
-					, flyerDate = '';
-					
-     				async.map(folders3
-     					, function (flyerPart, complete) {
-
-     					fs.readFile('./sobeys/'+latestFolder + '/' + h + '/' + flyerPart, 'utf8', function (err4, data){
-
-							/** this is each 1 of 20 parts of a flyer */
-							if (err4) throw err4;
-							var $ = cheerio.load(data);
-							if($('.card .card-plain .card-inset p').text().indexOf('No flyer information at this time') > -1 || !$('div').hasClass('toggle-last')) {
-								console.log('no flyer at file: ' + flyerPart);
-							}
-							else {
-								$('.container .toggle-last .one-third .flyer-card .card-top').each(function (a, html){
-									var url = ''
-									, price = ''
-									, sav = ''
-									, desc = ''
-									, item = ''
-									, bestSav = ''
-									, bestPercent = ''
-									, savings = ''
-									, savings1 = ''
-									, savings2 = '';
-									for (var i = html.children.length - 1; i >= 0; i--) {
-
-										if(html.children[i].type === 'tag') {
-											var class1 = html.children[i];											
-											/** this finds url specifically from selecting a chain of classes */
-											if(class1.attribs.class === 'card-image'){
-												url = class1.attribs.style.split(' ')[1].substr(5);
-												url = url.substr(0, url.length -3);
-											}
-											else if (class1.attribs.class==='card-inset'){
-												for (var j = class1.children.length - 1; j >= 0; j--) {
-													var class2 = class1.children[j];
-													if(class2.type === 'tag'){
-														/** finds the desc */
-														if (class2.name === 'p'){
-															desc = class2.children[0].data;
-															desc = desc.replace(/&amp;/g, '&');
-															desc = desc.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"'");
-														}
-														/** finds the item name */
-														else if(class2.attribs.class.indexOf('h6') > -1){
-															item = class2.children[0].data;
-															item = item.replace(/&amp;/g, '&');
-															item = item.replace(/[^a-zA-Z 0-9+;():,.-\s*!%&\r\n\/]+/g,"'");
-														}
-														/** finds the price and savings */
-														else if (class2.attribs.class.indexOf('price')>-1){
-															for (var k = class2.children.length - 1; k >= 0; k--) {
-																var class3 = class2.children[k];
-																if(class3.type === 'tag'){
-																	if(class3.attribs.class.indexOf('price-amount')){
-																		if(class3.children.length > 1 && class3.children[1].children.length > 0){
-																			sav = class3.children[1].children[0].data;
-																			sav = sav.replace(/&amp;/g, '&');
-																			sav = sav.replace(/[^a-zA-Z0-9+;():,\.$-\s*!%&\r\n\/]+/g,"|");
-																			var savSplit = sav.split(' ')
-																			, tmp = ''
-																			, count = 0;
-																			for (var l = 0; l < savSplit.length; l++) {
-																				if(savSplit[l].indexOf('|') > -1){
-																					tmp += '$0.' + savSplit[l].replace('|', '') + ' ';
-																					count++;
-																				}
-																				else if (!isNaN(savSplit[l]) && savSplit[l].indexOf('$') === -1 && count === 0){
-																					tmp += '$'+savSplit[l] + ' ';
-																					count++;
-																				}
-																				else if (savSplit[l].indexOf('/') > -1){
-																					tmp += '$'+savSplit[l] + ' ';
-																				}
-																				else{
-																					tmp += savSplit[l] + ' ';
-																				}
-																			};
-																			sav = tmp
-																			sav = sav.replace('100 g', '100g');
-																			sav = sav.replace(' /100g', '/100g');
-																			sav = sav.replace('lb ,ea', 'lb,ea');
-																			sav = sav.replace('lb, ea', 'lb,ea');
-																			sav = sav.replace('$$', '$');
-																		}
-																	}
-																	else if (class3.attribs.class.indexOf('price-promos')) {
-																		
-																		if(class3.children.length > 1){
-
-																			if(class3.children[1].children.length > 1){
-																				savings = '$' + class3.children[0].data+'.';
-																				savings1 = class3.children[1].children[0].data;
-																				savings2 = class3.children[1].children[1].children[0].data;
-																			}
-																			else if (class3.children[0].data.indexOf('%') > -1){
-																				savings = 'noPrice';
-																				savings1 = class3.children[0].data;
-																				savings2 = class3.children[1].children[0].data;
-																			}
-																			else if (class3.children[0].data.indexOf('/') === -1){
-																				savings = '$0' + class3.children[0].data;
-																				savings1 = class3.children[1].children[0].data;
-																			}
-																			else{
-																				savings = class3.children[0].data + '.';
-																				savings = savings.replace('/', '/$');
-																				savings1 = class3.children[1].children[0].data;
-																			}
-																			var price = savings + savings1 + savings2;
-																		}
-																	}
-																}
-															};
-														}
-													}
-												};
-											}
-											if(flyerDate === ''){
-												flyerDate = $('.container .site-section .site-section-content .fancy-heading .h3-editorial').text();
-											}
-											
-											/** gets the best savings from the price */
-											if(url !== '' && item !== ''){
-												var priceSav = {};
-												priceSav.price = price;
-												priceSav.sav = sav;
-												var listOfFrenchStores = ['34'];
-												if(listOfFrenchStores.indexOf(h) === -1){
-													getBest(priceSav, function (percent, sav2, extra){
-														var ob = {};
-														ob.item = item;
-														ob.price = price;
-														ob.savings = sav;
-														ob.url = url;
-														ob.description = desc;
-														ob.bestPercent = percent;
-														ob.bestSav = sav2;
-														ob.extra = extra;
-														info.push(ob);
-													});
-												}
-											}
-										}
-
-									};
-								});
-							}
-							complete(err4, data);
-						})
-						}
-						, function (err, results){
-
-						console.log('iterating done');
-						var urlNum = h.split('.')[0];
-						Store.getStoreByUrlNum(urlNum, function (err7, store){
-							if (err7) throw err7;
-							if(!err7 && store !== null){
-								Store.makeFlyer(store, info, function (err8){
-									if (err8) throw err8;
-									Store.updateFlyerDateAndInterval(flyerDate, new Date().getTime(), urlNum, function (err9){
-										if(err9) throw err;
-										if(h > 288)
-											console.log('done');
-									});
-								});
-							}
-							else{
-								console.log('no store under that url number: '+urlNum);
-							}
-						});
-						
-					});
-				});
-			});
-		});
-	});
-});
-
-app.get('/makeStore', function (req, res){
+//
+app.get('/makeStoreSobeys', function (req, res){
 	var url = 'https://www.sobeys.com/en/stores/'
 
 	var z = 1;
 	(function loop(){
-		if(z < 296){
+		if(z < 200){
 			var storename = ''
 			, storeloc = ''
 			, storenum = 0
@@ -734,7 +537,131 @@ app.get('/makeStore', function (req, res){
 					var lat = latLng[1].substr(0,latLng[1].length -1);
 					if(isEmptyObject(hours))
 						hours.open = '24 hours';
-					Store.makeStore(storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
+					Store.makeStore('sobeys', storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
+						if(err) throw err;
+						console.log(z);
+						z++;
+						loop();
+					});
+				}
+				else{
+					z++;
+					loop();
+				}
+			});
+		}
+	}());
+});
+
+app.get('/makeStoreSobeys2', function (req, res){
+	var url = 'https://www.sobeys.com/en/stores/'
+
+	var z = 200;
+	(function loop(){
+		if(z < 300){
+			var storename = ''
+			, storeloc = ''
+			, storenum = 0
+			, urlnum = z
+			, city = ''
+			, postal = ''
+			, hours = {}
+			, interval = '';
+			request(url+z, function (r, s, b){
+				var $ = cheerio.load(b);
+				var info = [];
+				if(	$('body').find('.block').length == 0){
+					$('.container .site-section .site-section-content .card .card-plain .card-inset').each(function (z, html){
+						var count = 0;
+						html.children.forEach(function (i){
+							if(i.data !== '\n' && count > 1){
+								var count3 = 0;
+								i.children.forEach(function (j){
+									if(j.data !== '\n'){
+										if(j.attribs['class'].indexOf('grid__item') > -1){
+											
+											j.children.forEach(function (k){
+												if(k.data !== '\n'){
+													if(k.attribs['class'] === 'palm--hide'){
+														var str = '';
+														var count2 = 0;
+														k.children.forEach(function (l){
+															if(l.type !== 'tag'){
+																var tmp = l.data.split('\n');
+																tmp.forEach(function (m){
+																	if(m !== ''){
+																		str += m + ' ';
+																		switch(count2){
+																			case 0:
+																				storeloc = m;
+																				count2++;
+																				break;
+																			case 1:
+																				city = m;
+																				count2++;
+																				break;
+																			case 2:
+																				postal = m;
+																				count2++;
+																				break;
+																		}
+																	}
+																});
+															}
+														});
+														count2 = 0;
+													}
+													if(count3 == 6){
+														storenum = 	k.children[0].data.split('\n')[1];					
+													}
+													count3++;
+												}
+											});
+										}										
+									}
+								});
+								count3 = 0;
+							}
+							count++;
+						});
+					});
+					$('.my-store-title div div h3').each(function (i, html){
+						var tmp = html.children[0].data.split(' ');
+						var tmp2 = '';
+						for(var y = 0; y < tmp.length; y++){
+							if(y > 1){
+								tmp2 += tmp[y];
+								if(y+1 < tmp.length)
+									tmp2+=' ';
+							}
+						}
+						tmp2 = tmp2.replace('&amp;', '&');
+						storename = tmp2;
+					});
+					$('.push--desk--one-half table tbody tr').each(function (i, html){
+						var prevDay = '';
+						html.children.forEach(function (i){
+							if(typeof(i.data.children) !== 'undefined' && i.data !== '\n' && i.data !== ''){
+									
+								var whole = i.children[0].data.split(' ');
+								if(whole.length == 5){
+									hours[prevDay] = i.children[0].data;
+								}
+								else if (whole.length == 1){
+									prevDay = whole[0];
+								}
+								else if (whole.length > 1 && whole.length < 5){
+									hours[prevDay] = i.children[0].data;
+								}
+							}
+						});
+					});
+					var latLng = $('#map_location').text().split(', ');
+					var lng = latLng[0].substr(1);
+					var lat = latLng[1].substr(0,latLng[1].length -1);
+					if(isEmptyObject(hours))
+						hours.open = '24 hours';
+					Store.makeStore('sobeys', storename, storeloc, storenum, urlnum, city, postal, hours, lat ,lng, function (err){
 						if(err) throw err;
 						console.log(z);
 						z++;
@@ -812,12 +739,18 @@ app.get('/getNearestStores/:elat/:elong/:maxD', function (req, res){
     
 
     var maxD = req.params.maxD/111;
+    //maxD = 10/111
     console.log(elong+ " " + elat + " " + maxD);
 	Store.getNearestStores( elong ,elat,maxD,function (err, flyer){
 		if(err){
 			console.log("there was an error");
 		}
 		else{
+			console.log('result is: ')
+			console.log(flyer.length);
+			for (var i = flyer.length - 1; i >= 0; i--) {
+				console.log(flyer[i].storeName);
+			};
 			/*var arr = [];
 			for (var i = 0; i < flyer.length; i++) {
 				var ob = {};
@@ -949,13 +882,87 @@ app.get('/deal', function (req, res){
 	console.log(info);
 	res.end();
 });
-/*
+
+app.get('/getMetroStore', function (req, res){
+	var url = 'http://www.metro.ca/find-a-store/details.en.html?id='
+
+	var z = 1;
+	(function loop(){
+		if(z < 375){
+			var storename = ''
+			, storeloc = ''
+			, storenum = -1
+			, urlnum = z
+			, city = ''
+			, postal = ''
+			, hours = {}
+			, interval = ''
+			, lng = ''
+			, lat = '';
+			request(url+z, function (r, s, b){
+				var $ = cheerio.load(b);
+				var info = [];
+
+				if($('.main-container').find('.main-errors').length !== 0){
+					console.log(z + " no metro here");
+					z++;
+					loop();
+				}
+				else{
+					
+					var latLong = $('.store-details .where .see-more')[0].attribs.href
+					, pattern = /[0-9-,][0-9.]+/g
+					, matches = latLong.match(pattern);
+					lng = parseFloat(matches[0]);
+					lat = parseFloat(matches[1]);
+
+					storename = $('.store-details .left-middle .name')[0].children[0].data
+					storeloc = $('.store-details .left-middle .text')[0].children[0].data
+					postal = $('.store-details .left-middle .text')[0].children[4].data.replace(/(\r\n|\n|\r| )/gm,"")
+					city = $('.store-details .left-middle .text')[0].children[2].data.replace(/(\r\n|\n|\r| )/gm,"")
+					//console.log($('.store-details .right-middle .first .date')[0].children)
+					if($('.store-details .right-middle .first .date').length !== 0)
+						interval = $('.store-details .right-middle .first .date')[0].children[0].data.replace(/(\r\n|\n|\r)/gm,"")
+					var hoursStr = $('.store-details .opening-hours ul li')
+
+					for (var i = hoursStr.length - 1; i >= 0; i--) {
+						var tmp = hoursStr[i].children[1].children[0].data
+						, tmp2 = hoursStr[i].children[0].data.replace(/(\r\n|\n|\r|\t| )/gm,"")
+						if (tmp2 === ''){
+							var changeTmp = $('.store-details .opening-hours ul li b')
+							hours[changeTmp[0].children[0].data] = changeTmp[0].children[1].children[0].data
+						}
+						else{
+							hours[tmp2] = tmp
+						}
+					};
+
+					//console.log(hours)
+					//console.log(interval)
+					//console.log(storeloc)
+					//console.log(postal)
+					//console.log(city)
+					//console.log(storename)
+					//console.log(lat + " " + lng);
+					Store.makeStore('metro', storename, storeloc, storenum, urlnum, city, postal, hours, lat, lng, function (err){
+						if(err) throw err;
+						
+						console.log(z);
+						z++;
+						loop();
+					});
+				}
+			});
+		}
+	}());
+});
+
 app.get('/getMetroFlyer', function (req, res){
 	var url = 'http://www.metro.ca/flyer/index.en.html?id='
 
 	var z = 1;
 	(function loop(){
-		if(z < 296){
+		if(z < 360){
 			var storename = ''
 			, storeloc = ''
 			, storenum = 0
@@ -968,13 +975,18 @@ app.get('/getMetroFlyer', function (req, res){
 				var $ = cheerio.load(b);
 				var info = [];
 
-				
+
+				Item.makeItem(item, price, sav, desc, url, extra, percent*100, sav2, name, h, function (errMakeItem){
+					if(errMakeItem) throw errMakeItem;
+				});
 			});
 		}
 	}());
-});*/
+});
 
 http.createServer(app).listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,process.env.OPENSHIFT_NODEJS_IP, function () {
 	console.log("Express server listening on port  8080");
 });
+
+
 
