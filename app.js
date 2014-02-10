@@ -557,7 +557,7 @@ app.get('/makeStoreSobeys2', function (req, res){
 
 	var z = 200;
 	(function loop(){
-		if(z < 300){
+		if(z < 400){
 			var storename = ''
 			, storeloc = ''
 			, storenum = 0
