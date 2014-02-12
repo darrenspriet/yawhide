@@ -79,4 +79,17 @@ $(document).ready(function(){
 		return str;
 	});
 
+	if(window.location.href.indexOf('viewFlyer') > -1){
+		console.log('at viewFlyer');
+		$('.checkValid').show();
+	}
+	else{
+		console.log('not at viewFlyer');
+		$('.checkValid').hide();
+	}
+	
+	$('.clearList').on('click', function(){
+		$('.modal-body').empty().append('Please add some items');
+	})
+
 });

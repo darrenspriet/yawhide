@@ -26,6 +26,7 @@ var IndexView = Backbone.View.extend({
 			var template = Handlebars.compile(incomingTemplate);
 			$('#page_container').html(template()).trigger('create');
 		});
+		$('.checkValid').hide();
 		return this;
 	}
 	, findFlyersPage: function(){
@@ -67,7 +68,8 @@ var NearestStoresView = Backbone.View.extend({
 						
 						var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
 						$('.tablesForStore').html(html).trigger('create');
-					});					
+					});
+					$('.checkValid').hide();			
 					return this;
 				},
 				error: function(){
@@ -110,7 +112,8 @@ var PostalStoresView = Backbone.View.extend({
 
 									var html = Mustache.to_html(incomingStores,{storesArray:storesArray} );
 									$('.tablesForStore').html(html).trigger('create');
-								});					
+								});
+								$('.checkValid').hide();					
 								return this;
 							},
 							error: function(){
@@ -143,7 +146,7 @@ var StoreInfoView = Backbone.View.extend({
 				"</table>";
 				
 				$('#page_container').html(Mustache.to_html(template, store.attributes)).trigger('create');
-				
+				$('.checkValid').hide();
 				return this;
 			}
 		});
@@ -158,6 +161,8 @@ var ViewFlyerView = Backbone.View.extend({
 		, "click #perFly":"clickPerFlyer"
 		, "click #savFly":"clickSavFlyer"
 		, "click #categ" : "doCateg"
+		, "click .plus-sign": "addCart"
+		, "click .minus-sign": "removeCart"
 	}
 	, render:function(id){
 
@@ -169,6 +174,7 @@ var ViewFlyerView = Backbone.View.extend({
 					var template = Handlebars.compile(incomingTemplate);
 					$('#page_container').html(template({storeInfo:store.attributes})).trigger('create');
 				});
+				$('.checkValid').show();
 				return this;
 			}
 		});
@@ -276,6 +282,16 @@ var ViewFlyerView = Backbone.View.extend({
 			
 		};		
 		window.scrollTo(0,0);
+	}
+	, addCart: function(event){
+		$(event.target).toggleClass('plus-sign minus-sign');
+		$(event.target).find('span').toggleClass('glyphicon-plus-sign glyphicon-minus-sign');
+		var addItem = $(event.target).closest('.media');
+		$(addItem).remove('.minus-sign');
+		$('.modal-body > div').append(addItem.html());
+	}
+	, removeCart: function(event){
+		//$(event.target).toggleClass('minus-sign plus-sign');
 	}
 });
 
