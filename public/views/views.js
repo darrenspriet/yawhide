@@ -286,9 +286,25 @@ var ViewFlyerView = Backbone.View.extend({
 	, addCart: function(event){
 		$(event.target).toggleClass('plus-sign minus-sign');
 		$(event.target).find('span').toggleClass('glyphicon-plus-sign glyphicon-minus-sign');
-		var addItem = $(event.target).closest('.media');
-		$(addItem).remove('.minus-sign');
-		$('.modal-body > div').append(addItem.html());
+		var addItem = $(event.target).closest('.media2');
+		var ob = {};
+		ob.item = addItem.data('item');
+		ob.price = addItem.data('price');
+		ob.sav = addItem.data('sav');
+		ob.per = addItem.data('per');
+		ob.categ = addItem.data('categ');
+		if (localStorage.getItem('shoppingList') === null){
+			var arr = [];
+			arr.push(ob);
+			var shoppingList = { 'count': 1, 'list': arr };
+			localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+		}
+		else{
+			var retrievedObject =  JSON.parse(localStorage.getItem('shoppingList'));
+			retrievedObject.count++;
+			retrievedObject.list.push(ob);
+			localStorage.setItem('shoppingList', JSON.stringify(retrievedObject));
+		}
 	}
 	, removeCart: function(event){
 		//$(event.target).toggleClass('minus-sign plus-sign');

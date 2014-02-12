@@ -89,6 +89,8 @@ $(document).ready(function(){
 	}
 	
 	$('.clearList').on('click', function(){
+		var shoppingList = { 'count': 0, 'list': [] };
+		localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
 		$('.modal-body').empty().append('Please add some items');
 	})
 
