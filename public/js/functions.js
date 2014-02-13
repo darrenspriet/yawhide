@@ -91,7 +91,42 @@ $(document).ready(function(){
 	$('.clearList').on('click', function(){
 		var shoppingList = { 'count': 0, 'list': [] };
 		localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
-		$('.modal-body').empty().append('Please add some items');
-	})
+		$('.modal-body').empty().append('Your shopping list is empty');
+	});
+
+	$('.shoppingList').on('click', function(){
+		var retrievedObject =  JSON.parse(localStorage.getItem('shoppingList'));
+		if(retrievedObject === null){
+			var shoppingList = { 'count': 0, 'list': [] };
+			localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+			if($('.modalBody').text() !== 'Your shopping list is empty')
+				$('.modalBody').append('Your shopping list is empty');
+		}
+		else if (retrievedObject.count === 0){
+			if($('.modalBody').text() !== 'Your shopping list is empty')
+				$('.modalBody').append('Your shopping list is empty');
+		}
+		else{
+			var htm = '<table class="table table-condensed table-hover">';
+			htm += '<thead><tr><th>Item</th><th>Discount Price</th><th>Savings</th></tr></thead>';
+			htm += '<tbody>';
+			for (var i = 0; i < retrievedObject.count; i++) {
+				var p = retrievedObject.list[i];
+				console.log(p);
+				console.log(p.item);
+				console.log(p.price);
+
+				htm += '<tr>';
+				htm += '<td>' + p.item + '</td>';
+				htm += '<td>' + p.price + '</td>';
+				htm += '<td>$' + p.sav + '</td>';
+				htm += '</tr>';
+				//console.log(p);
+			};
+			htm += '</tbody>';
+			htm += '</table>';
+			$('.modalBody').children().replaceWith(htm);
+		}
+	});
 
 });

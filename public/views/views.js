@@ -279,7 +279,6 @@ var ViewFlyerView = Backbone.View.extend({
 			else{
 				$(child[i]).removeClass('active');
 			}
-			
 		};		
 		window.scrollTo(0,0);
 	}
