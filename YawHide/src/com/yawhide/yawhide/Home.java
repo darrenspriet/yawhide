@@ -96,21 +96,22 @@ public class Home extends Activity {
             pDialog.setMessage("Getting Data ...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
-            pDialog.show();
+           // pDialog.show();
         }
         @Override
         protected JSONArray doInBackground(String... args) {
             JSONParser jParser = new JSONParser();
             // Getting JSON from URL
-            System.out.println(latitude + " " + longitude + " test");
-            String lat = String.valueOf(latitude);
-            String lon = String.valueOf(longitude);
-            String url = "http://192.168.1.113:3000/getNearestStores/" + lat +"/"+ lon +"/20";
-            System.out.println(url);
+           // System.out.println(latitude + " " + longitude + " test");
+            String lat ="43.567532";// String.valueOf(43.567532);
+            String lon = "-79.770965";//String.valueOf(-79.770965");
+            String url = "http://darrenspriet.apps.runkite.com/getNearestStores/" + lat +"/"+ lon +"/20";
+           // System.out.println(url);
             JSONArray json = jParser.getJSONFromUrl(url);
             //System.out.println(json);
             return json;
         }
+        
          @Override
          protected void onPostExecute(JSONArray json) {
              pDialog.dismiss();
@@ -128,8 +129,6 @@ public class Home extends Activity {
                     // Adding value HashMap key => value
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put(TAG_STORENAME, ver);
-                    map.put(TAG_CITY, name);
-                    map.put(TAG_POSTALCODE, api);
                     oslist.add(map);
                     list=(ListView)findViewById(R.id.list);
                     ListAdapter adapter = new SimpleAdapter(Home.this, oslist,
@@ -139,9 +138,16 @@ public class Home extends Activity {
                     list.setAdapter(adapter);
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view,
+                        public void onItemClick(AdapterView<?> parent, View viewClicked,
                                                 int position, long id) {
-                            Toast.makeText(Home.this, "You Clicked at "+oslist.get(+position).get("name"), Toast.LENGTH_SHORT).show();
+//                        	TextView textView = (TextView) viewClicked;
+                        	TextView text = (TextView) viewClicked.findViewById(R.id.vers);
+                            String lst_txt = text.getText().toString().trim();
+                            System.out.println("this is value of string ::: :::: " + lst_txt);
+                           Toast.makeText(Home.this, "You Clicked at "+position, Toast.LENGTH_SHORT).show();
+                         	//TextView textView = (TextView) viewClicked;
+//                        	String message = "You clicked # " + position + ", which is string: " + textView.getText().toString();
+//                        	Toast.makeText(Home.this, message, Toast.LENGTH_LONG).show();
                         }
                     });
             	}
@@ -151,5 +157,8 @@ public class Home extends Activity {
          }
     }
 }
+
+
+
 
 
